@@ -12,7 +12,9 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 - `Original Sage prompt.pdf` — PDF export of the v2.0 prompt
 - `Current Sage Librechat Config.png` — Screenshot of the agent panel configuration
 - `Versions/sage_v2.1_main_prompt.md` — SAGE v2.1 prompt
-- `Versions/sage_v2.1.1_main_prompt.md` — Current SAGE production prompt (v2.1.1, adds Unleash for config edge cases)
+- `Versions/sage_v2.1.1_main_prompt.md` — SAGE v2.1.1 prompt (adds Unleash for config edge cases)
+- `Versions/sage_v2.1.2_main_prompt.md` — SAGE v2.1.2 prompt
+- `Versions/sage_v2.1.2.3_main_prompt.md` — Current SAGE production prompt (v2.1.2.3, tightens email reply mirroring, adds best-practice research trigger, blocks unverified packaging claims)
 - `Versions/Datifyer_v2.md` — Current Datifyer production prompt (optimized)
 - `Versions/Quill_v2.md` — Quill standalone email writing agent (was handoff from SAGE, now standalone)
 - `SAGE_Overview.md` — One-pager covering capabilities, guardrails, connections, value, use cases (for manager meetings)
@@ -36,7 +38,7 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 | Tavily (5 tools used) | tavily_search, tavily_extract, tavily_crawl, tavily_skill, tavily_research | Public web: Explore recipes, community, dev docs, marketplace. Default search_depth: fast. |
 | Researcher (dropped in v2.1) | — | Was unused. Removed. |
 
-## Key Architecture Decisions (v2.1 / v2.1.1)
+## Key Architecture Decisions (v2.1 through v2.1.2.3)
 1. **Signal-based routing replaced mandatory 3-source search.** Z2 is always first. Other sources only called when the question type signals they're needed.
 2. **Quill handoff removed.** SAGE drafts emails directly. Saved 15-45 sec per email flow.
 3. **Researcher MCP dropped.** Was listed in welcome message but had zero instructions.
@@ -45,6 +47,10 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 6. **Datifyer routing scoped.** Bare number triggers ("1", "2", "3") deactivate once SAGE presents its own checkpoint.
 7. **Model switched from Sonnet 4.6 (Bedrock) to GPT 5.4 (direct OpenAI).** Bedrock added latency on every step and caused NGHTTP2 errors on large payloads. Direct API removed the overhead.
 8. **Unleash expanded to config edge cases (v2.1.1).** Now also called for complex configuration questions (routing, permissions, automation interactions), not just bugs.
+9. **Email reply mirroring (v2.1.2.3).** Communication Mode must follow the customer's structure, not re-headline or reframe their problem. No meta-commentary on customer reasoning. End-state test: after reading, customer feels either resolved, clear next steps, or clear on what's not possible.
+10. **Best-practice research trigger (v2.1.2.3).** Phrases like "best practice," "mejores prácticas," "forma recomendada," "recommended way" force Z2 search before drafting, even inside Communication Mode follow-ups. Blocks answering from general knowledge.
+11. **No unverified packaging claims (v2.1.2.3, Constraint #23).** SAGE cannot state "included on your plan" or "no plan change required" without confirming plan + availability. Applies to Q&A, email drafts, success plans, recommendations.
+12. **Language-matched follow-ups (v2.1.2.3).** Post-draft prompts ("want me to adjust the tone?") match the thread language. No English fallback inside a Spanish thread.
 
 ## What's Next
 - Monitor accuracy on GPT 5.4 for 1-2 weeks (watch for: banned words, hedge language, verbosity, backstage leaking)
