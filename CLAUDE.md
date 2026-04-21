@@ -14,7 +14,8 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 - `Versions/sage_v2.1_main_prompt.md` — SAGE v2.1 prompt
 - `Versions/sage_v2.1.1_main_prompt.md` — SAGE v2.1.1 prompt (adds Unleash for config edge cases)
 - `Versions/sage_v2.1.2_main_prompt.md` — SAGE v2.1.2 prompt
-- `Versions/sage_v2.1.2.3_main_prompt.md` — Current SAGE production prompt (v2.1.2.3, tightens email reply mirroring, adds best-practice research trigger, blocks unverified packaging claims)
+- `Versions/sage_v2.1.2.3_main_prompt.md` — Previous SAGE production prompt (v2.1.2.3, tightens email reply mirroring, adds best-practice research trigger, blocks unverified packaging claims)
+- `Versions/sage_v2.4_main_prompt.md` — Current SAGE draft prompt (v2.4, adds Configuration Guide mode, MCP reliability layer, hardened plan detection, language auto-detection with CSM override, tightened Goals Analysis and Recommendations grounding, scoped workflow pause)
 - `Versions/Datifyer_v2.md` — Current Datifyer production prompt (optimized)
 - `Versions/Quill_v2.md` — Quill standalone email writing agent (was handoff from SAGE, now standalone)
 - `SAGE_Overview.md` — One-pager covering capabilities, guardrails, connections, value, use cases (for manager meetings)
@@ -38,7 +39,7 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 | Tavily (5 tools used) | tavily_search, tavily_extract, tavily_crawl, tavily_skill, tavily_research | Public web: Explore recipes, community, dev docs, marketplace. Default search_depth: fast. |
 | Researcher (dropped in v2.1) | — | Was unused. Removed. |
 
-## Key Architecture Decisions (v2.1 through v2.1.2.3)
+## Key Architecture Decisions (v2.1 through v2.4)
 1. **Signal-based routing replaced mandatory 3-source search.** Z2 is always first. Other sources only called when the question type signals they're needed.
 2. **Quill handoff removed.** SAGE drafts emails directly. Saved 15-45 sec per email flow.
 3. **Researcher MCP dropped.** Was listed in welcome message but had zero instructions.
@@ -51,6 +52,13 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 10. **Best-practice research trigger (v2.1.2.3).** Phrases like "best practice," "mejores prácticas," "forma recomendada," "recommended way" force Z2 search before drafting, even inside Communication Mode follow-ups. Blocks answering from general knowledge.
 11. **No unverified packaging claims (v2.1.2.3, Constraint #23).** SAGE cannot state "included on your plan" or "no plan change required" without confirming plan + availability. Applies to Q&A, email drafts, success plans, recommendations.
 12. **Language-matched follow-ups (v2.1.2.3).** Post-draft prompts ("want me to adjust the tone?") match the thread language. No English fallback inside a Spanish thread.
+13. **Configuration Guide mode (v2.4).** New mode for step-by-step setup guides. Requires confirmed plan, runs a scoped workflow-fit pre-check (only when context is missing), Z2-grounds every step, adds per-account variability line for intent/field/group-based guides. Z2 is required; no partial guides.
+14. **MCP reliability layer (v2.4).** Required vs optional MCPs per task type. Required MCP fails = stop, no CSM override. Optional MCP fails = note and continue. "MCPs reached" line in Sources & Confidence makes degraded runs visible.
+15. **Hardened plan detection (v2.4, Constraint #19).** Active extraction from all context before asking. Announce extracted plans explicitly ("Plan confirmed from transcript: Suite Enterprise"). Mandatory ask when plan is absent and matters. Scoped definition of when plan is required vs optional.
+16. **Language policy with CSM override (v2.4).** Customer-facing output always matches customer language (non-negotiable). Internal-facing output defaults to customer language but respects sticky CSM override ("give me this in English"). Handles multilingual CSM team (Portuguese, Italian, German, English, Spanish).
+17. **Goals Analysis customer-language framing (v2.4).** Section headers reflect customer's expressed situation, not Zendesk product taxonomy. Worked example in prompt. Supporting quote required for every goal; one-line inference from quote allowed.
+18. **Recommendations grounded in call (v2.4).** No generic best practices padded in. 🔴 marker removed from table. Dependency sequencing stated explicitly in "Why It Fits" column.
+19. **Scoped workflow pause (v2.4).** Pause signal no longer fires for clarifications about the active deliverable. Those are answered inline with a simple "¿continuamos?" Spontaneous Q&A on unrelated topics still triggers the pause.
 
 ## What's Next
 - Monitor accuracy on GPT 5.4 for 1-2 weeks (watch for: banned words, hedge language, verbosity, backstage leaking)
