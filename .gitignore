@@ -1,4 +1,20 @@
+# Whitelist approach: ignore everything, only allow explicit exceptions
+# This keeps the GitHub repo to just the heart (current prompt + context)
+
+# Ignore everything by default
+*
+
+# Allow .gitignore itself
+!.gitignore
+
+# Allow the project context file
+!CLAUDE.md
+
+# Allow the Versions directory but only the current production/draft prompt
+!Versions/
+Versions/*
+!Versions/sage_v2.4_main_prompt.md
+
+# Explicit exclusions for tooling (redundant with * but kept for clarity)
 .DS_Store
 .claude/
-excalidraw.log
-*.mp4
