@@ -15,8 +15,10 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 - `Versions/sage_v2.1.1_main_prompt.md` — SAGE v2.1.1 prompt (adds Unleash for config edge cases)
 - `Versions/sage_v2.1.2_main_prompt.md` — SAGE v2.1.2 prompt
 - `Versions/sage_v2.1.2.3_main_prompt.md` — Previous SAGE production prompt (v2.1.2.3, tightens email reply mirroring, adds best-practice research trigger, blocks unverified packaging claims)
-- `Versions/sage_v2.4_main_prompt.md` — Current SAGE draft prompt (v2.4, adds Configuration Guide mode, MCP reliability layer, hardened plan detection, language auto-detection with CSM override, tightened Goals Analysis and Recommendations grounding, scoped workflow pause)
+- `Versions/sage_v2.4_main_prompt.md` — **Active sonnetized production line** (v2.4, adds Configuration Guide mode, MCP reliability layer, hardened plan detection, language auto-detection with CSM override, tightened Goals Analysis and Recommendations grounding, scoped workflow pause). New SAGE features land here first.
+- `Versions/sage_openai_v1_main_prompt.md` — **Parallel experimental branch, intended future production.** Built around OpenAI's GPT-5 cookbook for GPT-5.4 direct. XML spec blocks for plan detection, MCP reliability, source routing, output chaining, language policy, and industry enrichment. Claude-era residue dropped, prose compressed to cookbook pattern, Config Guide and Deliverables modes refined across real testing. Requires specific LibreChat settings (see "Parallel Prompt Lines" section below). Feedback loop: user reports bad output or new need, variant file is edited directly.
 - `Versions/Datifyer_v2.md` — Current Datifyer production prompt (optimized)
+- `Versions/Datifyer_openai_v1.md` — **Parallel experimental Datifyer, intended future production.** Format-agnostic input (Google Sheet workbook, AIH PDFs, Excel, CSV, screenshots, pasted tables). Standardized 5-section output (Snapshot, Story, Numbers, Probes, Menu). Strict source provenance (no fabrication from conversation memory). Customer-ready ROI with customer-language pillar headers, whole-number rounding, single-currency tables, silent industry enrichment. ROI baseline fixed at most recent 12 months when source provides 12+, full window otherwise.
 - `Versions/Quill_v2.md` — Quill standalone email writing agent (was handoff from SAGE, now standalone)
 - `SAGE_Overview.md` — One-pager covering capabilities, guardrails, connections, value, use cases (for manager meetings)
 - `SAGE_Presentation.excalidraw` — Visual presentation covering the same points
@@ -60,11 +62,42 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 18. **Recommendations grounded in call (v2.4).** No generic best practices padded in. 🔴 marker removed from table. Dependency sequencing stated explicitly in "Why It Fits" column.
 19. **Scoped workflow pause (v2.4).** Pause signal no longer fires for clarifications about the active deliverable. Those are answered inline with a simple "¿continuamos?" Spontaneous Q&A on unrelated topics still triggers the pause.
 
+## Parallel Prompt Lines
+
+SAGE and Datifyer each have two active prompt lines — a sonnetized production line and an OpenAI-cookbook-tuned experimental line.
+
+### Sonnetized line (active production)
+- SAGE: `Versions/sage_v2.4_main_prompt.md` (rolling out 2026-04-24; v2.1.2.3 was live until then)
+- Datifyer: `Versions/Datifyer_v2.md` (live)
+- Style: detailed prose, originally tuned for Claude Sonnet 4.6.
+- Rule: new features or requested changes land here first when they need to reach production CSMs immediately.
+
+### OpenAI line (parallel experimental → future production)
+- SAGE: `Versions/sage_openai_v1_main_prompt.md`
+- Datifyer: `Versions/Datifyer_openai_v1.md`
+- Style: cookbook-aligned — XML spec blocks, compressed tool specs, length and reasoning delegated to API parameters, customer-ready default output quality.
+- Status: experimental. Tested on cloned agents in LibreChat with real customer scenarios. Intended to replace the sonnetized line once soft-launched and validated.
+- **Required LibreChat agent settings (both prompts assume them):**
+  - Model: GPT-5.4 (direct OpenAI, not Bedrock)
+  - `reasoning_effort: medium`
+  - `verbosity: low`
+  - `useResponsesApi: off`
+- Feedback loop: user brings bad output or new need, variant file is edited directly. Production files are not touched during these edits unless the change must also land in production today.
+
+### When to edit which
+- Bug or missing feature visible in production today → production file first (v2.4 or Datifyer_v2.md), then port to the OpenAI variant.
+- Refinement or addition requested only for the OpenAI variant → variant file only.
+- Never edit production files unless the change is intended for production CSMs in the next rollout.
+
+### Capability highlights of the OpenAI line
+- **SAGE:** contradiction fixes, hardened plan detection with no fallback, Config Guide with placeholder discipline and source consolidation, Deliverables mode with goal-consolidation rules and Success Plan brevity, factual-vs-meaning follow-up distinction, industry enrichment spec (website ask) alongside plan detection, customer-language output, traffic-light scope tightened to standalone Q&A and Configuration Guide only.
+- **Datifyer:** format-agnostic input, source provenance rule preventing memory-based fabrication, 12-month ROI baseline for comparability across sources, customer-ready ROI with plain-word trend labels (no arrow ambiguity), dynamic month header (no ambiguous "Latest"), silent industry enrichment with mandatory CSM ask, whole-number rounding throughout customer-facing display.
+
 ## What's Next
-- Monitor accuracy on GPT 5.4 for 1-2 weeks (watch for: banned words, hedge language, verbosity, backstage leaking)
-- Experiment with reducing thinking budget (2000 → 1024)
-- Model config tuning (temperature, top_p)
-- Consider splitting SAGE into router + specialists if further speed needed
+- Validate sage_openai_v1 with real CSM use after the v2.4 rollout on 2026-04-24.
+- Soft-launch Datifyer_openai_v1 to a small CSM group for real-world testing.
+- Replace the sonnetized line with the OpenAI line when soft-launch evidence supports it.
+- Monitor GPT-5.4 for behavior drift (banned words, hedge language, verbosity, backstage leaking).
 
 ## How to Use promptsmith.md
 The promptsmith skill is used to analyze and score LibreChat agent prompts. To invoke it, read the file and adopt its framework. It provides: classification, dimensional scoring (1-10), diagnosis by severity, and rewrite guidance. It has LibreChat-specific knowledge (capabilities, handoffs, artifacts, step limits).

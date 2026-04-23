@@ -10,10 +10,13 @@
 # Allow the project context file
 !CLAUDE.md
 
-# Allow the Versions directory but only the current production/draft prompt
+# Allow the Versions directory but only the current production/draft prompts
+# and the active OpenAI parallel experimental line.
 !Versions/
 Versions/*
 !Versions/sage_v2.4_main_prompt.md
+!Versions/sage_openai_v1_main_prompt.md
+!Versions/Datifyer_openai_v1.md
 
 # Explicit exclusions for tooling (redundant with * but kept for clarity)
 .DS_Store
