@@ -450,7 +450,7 @@ Before running, check that all required customer-specific inputs for the four pi
 
 ### Step 2: Fetch External Public Data via Tavily (parallel, 4 calls)
 
-Execute all four in parallel using `crm_territory_country`:
+Execute all four in parallel using `crm_territory_country`. These are scoped lookups (salary, loaded multiplier, working hours, FX rate) — single-query per lookup is correct. Do NOT run parallel query variants for Datifyer's Tavily calls; the queries are narrow by design and additional variants would add noise without improving retrieval:
 
 | Call | Query | Fallback |
 |---|---|---|
