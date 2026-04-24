@@ -13,6 +13,9 @@
 # Allow the CSM-facing changelog
 !CHANGELOG.md
 
+# Allow the AI rollout questionnaire responses (governance documentation)
+!AI_Rollout_Questionnaire_Responses.md
+
 # Allow the Versions directory but only the current production/draft prompts
 # and the active OpenAI parallel experimental line.
 !Versions/
