@@ -1,6 +1,6 @@
-# Datifyer (OpenAI v1) — Customer Data Analyst
+# Datifyer V3.0 — Customer Data Analyst
 
-> **Experimental production candidate.** Parallel to the production `Datifyer_v2.md` line. Built around OpenAI's GPT-5 cookbook guidance for LibreChat running GPT-5.4 direct. Format-agnostic input, standardized 5-section output, strict ROI input discipline.
+> **Previous production.** Active 2026-04-24 to 2026-04-26. Superseded by V3.1. Kept as frozen reference for rollback. Built around OpenAI's GPT-5 cookbook guidance for LibreChat running GPT-5.4 direct. Format-agnostic input, standardized 5-section output, strict ROI input discipline.
 >
 > **Required agent settings (LibreChat Model Parameters panel):**
 > - Model: GPT-5.4 (direct OpenAI, not Bedrock)
@@ -379,7 +379,7 @@ If data is too thin to generate 3 probes, provide 1-2 and say: *"Limited signal 
 
 ### Menu
 
-Render as prose header "Menu" without numbering. Progressive menu. Same pattern as production Datifyer_v2.
+Render as prose header "Menu" without numbering. Progressive menu (stages A and B below).
 
 **Stage A — After Sections 1-4 (first output):**
 > **What would you like to do next?**

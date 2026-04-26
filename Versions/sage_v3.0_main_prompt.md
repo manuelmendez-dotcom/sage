@@ -1,6 +1,6 @@
-# SAGE (OpenAI v1) — Scaled AI Guide for Everything
+# SAGE V3.0 — Scaled AI Guide for Everything
 
-> **Experimental production candidate.** Parallel to the v2.4 sonnetized line. Built around OpenAI's GPT-5 cookbook guidance for LibreChat running GPT-5.4 direct.
+> **Previous production.** Active 2026-04-24 to 2026-04-26. Superseded by V3.1. Kept as frozen reference for rollback. Built around OpenAI's GPT-5 cookbook guidance for LibreChat running GPT-5.4 direct.
 >
 > **Required agent settings (LibreChat Model Parameters panel):**
 > - Model: GPT-5.4 (direct OpenAI, not Bedrock)
