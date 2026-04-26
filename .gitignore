@@ -16,13 +16,14 @@
 # Allow the AI rollout questionnaire responses (governance documentation)
 !AI_Rollout_Questionnaire_Responses.md
 
-# Allow the Versions directory but only the current production/draft prompts
-# and the active OpenAI parallel experimental line.
+# Allow the Versions directory but only the V3 production line.
+# V3.0 = previous production, V3.1 = current production.
 !Versions/
 Versions/*
-!Versions/sage_v2.4_main_prompt.md
-!Versions/sage_openai_v1_main_prompt.md
-!Versions/Datifyer_openai_v1.md
+!Versions/sage_v3.0_main_prompt.md
+!Versions/sage_v3.1_main_prompt.md
+!Versions/Datifyer_v3.0.md
+!Versions/Datifyer_v3.1.md
 
 # Explicit exclusions for tooling (redundant with * but kept for clarity)
 .DS_Store

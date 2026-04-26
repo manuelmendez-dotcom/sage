@@ -4,25 +4,19 @@
 SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's Scaled Customer Success team. It helps CSMs answer product questions, analyze call transcripts, build recommendations, and draft customer communications.
 
 ## Project Files
-- `sage_v2_main_prompt.md` — Previous SAGE production prompt (baseline)
-- `Datifyer.md` — Previous Datifyer prompt (baseline)
 - `promptsmith.md` — Skill file for analyzing and writing LibreChat agent prompts
-- `SAGE_v2.1_Changes.md` — One-pager documenting what changed from v2.0 to v2.1
 - `Infrastructure_ Librechat.pdf` — Visual guide showing LibreChat setup (screenshots, mostly images)
-- `Original Sage prompt.pdf` — PDF export of the v2.0 prompt
 - `Current Sage Librechat Config.png` — Screenshot of the agent panel configuration
-- `Versions/sage_v2.1_main_prompt.md` — SAGE v2.1 prompt
-- `Versions/sage_v2.1.1_main_prompt.md` — SAGE v2.1.1 prompt (adds Unleash for config edge cases)
-- `Versions/sage_v2.1.2_main_prompt.md` — SAGE v2.1.2 prompt
-- `Versions/sage_v2.1.2.3_main_prompt.md` — Previous SAGE production prompt (v2.1.2.3, tightens email reply mirroring, adds best-practice research trigger, blocks unverified packaging claims)
-- `Versions/sage_v2.4_main_prompt.md` — **Active sonnetized production line** (v2.4, adds Configuration Guide mode, MCP reliability layer, hardened plan detection, language auto-detection with CSM override, tightened Goals Analysis and Recommendations grounding, scoped workflow pause). New SAGE features land here first.
-- `Versions/sage_openai_v1_main_prompt.md` — **Parallel experimental branch, intended future production.** Built around OpenAI's GPT-5 cookbook for GPT-5.4 direct. XML spec blocks for plan detection, MCP reliability, source routing, output chaining, language policy, and industry enrichment. Claude-era residue dropped, prose compressed to cookbook pattern, Config Guide and Deliverables modes refined across real testing. Requires specific LibreChat settings (see "Parallel Prompt Lines" section below). Feedback loop: user reports bad output or new need, variant file is edited directly.
-- `Versions/Datifyer_v2.md` — Current Datifyer production prompt (optimized)
-- `Versions/Datifyer_openai_v1.md` — **Parallel experimental Datifyer, intended future production.** Format-agnostic input (Google Sheet workbook, AIH PDFs, Excel, CSV, screenshots, pasted tables). Standardized 5-section output (Snapshot, Story, Numbers, Probes, Menu). Strict source provenance (no fabrication from conversation memory). Customer-ready ROI with customer-language pillar headers, whole-number rounding, single-currency tables, silent industry enrichment. ROI baseline fixed at most recent 12 months when source provides 12+, full window otherwise.
-- `Versions/Quill_v2.md` — Quill standalone email writing agent (was handoff from SAGE, now standalone)
+- `Versions/sage_v3.0_main_prompt.md` — Previous SAGE production prompt. Active 2026-04-24 to 2026-04-26. Superseded by V3.1.
+- `Versions/sage_v3.1_main_prompt.md` — **Active production SAGE** (rolled out 2026-04-26). Adds Welcome MCP probe (4 parallel tool calls, pre-empts mid-session auth failures), template-language rule in Deliverables (forces translation of headers/columns/examples), QBR Express workbook wording. Builds on all V3.0 architecture.
+- `Versions/Datifyer_v3.0.md` — Previous Datifyer production prompt. Active 2026-04-24 to 2026-04-26. Superseded by V3.1.
+- `Versions/Datifyer_v3.1.md` — **Active production Datifyer** (rolled out 2026-04-26). Range-based ROI, plain-English discipline, two-zone UX, math-integrity spec. Built from 9+ iterations ending 2026-04-26.
+- `Versions/old/Quill_v2.md` — Quill standalone email writing agent (separate from SAGE)
 - `SAGE_Overview.md` — One-pager covering capabilities, guardrails, connections, value, use cases (for manager meetings)
 - `SAGE_Presentation.excalidraw` — Visual presentation covering the same points
-- `Tiered Inquiry Handling System for CSM AI Assistant - Sage.xlsx` — Use case matrix from team member (validated against v2.1, 14/15 covered)
+- `Tiered Inquiry Handling System for CSM AI Assistant - Sage.xlsx` — Use case matrix from team member
+- `CHANGELOG.md` — CSM-facing changelog
+- `AI_Rollout_Questionnaire_Responses.md` — AI rollout governance documentation
 
 ## Infrastructure
 - **Platform:** LibreChat (self-hosted, accessed via VPN)
@@ -30,74 +24,69 @@ SAGE (Scaled AI Guide for Everything) is a LibreChat agent built for Zendesk's S
 - **Model (previous):** Claude Sonnet 4.6 (via AWS Bedrock, added latency due to extra routing layer)
 - **Why the switch:** AWS Bedrock adds an intermediary between LibreChat and the model (authentication overhead, regional routing, default timeouts too short for large payloads). This caused latency on every step and NGHTTP2_INTERNAL_ERROR failures on complex queries. GPT 5.4 connects directly to OpenAI's API, removing that overhead. Same prompt, shorter path.
 - **Thinking budget:** 2000 tokens (candidate for reduction to 1024 after testing)
-- **Agent architecture:** SAGE is the main agent. Datifyer is a specialist agent for sheet analysis (handoff from SAGE). Quill is a standalone email writing agent (removed from SAGE handoff in v2.1, now offered as a separate agent CSMs can use directly).
+- **Agent architecture:** SAGE is the main agent. Datifyer is a specialist agent for sheet analysis (handoff from SAGE). Quill is a standalone email writing agent CSMs use directly (not a SAGE handoff).
 
 ## MCP Architecture (4 MCPs)
 | MCP | Tools | Role |
 |-----|-------|------|
 | Z2 Help Center (3 tools) | search_z2_articles, get_z2_articles_by_ids, fetch_z2_content_by_url | Primary source. Official Zendesk product docs. Always searched first. |
-| Unleash (2 tools) | search, get_content | Internal knowledge only: Jira tickets, Slack threads, worklogs, config edge cases. NOT product docs. Called for troubleshooting, bugs, and complex configuration questions (v2.1.1). |
+| Unleash (2 tools) | search, get_content | Internal knowledge only: Jira tickets, Slack threads, worklogs, config edge cases. NOT product docs. Called for troubleshooting, bugs, and complex configuration questions. |
 | Google Drive (5 tools) | gdrive_search, gdrive_get_document, gdrive_get_presentation, gdrive_get_sheet, gdrive_get_sheet_names | Team knowledge: playbooks, decks, comparison charts. Stale content risk. Use sort_order: recently_modified. |
 | Tavily (5 tools used) | tavily_search, tavily_extract, tavily_crawl, tavily_skill, tavily_research | Public web: Explore recipes, community, dev docs, marketplace. Default search_depth: fast. |
-| Researcher (dropped in v2.1) | — | Was unused. Removed. |
 
-## Key Architecture Decisions (v2.1 through v2.4)
-1. **Signal-based routing replaced mandatory 3-source search.** Z2 is always first. Other sources only called when the question type signals they're needed.
-2. **Quill handoff removed.** SAGE drafts emails directly. Saved 15-45 sec per email flow.
-3. **Researcher MCP dropped.** Was listed in welcome message but had zero instructions.
-4. **Step budgeting added.** Tool calls are capped by query complexity to avoid hitting the 25-step limit.
-5. **Tavily optimized.** Default search_depth changed from "advanced" to "fast". Added tavily_skill and tavily_research. Use include_domains instead of site: operators.
-6. **Datifyer routing scoped.** Bare number triggers ("1", "2", "3") deactivate once SAGE presents its own checkpoint.
-7. **Model switched from Sonnet 4.6 (Bedrock) to GPT 5.4 (direct OpenAI).** Bedrock added latency on every step and caused NGHTTP2 errors on large payloads. Direct API removed the overhead.
-8. **Unleash expanded to config edge cases (v2.1.1).** Now also called for complex configuration questions (routing, permissions, automation interactions), not just bugs.
-9. **Email reply mirroring (v2.1.2.3).** Communication Mode must follow the customer's structure, not re-headline or reframe their problem. No meta-commentary on customer reasoning. End-state test: after reading, customer feels either resolved, clear next steps, or clear on what's not possible.
-10. **Best-practice research trigger (v2.1.2.3).** Phrases like "best practice," "mejores prácticas," "forma recomendada," "recommended way" force Z2 search before drafting, even inside Communication Mode follow-ups. Blocks answering from general knowledge.
-11. **No unverified packaging claims (v2.1.2.3, Constraint #23).** SAGE cannot state "included on your plan" or "no plan change required" without confirming plan + availability. Applies to Q&A, email drafts, success plans, recommendations.
-12. **Language-matched follow-ups (v2.1.2.3).** Post-draft prompts ("want me to adjust the tone?") match the thread language. No English fallback inside a Spanish thread.
-13. **Configuration Guide mode (v2.4).** New mode for step-by-step setup guides. Requires confirmed plan, runs a scoped workflow-fit pre-check (only when context is missing), Z2-grounds every step, adds per-account variability line for intent/field/group-based guides. Z2 is required; no partial guides.
-14. **MCP reliability layer (v2.4).** Required vs optional MCPs per task type. Required MCP fails = stop, no CSM override. Optional MCP fails = note and continue. "MCPs reached" line in Sources & Confidence makes degraded runs visible.
-15. **Hardened plan detection (v2.4, Constraint #19).** Active extraction from all context before asking. Announce extracted plans explicitly ("Plan confirmed from transcript: Suite Enterprise"). Mandatory ask when plan is absent and matters. Scoped definition of when plan is required vs optional.
-16. **Language policy with CSM override (v2.4).** Customer-facing output always matches customer language (non-negotiable). Internal-facing output defaults to customer language but respects sticky CSM override ("give me this in English"). Handles multilingual CSM team (Portuguese, Italian, German, English, Spanish).
-17. **Goals Analysis customer-language framing (v2.4).** Section headers reflect customer's expressed situation, not Zendesk product taxonomy. Worked example in prompt. Supporting quote required for every goal; one-line inference from quote allowed.
-18. **Recommendations grounded in call (v2.4).** No generic best practices padded in. 🔴 marker removed from table. Dependency sequencing stated explicitly in "Why It Fits" column.
-19. **Scoped workflow pause (v2.4).** Pause signal no longer fires for clarifications about the active deliverable. Those are answered inline with a simple "¿continuamos?" Spontaneous Q&A on unrelated topics still triggers the pause.
+## Architecture Principles (carried into V3)
+These are the load-bearing rules the V3 prompts implement. Kept as context for why the prompts look the way they do.
 
-## Parallel Prompt Lines
+1. **Signal-based routing.** Z2 is always first. Other sources only called when the question type signals they're needed.
+2. **SAGE drafts emails directly.** No Quill handoff. Quill is a separate standalone agent.
+3. **Step budgeting.** Tool calls capped by query complexity to stay under the 25-step limit.
+4. **Tavily optimized.** Default `search_depth: "fast"`. Use `include_domains`, not `site:` operators.
+5. **Datifyer session ownership.** Once Datifyer produces output, Datifyer owns every subsequent turn until explicit exit.
+6. **Email reply mirroring.** Communication Mode follows the customer's structure. No re-headlining or reframing.
+7. **Best-practice research trigger.** "best practice," "mejores prácticas," "recommended way" force Z2 search before answering, even in Communication Mode follow-ups.
+8. **No unverified packaging claims (Constraint #19).** SAGE cannot state "included on your plan" or "no plan change required" without confirming plan and availability.
+9. **Configuration Guide mode.** Z2-grounded step-by-step setup guides. Per-account variability line for intent/field/group-based guides. No partial guides.
+10. **MCP reliability layer.** Required vs optional MCPs per task type. Required fails = stop. Optional fails = flag and continue. `MCPs reached:` line in Sources & Confidence.
+11. **Hardened plan detection.** Active extraction from context first. Announce extracted plans explicitly. Mandatory ask when plan is absent and matters.
+12. **Language policy with sticky CSM override.** Customer-facing output always matches customer language (non-negotiable). Internal-facing defaults to customer language but respects `"give me this in English"` override.
+13. **Goals Analysis customer-language framing.** Category headers reflect customer's situation, not Zendesk product taxonomy.
+14. **Recommendations grounded in call.** No generic best practices. Dependency sequencing stated in "Why It Fits" column.
+15. **Scoped workflow pause.** Pause signal fires only for unrelated topics, not clarifications about the active deliverable.
+16. **AI Product Truth (Constraint #21).** Essential vs Advanced distinction retiring April 27 – May 18, 2026. Single AI agent offering going forward. Never recommend "upgrading to AI Advanced" as a separate purchase.
+17. **Industry enrichment spec.** Four-tier approach (already in context → domain infer → ask → graceful skip). Stored in COMPANY_CONTEXT slot, reused across modes.
 
-SAGE and Datifyer each have two active prompt lines — a sonnetized production line and an OpenAI-cookbook-tuned experimental line.
+## V3.1 additions on top of V3.0
+- **Welcome MCP probe.** Four parallel tool calls on greeting-only starts (Z2 search, Drive search, Unleash search, Tavily extract on zendesk.com). Surfaces auth failures and connection issues at session start, before real work is at stake.
+- **Template-language rule.** Explicit instruction at top of Deliverables that every English header, column name, status value, and example in the templates is a translation slot, not a literal string. Fixes mixed-language Recommendations and Success Plan outputs.
+- **Wording refinement.** "QBR Express workbook (Google Sheet pre-loaded with Snowflake data via Coefficient)" replaces the generic QBR workbook phrasing.
 
-### Sonnetized line (active production)
-- SAGE: `Versions/sage_v2.4_main_prompt.md` (rolling out 2026-04-24; v2.1.2.3 was live until then)
-- Datifyer: `Versions/Datifyer_v2.md` (live)
-- Style: detailed prose, originally tuned for Claude Sonnet 4.6.
-- Rule: new features or requested changes land here first when they need to reach production CSMs immediately.
+## Prompt Lines
 
-### OpenAI line (parallel experimental → future production)
-- SAGE: `Versions/sage_openai_v1_main_prompt.md`
-- Datifyer: `Versions/Datifyer_openai_v1.md`
+### Active production (V3.1, rolled out 2026-04-26)
+- SAGE: `Versions/sage_v3.1_main_prompt.md`
+- Datifyer: `Versions/Datifyer_v3.1.md`
 - Style: cookbook-aligned — XML spec blocks, compressed tool specs, length and reasoning delegated to API parameters, customer-ready default output quality.
-- Status: experimental. Tested on cloned agents in LibreChat with real customer scenarios. Intended to replace the sonnetized line once soft-launched and validated.
 - **Required LibreChat agent settings (both prompts assume them):**
   - Model: GPT-5.4 (direct OpenAI, not Bedrock)
   - `reasoning_effort: medium`
   - `verbosity: low`
   - `useResponsesApi: off`
-- Feedback loop: user brings bad output or new need, variant file is edited directly. Production files are not touched during these edits unless the change must also land in production today.
+- Feedback loop: user brings bad output or new need, file is edited directly.
+
+### Previous production (V3.0, 2026-04-24 to 2026-04-26)
+- SAGE: `Versions/sage_v3.0_main_prompt.md`
+- Datifyer: `Versions/Datifyer_v3.0.md`
+- Status: superseded by V3.1. Kept for reference and rollback if needed.
 
 ### When to edit which
-- Bug or missing feature visible in production today → production file first (v2.4 or Datifyer_v2.md), then port to the OpenAI variant.
-- Refinement or addition requested only for the OpenAI variant → variant file only.
-- Never edit production files unless the change is intended for production CSMs in the next rollout.
-
-### Capability highlights of the OpenAI line
-- **SAGE:** contradiction fixes, hardened plan detection with no fallback, Config Guide with placeholder discipline and source consolidation, Deliverables mode with goal-consolidation rules and Success Plan brevity, factual-vs-meaning follow-up distinction, industry enrichment spec (website ask) alongside plan detection, customer-language output, traffic-light scope tightened to standalone Q&A and Configuration Guide only.
-- **Datifyer:** format-agnostic input, source provenance rule preventing memory-based fabrication, 12-month ROI baseline for comparability across sources, customer-ready ROI with plain-word trend labels (no arrow ambiguity), dynamic month header (no ambiguous "Latest"), silent industry enrichment with mandatory CSM ask, whole-number rounding throughout customer-facing display.
+- Bug or missing feature in production → edit the V3.1 files (`sage_v3.1_main_prompt.md` / `Datifyer_v3.1.md`) directly.
+- Never edit V3.0 files unless rolling back. V3.0 is a frozen reference snapshot.
+- New experiments that aren't production-ready yet should be created as new files (e.g., `sage_v3.2_experimental.md`) and added to `.gitignore`'s allowlist if they need to be tracked.
 
 ## What's Next
-- Validate sage_openai_v1 with real CSM use after the v2.4 rollout on 2026-04-24.
-- Soft-launch Datifyer_openai_v1 to a small CSM group for real-world testing.
-- Replace the sonnetized line with the OpenAI line when soft-launch evidence supports it.
-- Monitor GPT-5.4 for behavior drift (banned words, hedge language, verbosity, backstage leaking).
+- Monitor V3.1 in production for real CSM feedback.
+- Watch for the specific V3.1 changes in action: welcome MCP probe catching auth issues, Deliverables outputs staying in-language, no mixed-language headers.
+- Continue monitoring GPT-5.4 for behavior drift (banned words, hedge language, verbosity, backstage leaking).
 
 ## How to Use promptsmith.md
 The promptsmith skill is used to analyze and score LibreChat agent prompts. To invoke it, read the file and adopt its framework. It provides: classification, dimensional scoring (1-10), diagnosis by severity, and rewrite guidance. It has LibreChat-specific knowledge (capabilities, handoffs, artifacts, step limits).
