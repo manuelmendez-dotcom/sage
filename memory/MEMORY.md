@@ -1,0 +1,7 @@
+- [Naturecan incident](project_naturecan_incident.md) — Wrong architecture + hardcoded intents in triage guide; root cause is missing context, not MCP state
+- [SAGE V3 production line](project_sage_v3.md) — V3.0 (2026-04-24 to 2026-04-26) superseded by V3.1 (2026-04-26). V3.1 adds Welcome MCP probe + Deliverables template-language rule. All work lands in V3.1.
+- [Datifyer V3 production line](project_datifyer_v3.md) — V3.1_production active (rolled out 2026-05-05). Sheet + AIH PDF only. Dual-path determinism locked. Naming mirrors SAGE: `_production.md` is live, `_v3.1.md` is frozen staging reference.
+- [Prompt-layer ceiling](reference_prompt_layer_ceiling.md) — What spec-layer fixes can/cannot lock. 24-run PAYPER debug pattern: drop the cell > tighten the spec. Architecture change beats rule addition.
+- [GPT-5.4 prompting guidance](reference_gpt54_prompting_guidance.md) — Distilled OpenAI cookbook guidance: XML specs, verbosity as param, contradictions hurt more, Claude-era residue to drop.
+- [LibreChat MCP limits](reference_librechat_mcp_limits.md) — Agent cannot proactively detect MCP status; all reliability logic must be reactive
+- [Pressure-test recommendations](feedback_pressure_test_recommendations.md) — Manuel filters proposals through necessity/logic/latency; default to leaner designs

@@ -1,5 +1,5 @@
-# Whitelist approach: ignore everything, only allow explicit exceptions
-# This keeps the GitHub repo to just the heart (current prompt + context)
+# Whitelist approach: ignore everything, only allow the disaster-recovery
+# minimum — the two live production prompts + project context + memory.
 
 # Ignore everything by default
 *
@@ -10,23 +10,17 @@
 # Allow the project context file
 !CLAUDE.md
 
-# Allow the CSM-facing changelog
-!CHANGELOG.md
-
-# Allow the AI rollout questionnaire responses (governance documentation)
-!AI_Rollout_Questionnaire_Responses.md
-
-# Allow the Versions directory but only the V3 production line.
-# V3.0 = previous production, V3.1 = staging/reference, V3.1_production = live.
+# Allow the Versions directory, but ONLY the production subfolder contents.
+# V3.0, V3.1 staging, and other historical prompts live locally only.
 !Versions/
 Versions/*
-!Versions/sage_v3.0_main_prompt.md
-!Versions/sage_v3.1_main_prompt.md
-!Versions/Datifyer_v3.0.md
-!Versions/Datifyer_v3.1.md
 !Versions/production/
 !Versions/production/sage_v3.1_main_production.md
 !Versions/production/Datifyer_v3.1_production.md
+
+# Allow the memory directory — every .md inside.
+!memory/
+!memory/*.md
 
 # Explicit exclusions for tooling (redundant with * but kept for clarity)
 .DS_Store
