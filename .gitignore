@@ -17,13 +17,16 @@
 !AI_Rollout_Questionnaire_Responses.md
 
 # Allow the Versions directory but only the V3 production line.
-# V3.0 = previous production, V3.1 = current production.
+# V3.0 = previous production, V3.1 = staging/reference, V3.1_production = live.
 !Versions/
 Versions/*
 !Versions/sage_v3.0_main_prompt.md
 !Versions/sage_v3.1_main_prompt.md
 !Versions/Datifyer_v3.0.md
 !Versions/Datifyer_v3.1.md
+!Versions/production/
+!Versions/production/sage_v3.1_main_production.md
+!Versions/production/Datifyer_v3.1_production.md
 
 # Explicit exclusions for tooling (redundant with * but kept for clarity)
 .DS_Store
