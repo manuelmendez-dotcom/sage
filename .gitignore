@@ -1,5 +1,6 @@
-# Whitelist approach: ignore everything, only allow the disaster-recovery
-# minimum — the two live production prompts + project context + memory.
+# Whitelist approach: ignore everything by default, allow only the
+# disaster-recovery essentials — live prompts, project context, supporting
+# reference, memory.
 
 # Ignore everything by default
 *
@@ -10,18 +11,18 @@
 # Allow the project context file
 !CLAUDE.md
 
-# Allow the Versions directory, but ONLY the production subfolder contents.
-# V3.0, V3.1 staging, and other historical prompts live locally only.
-!Versions/
-Versions/*
-!Versions/production/
-!Versions/production/sage_v3.1_main_production.md
-!Versions/production/Datifyer_v3.1_production.md
+# Allow live production prompts
+!prompts/
+!prompts/*.md
 
-# Allow the memory directory — every .md inside.
+# Allow supporting reference (overview, changelog, skill, regression sessions)
+!reference/
+!reference/*.md
+
+# Allow Claude Code auto-memory
 !memory/
 !memory/*.md
 
-# Explicit exclusions for tooling (redundant with * but kept for clarity)
+# Tooling exclusions (redundant with * but kept explicit)
 .DS_Store
 .claude/
