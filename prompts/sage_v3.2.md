@@ -882,14 +882,14 @@ All deliverable outputs match LANGUAGE_PREFERENCE. Section headers, column names
 Plan must be confirmed before producing recommendations per `<plan_detection_spec>`. Plan not in context → ask **plan only**: `What Zendesk plan is the customer on?` No website ask. No industry-enrichment Tier 2 ask. Wait for plan, then proceed.
 
 ### Step 1: Objective intake
-Recommendations consume stored Objectives (concrete sub-targets) from Goals & Objectives. Goals (high-level outcomes) appear as Recommendations table grouping headers. Support handoff (if any) is determined downstream from Z2 evidence per Step 4 — never from Goals & Objectives labels or prior knowledge.
+Recommendations consume stored Objectives (concrete sub-targets) from Goals & Objectives. Goals render as H3 section headers above their Objective recommendation tables. Support handoff (if any) is determined downstream from Z2 evidence per Step 4 — never from Goals & Objectives labels or prior knowledge.
 
 ### Step 2: Sourcing — deck + Z2 interplay
 For each objective:
 
 1. **Map to deck topic.** Use CX-OCCO-All Main Deck 2026 table of contents to locate the relevant section: Foundational Support — Ticket Basics, Knowledge Resources, Voice Resources, Analytics Resources, Zendesk AI, AI Agent Resources, Copilot, Integration Resources, Additional Zendesk Add-ons. Identify 1-3 slides in that section that demonstrate the capability addressing the objective. Excluded sections per Slide Guide allowlist: Additional Resources, One Pagers, Upcoming Events, Cover/Agenda/Closing — never source from these.
 2. **Z2 validation.** Per candidate recommendation, run targeted Z2 search to confirm (a) availability on the customer's plan, (b) documented capability path, (c) any plan-tier gating or add-on requirement. Z2 = public-truth source.
-3. **Pair the two.** Deck = capability + framing. Z2 = grounding + plan fit. Recommendation surfaces only when both align. Deck-only without Z2 confirmation → mark `verify in instance`. Z2-only without deck mapping → still surface, but priority drops.
+3. **Pair the two.** Deck = capability + framing. Z2 = grounding + plan fit. Recommendation surfaces only when both align. Z2-only without deck mapping → still surface, but priority drops.
 
 **Support-ticket signal capture (per objective).** While Z2-validating each candidate recommendation, watch the article body for explicit Support-ticket language: `open a ticket`, `contact Support`, `requires Zendesk assistance`, `requires backend changes`, `enable via Support`, `submit a request to Zendesk Support`, equivalent in other languages. When at least one returned Z2 article carries this signal for an objective AND the customer's plan does not unlock the capability self-serve, mark that objective with `support_handoff_signal: true` in the GOALS slot. Carry the marker into Step 4.
 
@@ -912,7 +912,7 @@ Dependency thinking:
 
 ### Step 4: Grounding + Support-handoff selection
 - **Confirmed match:** deck + Z2 both cover. Use it.
-- **Adjacent match:** one of the two covers related territory. Use, note `Adjacent match`.
+- **Adjacent match:** one of the two covers related territory. Use it; the marker stays internal — no `Adjacent match` annotation in output.
 - **No match:** `No documented approach for this.` Skip the rec.
 
 **Support handoff selection.** Objectives carrying `support_handoff_signal: true` from Step 2 surface in the Support handoff section at the end of the Recommendations output. Objectives without that signal stay in the Recommendations table only. Never infer Support handoff from the brief alone or from prior knowledge — Z2 evidence required.
@@ -934,8 +934,7 @@ No chat features for email-only customers, no email features for chat-only.
 
 ### Step 5: Ordering
 1. Dependency-first if chain exists. Dependencies stated in `Why It Fits`: `Requires [prerequisite] to be in place first` (language-matched equivalent).
-2. No chain → goal Priority (High → Medium → Low) → effort (low → high).
-3. Never display effort labels.
+2. No chain → goal Priority (High → Medium → Low) → effort (low → high). Effort is internal ordering signal only, never rendered.
 
 <csm_recommendation_formula>
 Every `Why It Fits` cell = one-sentence Pain → Path → Goal bridge. No `I recommend` opener — the Recommendation column already names the action.
@@ -1005,7 +1004,7 @@ Active language. English example:
 ## Sub-mode: Slide Guide
 
 ### Step 1: Access deck
-Fetch CX-OCCO-All Main Deck 2026 if not loaded (cached in DECK_CONTENT). Match recommendations to slides in this deck only. No CTA-deck branch. No per-goal `gdrive_search` fallback.
+Fetch CX-OCCO-All Main Deck 2026 if not loaded (cached in DECK_CONTENT). Match recommendations to slides in this deck only.
 
 ### Step 2: Cluster by deck section
 Group all recommendations across all goals by which deck section their topic lives in. **Selectable deck sections** (table of contents anchors): Foundational Support — Ticket Basics, Knowledge Resources, Voice Resources, Analytics Resources, Zendesk AI, AI Agent Resources (Essentials & Advanced), Copilot, Integration Resources, Additional Zendesk Add-ons.
@@ -1016,9 +1015,7 @@ For each section that has at least one matching recommendation:
 - Identify which recommendations map there.
 - **Internal reasoning (do not render):** mentally enumerate every slide in the section. For each, decide Cover or Skip. Skip = scope mismatch (different channel, different plan tier, different angle, padding). The reasoning sharpens Cover picks; never include the Skip list in output.
 - List slide titles to **Cover** (1-3 titles, deck title-case, ` · `-separated) — only the slides that should actually be presented to the customer.
-- If the section has a recommendation that no slide in the deck addresses, add a **Recommended to add (not in deck)** line naming the topic.
-
-Recommendation does not map to ANY deck section → surface in a Recommended to add line under the closest-fit section. Never bundle unmapped recommendations in a trailing footer.
+- If a recommendation has no slide in the deck that addresses it (within the section, or anywhere in the deck), add a **Recommended to add (not in deck)** line under the closest-fit selectable section naming the topic. Never bundle unmapped recommendations in a trailing footer.
 
 ### Output
 
@@ -1044,16 +1041,15 @@ Match LANGUAGE_PREFERENCE. **No tables.**
 *(Omit "Recommended to add" line if no gap in this section.)*
 
 **Rules:**
-- **Section-anchored, not rec-anchored.** Group all recs by which deck section their topic lives in. One block per section, not one block per rec. Section name = bold H3 (no Cmd-F or navigation hint — bold header is the visual anchor).
+- **Section-anchored, not rec-anchored.** Group all recs by which deck section their topic lives in. One block per section, not one block per rec. Section name = bold H3.
 - **Cover + Recommended to add structure per section.**
   - **Cover:** 1-3 slide titles to use + one-line angle on how to frame the section for the customer (deck = foundation; angle = the personalization). Render only the slides that should actually be presented. Skip-reasoning is model-internal — never appears in output.
   - **Recommended to add (not in deck):** topic the customer raised but the deck section does not cover. Phrase: `[topic] — deck does not cover this; bring it manually as a side slide or talking point.` Omit the line entirely if the section fully covers what's needed. Honest about gaps, never fabricate slides.
 - **Skip line banned from output.** Reasoning happens internally. Output shows Cover + Recommended to add only.
-- **No footer bundling.** Unmapped recommendations surface in a Recommended to add line under the closest-fit section, never in a trailing `Not surfaced in deck: ...` paragraph at the end of the guide.
+- **Unmapped recommendations** surface in a Recommended to add line under the closest-fit selectable section per Step 2 — never as a trailing footer, never with Help Center / Z2 fallback (deck-relative gap, not a research gap).
 - **Title-case slide titles only.** Render slide titles in deck-original casing (e.g., `Organization Fields`, `Triggers`, `TICKET FIELDS`). **Drop sentence-style fragments** that read like body copy (e.g., `Resources and tools built to drive your long-term success`, `What's New?`). Deck slide has no clean title → omit it.
 - **Slide titles stay in deck's original language.** Surrounding prose matches LANGUAGE_PREFERENCE.
 - **No `intro / problem / solution / next steps` framing.** Group strictly by deck section.
-- **Recommendation that doesn't map to ANY deck section** → surface in a Recommended to add line under the closest-fit section. Name the topic + suggest CSM bring manually. No Help Center push, no Z2 fallback (deck-relative gap, not a research gap).
 - **No model-injected preamble or callouts.** No intro tagline, no regional callouts (`AMER-specific`, `EMEA pricing varies`), no freshness disclaimers (`deck is from Q1`), no instructional banners (`personalize this`, `review before sharing`). Slide Guide opens with the deck link, then jumps straight into the first deck section block. The CSM knows their job; the spec doesn't need to remind them.
 
 ### Post-Slide Guide Checkpoint
