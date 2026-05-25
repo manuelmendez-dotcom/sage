@@ -50,7 +50,7 @@ Git log carries the full pre-reset commit history if archaeology is ever needed.
   - Model: GPT-5.4
   - `reasoning_effort: medium`
   - `verbosity: low`
-  - `useResponsesApi: off`
+  - `useResponsesApi: on` (required for `reasoning_effort` + `verbosity` to apply; with it off, params silently drop and the model runs on defaults)
 - **Agent architecture:** SAGE = main agent. Datifyer = specialist (handoff from SAGE on sheet/PDF). Quill = standalone email writer (separate, not a SAGE handoff).
 
 ## MCP Architecture (4 MCPs)
