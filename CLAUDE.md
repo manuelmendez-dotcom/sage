@@ -10,7 +10,7 @@ SAGE/
 ├── CLAUDE.md                  ← this file (project context)
 ├── prompts/                   ← live production prompts
 │   ├── sage_v3.0.md           ← active SAGE prompt
-│   └── datifyer_v3.0.md       ← active Datifyer prompt
+│   └── datifyer_v3.2.md       ← active Datifyer prompt
 ├── reference/                 ← context + regression tests + tools
 │   ├── SAGE_Overview.md       ← manager-facing one-pager
 │   ├── CHANGELOG.md           ← CSM-facing changelog
@@ -32,7 +32,7 @@ Git log carries the full pre-reset commit history if archaeology is ever needed.
 
 ## Versioning workflow (forward)
 
-1. **All edits land directly in `prompts/sage_v3.0.md` or `prompts/datifyer_v3.0.md`.** Treat the V3.0 file like a living trunk.
+1. **All edits land directly in `prompts/sage_v3.0.md` or `prompts/datifyer_v3.2.md`.** Treat the active trunk file like a living document. SAGE trunk = `sage_v3.0.md`. Datifyer trunk = `datifyer_v3.2.md` (promoted 2026-05-28: V3.0 + V3.1 deleted from `prompts/`, V3.2 carries active-agent denominator + Light-tier branch + range-rationale + SS-ratio band rendering).
 2. **Bump version on material change.** Refactors, render-shape changes, math changes, or new modes → increment to V3.1, V3.2, etc. Cosmetic edits, typo fixes, wording polish do NOT bump.
 3. **Bump procedure:**
    - `cp prompts/sage_v3.0.md prompts/sage_v3.1.md` (or whatever bump)
