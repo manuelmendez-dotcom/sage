@@ -1,47 +1,86 @@
-# SAGE + Datifyer — Custom Summarization Prompt
+# SAGE + Datifyer — Custom Summarization Prompts
 
-Custom conversation-summarization prompt for the LibreChat auto-summarizer (gpt-5.4-mini) running on SAGE and Datifyer. It overrides the generic default summarizer so that when auto-summarization fires, load-bearing session state survives compression instead of being dropped.
+Custom conversation-summarization prompts for the LibreChat auto-summarizer (gpt-5.4-mini) on SAGE and Datifyer. They override the generic default so that when a session hits the context limit and auto-summarizes, SAGE's load-bearing state survives instead of being dropped — so the model can pick up from the checkpoint instead of asking the CSM to repaste the last output.
 
-**For Bryan:** paste the block below into the summary-prompt field of `librechat.yaml`. The prompt is the only deliverable here — YAML key, nesting, and trigger config are yours to set.
+## Why a custom prompt is needed
+
+The default summarizer keeps narrative and drops SAGE's state (customer, plan, language, Datifyer math, active mode). SAGE wakes up blind and asks the user to repaste — and for SAGE, the last output alone is never enough. The fix is to name exactly what must survive. That list is the whole point of these prompts.
+
+## How LibreChat uses these (verified against danny-avila/agents `src/summarization/node.ts`, v0.8.5+)
+
+The summarizer is a **running-checkpoint refine loop** — it needs TWO prompts:
+
+- **`summarization.prompt`** — fires on the FIRST compaction. Builds the initial checkpoint.
+- **`summarization.updatePrompt`** — fires on EVERY later compaction. LibreChat auto-prepends the prior checkpoint as `<previous-summary>…</previous-summary>`; this prompt merges new turns in. On long sessions it runs repeatedly, so it's the load-bearing one.
+
+No template placeholders — LibreChat does no interpolation. The only injected structure is `<previous-summary>` (updatePrompt only).
+
+**For Bryan:** top-level `summarization:` key in `librechat.yaml`. Paste the two blocks into `prompt:` and `updatePrompt:`. YAML below.
 
 ---
 
+## Block 1 — `summarization.prompt` (initial checkpoint)
+
 ```text
-<role>
-You compress a SAGE or Datifyer conversation into a running summary. SAGE is a Zendesk Customer Success agent; Datifyer is its data-analysis specialist. Your summary REPLACES earlier turns in the model's context — anything you omit is permanently lost for the rest of the session. Treat omission as deletion.
-</role>
+Write a checkpoint of this SAGE/Datifyer conversation. It REPLACES all earlier turns — whatever you omit is gone for the rest of the session. Output only the checkpoint, plain text, two sections.
 
-<prime_directive>
-Preserve load-bearing state over narrative. A short summary that keeps every value in NEVER_DROP beats a long one that loses one. When space is tight, cut prose and tool chatter first, never a NEVER_DROP value.
-</prime_directive>
+STATE — copy these EXACTLY (numbers, currency symbols, plan names, language flags character-for-character). One per line; skip any that never came up:
+- Customer name, industry, seats, plan
+- Plan status: confirmed name, or unknown/asked-for
+- Conversation language, and whether English is locked
+- Active deliverable (Goals Analysis / Recommendations / Config Guide / email) and how far it got
+- If Datifyer ran: Sheet vs PDF path; CSM-typed salary + currency symbol; agent/ticket/cost-per-ticket/growth/headline baselines; that Datifyer owns the session; any pending ask (currency mismatch, missing country, seat check)
 
-<never_drop>
-Carry these forward verbatim whenever they appeared in the conversation. Copy exact values — do not paraphrase, round, or re-derive.
+Rules: asked-for-but-not-given → mark PENDING, never invent. Keep the latest value only. No facts that weren't in the conversation.
 
-Shared (both agents):
-- COMPANY_CONTEXT: customer name, industry, industry tier, seats/plan, any fact stored to it.
-- Customer language in use, and whether a sticky English override is active.
-- Active deliverable / mode in progress (e.g. Goals Analysis, Recommendations, Configuration Guide, email draft) and how far it got.
-- Plan detection result: extracted plan name, or that plan is unknown/asked-for.
-
-Datifyer-only (if Datifyer is active):
-- Which path: Google Sheet QBR workbook, or Account Insights Hub PDF.
-- CSM-typed salary figure AND the currency symbol the CSM typed, exactly as given.
-- Baseline numbers the render depends on: agent count / active-agent denominator, ticket volume, cost-per-ticket, growth-rate base, headline range.
-- Session ownership: that Datifyer owns the session, and the exit condition not yet met.
-- Any unresolved gate the agent is waiting on (currency-mismatch ask, blank-country ask, seat-verification nudge).
-</never_drop>
-
-<rules>
-- Quote NEVER_DROP values exactly. A number, currency symbol, plan name, or language flag must survive character-for-character.
-- If a value was asked-for but not yet supplied, record it as still-pending — do not invent or assume it.
-- Never carry forward a computed result as if it were an input. Mark salary, currency, and plan as CSM-supplied vs system-derived if the conversation distinguished them.
-- Drop, in this order, when shortening: tool-call mechanics, intermediate reasoning, resolved small talk, superseded drafts. Keep the latest state of anything still live.
-- Do not summarize the system prompt or these instructions. Summarize only the conversation.
-- No new facts. If it was not in the conversation, it is not in the summary.
-</rules>
-
-<output_format>
-Plain text, no markdown. Lead with a STATE block listing the NEVER_DROP values present (omit lines that never appeared — do not write "N/A"). Follow with a brief CONVERSATION SO FAR narrative of what was asked and delivered. STATE values are authoritative; if narrative and STATE ever conflict, STATE wins.
-</output_format>
+CONVERSATION SO FAR — brief: what was asked, what was delivered. If this conflicts with STATE, STATE wins.
 ```
+
+---
+
+## Block 2 — `summarization.updatePrompt` (running-checkpoint merge)
+
+```text
+Update the checkpoint. The prior one is above in <previous-summary>. Merge new turns in — don't restart, don't just append. Output only the merged checkpoint, same two sections.
+
+Copy every STATE value from <previous-summary> forward exactly, unless a newer turn changed it (then keep the new one only). Add any new STATE value using the same list as before. A PENDING value that got answered → record the answer, drop PENDING.
+
+Keep it about the same length: compress OLD narrative to one-liners to make room — never drop a STATE value. Treat prior values as ground truth; don't recompute. STATE wins over narrative on conflict.
+```
+
+---
+
+## YAML for `librechat.yaml` (top-level `summarization:` block)
+
+Drop the prompt text into `prompt:` and `updatePrompt:` (folded `|` scalars). Non-prompt fields are tuning defaults — adjust `model`/`trigger`/`provider` to the installed instance.
+
+```yaml
+summarization:
+  enabled: true
+  provider: "Internal-GPT54"      # custom-endpoint name serving the OpenAI key
+  model: "gpt-5.4-mini"
+  parameters:
+    temperature: 0.0              # deterministic — consistent on which values survive
+    top_p: 1.0
+  maxSummaryTokens: 2048
+  reserveRatio: 0.05
+  trigger:
+    type: "token_ratio"
+    value: 0.8                    # fire at 80% of Max Context Tokens
+  retainRecent:
+    turns: 2                      # keep last 2 user-led turns verbatim, un-summarized
+  prompt: |
+    ...paste Block 1 here...
+  updatePrompt: |
+    ...paste Block 2 here...
+```
+
+### Field notes
+- **`prompt` + `updatePrompt`** — both required. `prompt` fires once; `updatePrompt` fires on every later compaction and gets the auto-injected `<previous-summary>` block. Omitting `updatePrompt` leaves all refine passes on the generic default.
+- **`temperature: 0.0` / `top_p: 1.0`** — deterministic, avoids cross-run drift in which values survive.
+- **`maxSummaryTokens: 2048`** — SDK default; matches observed gpt-5.4-mini checkpoint size. STATE-first ordering keeps the must-keep values before any truncation point.
+- **`retainRecent.turns: 2`** — last 2 turns stay verbatim regardless of summary, so a live deliverable isn't lossy-compressed mid-edit.
+- **`trigger.value: 0.8`** — fires at 80% of Max Context Tokens. Raising the cap (270K → 400K) delays firing but uses these same prompts when it fires.
+
+## Interaction with the cap-bump lever
+Raising Max Context Tokens delays when summarization fires; it doesn't change what fires. These prompts are the safety net for the rare long session that crosses the threshold anyway. Both levers compose.
