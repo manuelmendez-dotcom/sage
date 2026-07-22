@@ -1,0 +1,30 @@
+interface:
+  display_name: "SAGE Zendesk Q&A"
+  short_description: "Research grounded Zendesk customer answers"
+  default_prompt: "Use $answer-zendesk-questions to research this Zendesk question and brief me with a source-grounded answer."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "z2-help-center"
+      description: "Official Zendesk Help Center documentation"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/z2-help-center"
+    - type: "mcp"
+      value: "tavily"
+      description: "Official Zendesk public web discovery and retrieval"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/tavily"
+    - type: "mcp"
+      value: "unleash"
+      description: "Indexed Zendesk internal knowledge, Slack, and Jira"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/unleash"
+    - type: "mcp"
+      value: "slack"
+      description: "Read-only live Slack channel and thread research"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/slack"
+
+policy:
+  allow_implicit_invocation: true

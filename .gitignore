@@ -1,6 +1,6 @@
 # Whitelist approach: ignore everything by default, allow only the
 # disaster-recovery essentials — live prompts, project context, supporting
-# reference, memory.
+# reference, memory, and the shareable SAGE plugin bundle.
 
 # Ignore everything by default
 *
@@ -22,6 +22,17 @@
 # Allow Claude Code auto-memory
 !memory/
 !memory/*.md
+
+# Allow the internal Codex plugin and its repo-local marketplace entry
+!.agents/
+!.agents/plugins/
+!.agents/plugins/marketplace.json
+!plugins/
+!plugins/sage-zendesk-qa/
+!plugins/sage-zendesk-qa/**
+!evals/
+!evals/sage-zendesk-qa/
+!evals/sage-zendesk-qa/**
 
 # Tooling exclusions (redundant with * but kept explicit)
 .DS_Store

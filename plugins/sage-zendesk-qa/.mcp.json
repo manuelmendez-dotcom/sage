@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "z2-help-center": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/z2-help-center"
+    },
+    "tavily": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/tavily"
+    },
+    "unleash": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/unleash"
+    },
+    "slack": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/slack"
+    }
+  }
+}
