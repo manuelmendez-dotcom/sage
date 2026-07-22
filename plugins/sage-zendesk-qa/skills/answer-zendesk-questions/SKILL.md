@@ -13,6 +13,7 @@ Turn Zendesk questions into concise, evidence-grounded CSM briefings. Treat the 
 - Use Z2 first. Use Tavily only for an official public sweep that can add value. Use Unleash and Slack only when internal evidence can resolve a problem signal, recent change, documentation gap, or conflict.
 - Keep public and internal evidence visibly separate. Never turn Slack, Jira, or an internal discussion into an announced product commitment.
 - Default to a CSM-facing diagnostic briefing. Produce customer-ready copy only when explicitly requested.
+- Do not narrate a future deliverable. If customer-ready copy is requested or promised, include the complete copyable draft in the same response.
 - Match the language rules in [references/response-formats.md](references/response-formats.md).
 - Say `couldn't verify` when the available evidence does not support a claim.
 
@@ -96,6 +97,8 @@ Read [references/evidence-policy.md](references/evidence-policy.md) whenever Tav
 
 Read [references/solution-and-escalation.md](references/solution-and-escalation.md) when the answer may require Support, Security, Product, Account Management, Professional Services, a Solution Architect, Marketplace, App Builder, or custom development.
 
+Do not present custom development as an implementation option merely because an API object or field exists. Verify the write path, relevant prerequisites, and architecture from current sources. Otherwise label it a technical discovery path and route it to an appropriate technical owner.
+
 ## 7. Produce the right response
 
 Read [references/response-formats.md](references/response-formats.md) and select the matching format.
@@ -121,6 +124,7 @@ Confirm silently that:
 - The plan gate and add-on minimum-tier check passed where relevant.
 - Public, internal, and unverified evidence are not blurred.
 - Internal information is absent from customer-ready copy.
+- Every promised deliverable is present in the response; no research-plan narration remains.
 - Recommendations fit the customer's actual workflow rather than only a generic documented pattern.
 - The response format and language match the input.
 

@@ -36,6 +36,8 @@ Do not rely on titles or snippets for detailed procedures, exact UI controls, or
 
 Use `search_depth: "fast"` and `max_results: 5` by default. Escalate depth only when the first official sweep is materially thin.
 
+Run one official-domain sweep per unresolved claim. Run at most one refined follow-up when a distinct load-bearing claim remains unresolved; do not chain broad Tavily searches for the same question.
+
 Default official allowlist:
 
 - `support.zendesk.com`

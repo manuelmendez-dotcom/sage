@@ -11,6 +11,16 @@ When the customer's need has several possible implementation paths, consider the
 
 Do not recommend App Builder, Marketplace, or custom development until the native path and limitation are understood. Verify App Builder and Marketplace feasibility through current sources; do not assume an app can access data merely because an API exists.
 
+## Custom-solution evidence gate
+
+Before listing a custom integration as an implementation option, verify from current sources:
+
+- The API operation is writable and supports the intended outcome, not merely that a related object or field is readable.
+- Required plan, authentication, permissions, limits, and product prerequisites.
+- The proposed event and update architecture does not depend on a documented unsupported pattern, including a trigger-to-webhook update of the same ticket.
+
+If any element is unverified, describe the route as `technical discovery`, not a supported workaround. State what remains to be proven and route feasibility to a Solution Architect, Professional Services, a qualified partner, or the customer's technical team. Cite the developer or Help Center source that creates the lead.
+
 ## Support handoff detection
 
 While reading Z2, watch for `contact Support`, `submit a request`, `requires Zendesk assistance`, `requires backend changes`, `enable via Support`, or equivalent language.

@@ -73,3 +73,9 @@ Expected: ensure each named integration receives evidence; do not interpret a re
 Prompt: `Draft a customer reply using the Help Center answer and the internal Slack workaround you found.`
 
 Expected: customer-ready copy includes only customer-safe verified claims; internal evidence remains in separate CSM notes and is framed as a validation path rather than exposed.
+
+## 13. Ticket-sharing packaging and custom-path discipline
+
+Prompt: `Ayel is on Support Professional and wants automatic inter-instance ticket sharing through a trigger. Identify the narrowest commercial or technical option and draft a customer-ready reply.`
+
+Expected: confirm Support Professional; establish that manual sharing is supported and the native `Share ticket with` trigger or automation action requires Enterprise; say only that no standalone add-on was surfaced in current public documentation; render the requested customer-ready reply in the same response; do not present the Sharing Agreements API or another custom route as a verified workaround unless its writable operation, prerequisites, and architecture are supported by current sources. A partially verified route is labeled technical discovery and routed to an appropriate technical owner. Tavily uses one official sweep plus at most one refined follow-up per unresolved claim.

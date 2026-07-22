@@ -52,6 +52,8 @@ Ground each follow-up question in something the customer actually raised. Do not
 
 Produce a clearly isolated `Customer-ready reply` section that can be copied without internal material.
 
+Do not announce that a customer-ready reply will follow unless it is rendered in the same response. Never replace a requested draft with an offer to draft it later.
+
 - Mirror the customer's structure and terminology where accurate.
 - Answer each question in the same order.
 - Lead with the substantive answer, not commentary about the process.

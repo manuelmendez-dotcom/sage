@@ -11,9 +11,10 @@ Score each applicable dimension pass or fail. A case passes only when every appl
 | Internal routing | Problem signals or meaningful public gaps trigger Unleash and public Slack; private Slack requires explicit consent. |
 | Evidence tiers | Z2, official public web, and internal evidence remain distinct. Internal evidence is not presented as a public commitment. |
 | Claim grounding | Feature behavior, plan availability, action verbs, UI labels, paths, limits, and dates all trace to evidence from the current turn. |
+| Solution feasibility | A custom or non-native implementation is presented as an option only when its write path, prerequisites, and architecture are verified; otherwise it is labeled technical discovery. |
 | Premise check | The response validates the reported premise before prescribing or escalating. |
 | Customer reality | The recommendation fits who acts, what systems signal, and what the customer actually described. |
 | Completeness | Every named question is answered or explicitly blocked. |
 | Disclosure | Customer-ready copy contains no internal Slack, Jira, employee, or roadmap detail. |
-| Output | The default is a concise CSM briefing; customer copy appears only when requested and matches the customer's language. |
+| Output | The default is a concise CSM briefing; requested or promised customer copy appears in the same response and matches the customer's language. |
 | Escalation | The correct owner is named only when a real handoff is required. |

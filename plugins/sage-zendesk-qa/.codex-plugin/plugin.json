@@ -1,11 +1,16 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.1.0",
+  "version": "0.1.1+codex.20260722221728",
   "description": "Evidence-grounded Zendesk Q&A for Scaled Customer Success.",
   "author": {
-    "name": "Manuel Méndez"
+    "name": "Manuel M\u00e9ndez"
   },
-  "keywords": ["zendesk", "customer-success", "research", "support"],
+  "keywords": [
+    "zendesk",
+    "customer-success",
+    "research",
+    "support"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "SAGE Zendesk Q&A",
@@ -13,7 +18,9 @@
     "longDescription": "Internal pilot for researching Zendesk product, configuration, plan, workflow, and troubleshooting questions through Z2, official Zendesk web sources, Unleash, and Slack.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
-    "capabilities": ["Read"],
+    "capabilities": [
+      "Read"
+    ],
     "defaultPrompt": [
       "Check whether this Zendesk feature is available on the customer's plan.",
       "Investigate this Zendesk issue using public and internal evidence.",
