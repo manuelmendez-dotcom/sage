@@ -1,98 +1,156 @@
 # Source routing
 
-Use the smallest evidence set that can answer the question safely. Preserve this order: Z2, official public web, internal evidence.
+Let the user control discovery order. Let evidence authority control what the response may safely claim.
 
-## Routing table
+## Contents
 
-| Signal | Sources |
-|---|---|
-| Basic product concept or universal behavior | Z2 only |
-| Configuration how-to without problem signals | Z2; Tavily only if Z2 is thin |
-| Plan, packaging, limit, or add-on | Z2; Tavily official pricing/product page when useful |
-| Best practice or recommended approach | Z2 first; Tavily official Zendesk material when Z2 lacks sufficient breadth |
-| Reporting, Explore, API, webhook, or developer question | Z2; Tavily restricted to official Zendesk developer pages if needed |
-| Pricing or public product comparison | Z2 plus Tavily restricted to official product/pricing pages |
-| Marketplace or third-party integration | Z2 plus Tavily restricted to official Zendesk Marketplace/product pages |
-| Troubleshooting, bug, error, outage, regression, intermittent behavior | Z2; Tavily official status/release sweep; Unleash plus public Slack |
-| Z2 and official web conflict or appear stale | Unleash plus public Slack for current internal context |
-| Known issue, workaround, recent rollout, or `has anyone solved this?` | Z2 first; then Unleash plus public Slack |
-| Clearly non-Zendesk external SaaS needed to answer an integration question | Tavily on the vendor's official documentation after the Zendesk side is checked |
+- [Mode contract](#mode-contract)
+- [Evidence reuse](#evidence-reuse)
+- [Source roles](#source-roles)
+- [AUTO routing table](#auto-routing-table)
+- [Source playbooks](#source-playbooks)
+- [Search budget](#search-budget)
+- [Failure handling](#failure-handling)
 
-Google Drive is outside this skill.
+## Mode contract
 
-## Z2 playbook
+| Mode | Trigger | Tool behavior |
+|---|---|---|
+| `INTERPRET_ONLY` | Usable evidence is present and the user requests interpretation, reuse, or no new research | Make zero MCP calls |
+| `SOURCE_DIRECTED` | The user explicitly selects a source, source set, order, constraint, or validation source | Call only the allowed sources in the requested order |
+| `AUTO` | No interpret-only instruction and no source preference | Reuse suitable evidence, then use the smallest sufficient additional set |
+
+Do not silently widen a source-directed request. A source lock limits discovery; it never promotes the authority of the allowed evidence.
+
+A source named as provenance is not automatically a source directive. `Slack says X; is it true?` supplies internal evidence and ordinarily calls for AUTO public validation unless the user also directs the research to Slack.
+
+Distinguish research constraints from evidence constraints:
+
+- `Search Slack only` limits new calls to Slack but permits comparison with relevant prior evidence already in context.
+- `Base the answer only on Slack` excludes other-source evidence from the conclusion as well as from new calls.
+
+Treat `start with X` as one initial source call or focused search sequence. Report whether it was sufficient and identify—but do not call—the next useful source unless the user permits expansion.
+
+## Evidence reuse
+
+Before searching, inspect the active conversation for relevant retrieved content. Reuse evidence when its source, topic, scope, and date remain suitable for the current decision.
+
+Maintain a compact ledger containing:
+
+- Source and content title or identifier.
+- Retrieval, publication, or discussion date when available.
+- Audience tier: public product, official public, internal operational, internal engineering, enablement, or unverified.
+- Claims supported.
+- Material gaps or conflicts.
+
+Do not search the same source again solely because the user asks a follow-up. Re-query only when the earlier evidence does not cover the new claim, freshness materially matters, or the user asks for a fresh check.
+
+## Source roles
+
+| Source | Use | Authority and limits |
+|---|---|---|
+| Z2 Help Center | Product behavior, setup, requirements, limits, plans, troubleshooting, public developer documentation | Primary customer-safe product record when the article is public |
+| Tavily | Official Zendesk product, pricing, status, release, Marketplace, developer, and external-vendor pages | Official-public corroboration; community and Marketplace vendor claims require separate labels |
+| Unleash | Indexed internal knowledge, Jira, worklogs, known issues, recent decisions | Internal operational evidence; never a public commitment |
+| Slack | Fresh practitioner discussion, live operational context, and direct thread evidence | Internal conversational evidence; corroborate consequential claims |
+| Google Drive | Enablement, decks, playbooks, positioning, examples, and talk tracks | Internal enablement evidence; never overrides current product documentation |
+| Zendeskdev | Internal engineering documentation, architecture, runbooks, incidents, and deep technical feasibility | Internal engineering evidence; not public developer documentation |
+
+## AUTO routing table
+
+| Signal | Initial route | Conditional expansion |
+|---|---|---|
+| Basic product concept or universal behavior | Z2 | Stop when complete |
+| Configuration how-to without problem signals | Z2 | Tavily official Zendesk only if Z2 is materially thin |
+| Plan, packaging, limit, add-on, or pricing | Z2 | Tavily official product or pricing page when useful |
+| Best practice or recommended approach | Z2 | Tavily official Zendesk guidance when Z2 lacks breadth |
+| Public API, webhook, SDK, or developer question | Z2 | Tavily restricted to official developer.zendesk.com pages |
+| Marketplace or third-party integration | Z2 | Tavily restricted to official Marketplace and relevant vendor documentation |
+| Current outage or public status | Z2 for documented behavior | Tavily restricted to official status or release sources |
+| Suspected bug, regression, known issue, or Jira question | Z2 | Unleash first; add Slack only for a distinct freshness or practitioner gap |
+| Explicit request for recent Slack experience | Slack | Identify the public or internal validation source without calling it unless permitted |
+| Enablement, deck, playbook, positioning, or talk track | Google Drive | Z2 only when the user permits product-claim validation |
+| Internal architecture, runbook, incident mechanics, or deep engineering feasibility | Zendeskdev | Unleash only for a distinct Jira or decision gap |
+| Z2 and official web conflict or appear stale | Unleash or Slack, selected by the conflict signal | Use the second internal source only when it resolves a distinct gap |
+| Clearly non-Zendesk vendor behavior needed for an integration answer | Tavily on the vendor's official documentation | Validate the Zendesk side through Z2 when needed |
+
+Do not call Google Drive for ordinary product Q&A. Do not route public API questions to Zendeskdev merely because the word `developer` appears.
+
+## Source playbooks
+
+### Z2
 
 1. Search with a short product term plus the desired action or symptom.
-2. For load-bearing questions, run two variants: feature-specific and capability/intent.
-3. Retrieve the strongest content before using procedural or packaging claims.
-4. For long articles, inspect the TOC and retrieve only the relevant sections.
-5. Verify public status through `user_segment_id` before linking an article to a customer.
-6. For multiple named features or integrations, ensure each item receives a targeted search unless an earlier result explicitly covers it.
-7. Stop when the public answer is clear, current, applicable, and complete.
+2. Run a second focused variant only for load-bearing packaging, troubleshooting, multi-step configuration, or enumerated availability questions.
+3. Retrieve the strongest article content before using procedures, UI controls, actions, limits, or plan claims.
+4. Inspect the TOC and retrieve relevant sections for long articles.
+5. Check `user_segment_id` before treating an article as customer-shareable.
+6. Use a supplied Help Center URL directly.
 
-Do not rely on titles or snippets for detailed procedures, exact UI controls, or eligibility. Search metadata can establish that a topic exists, but body content must support the actual claim.
+Titles and snippets can identify candidates but cannot support detailed claims.
 
-## Tavily official-public playbook
+### Tavily
 
-Use `search_depth: "fast"` and `max_results: 5` by default. Escalate depth only when the first official sweep is materially thin.
+Use `search_depth: "fast"` and `max_results: 5` by default. Run one official-domain sweep per unresolved claim and at most one refined follow-up.
 
-Run one official-domain sweep per unresolved claim. Run at most one refined follow-up when a distinct load-bearing claim remains unresolved; do not chain broad Tavily searches for the same question.
-
-Default official allowlist:
+Default Zendesk allowlist:
 
 - `support.zendesk.com`
 - `www.zendesk.com`
 - `developer.zendesk.com`
 - `status.zendesk.com`
 
-Use `include_domains`; do not place `site:` in the query. Retrieve the relevant page with Tavily Extract before relying on its content.
+Use `include_domains`; do not place `site:` in the query. Retrieve the actual page before relying on it.
 
-Classify results accurately:
-
-- Official product, pricing, developer, status, and corporate pages: official public evidence.
-- Community posts: community evidence, not official product truth. Exclude by default unless the user asks for community experience or a workaround requires it.
-- Marketplace listings: Zendesk-hosted listings whose product claims may belong to a third-party vendor. Do not treat them as Zendesk-native behavior.
-
-If Tavily surfaces a Help Center URL, fetch it through Z2. This restores Z2 metadata, article content, and public-segment checks.
-
-## Internal playbook
-
-Trigger the internal layer for problem signals or meaningful public gaps. Problem signals include `bug`, `error`, `not working`, `broken`, `intermittent`, `failing`, `conflict`, `stuck`, `outage`, `crash`, `timeout`, `regression`, `no funciona`, `falla`, `roto`, `intermitente`, `bloqueado`, and `caída`.
+In AUTO mode, fetch a discovered Help Center URL through Z2 to restore article metadata. In SOURCE_DIRECTED mode, do this only when Z2 is in the allowed source set; otherwise retrieve through Tavily and disclose that Z2 audience metadata was not checked.
 
 ### Unleash
 
-- Search with the feature plus symptom or operational concept.
-- Use `include_jira: true` for suspected bugs, incidents, regressions, roadmap/status questions, and known issues.
-- Default to five results. Increase only for genuinely broad or thin searches.
-- Prefer results from the last 12 months. Use older material only when it specifically matches a long-standing issue.
-- Retrieve full content only when the snippet does not contain the needed resolution, status, or configuration detail.
+- Search with the product or feature plus the symptom, issue, or operational concept.
+- Use `include_jira: true` for suspected bugs, incidents, regressions, roadmap status, and known issues.
+- Start with five results and retrieve only the strongest relevant resources.
+- Prefer recent evidence; use older material only for a specifically matching long-standing issue.
 
 ### Slack
 
-- Search public channels using several small exact-term searches instead of one long natural-language query.
-- Add `in:`, `from:`, `is:thread`, and date modifiers only when they improve precision.
-- Read the full thread before relying on a message.
-- Prefer recent threads and identify the date in CSM notes.
-- Search private channels or DMs only after explicit current-conversation consent.
-- Never post, react, or otherwise mutate Slack from this skill.
+- Search public channels with several small exact-term searches rather than one long natural-language query.
+- Add channel, author, thread, and date modifiers only when they improve precision.
+- Read the full relevant thread before relying on a message.
+- Ask for current-conversation consent before searching private channels or DMs.
+- Never post, react, or mutate Slack from this skill.
 
-Unleash and Slack are complementary. Unleash provides indexed semantic discovery and Jira context; Slack provides fresher channel-native context. Search both when both can materially resolve an internal problem.
+### Google Drive
+
+- Retrieve a supplied canonical URL directly.
+- Search with plain text when no canonical link is available; prefer recent or clearly owned material and inspect modified dates.
+- Retrieve only the relevant document section, slide range, or sheet when the result is large.
+- Label deck language as enablement or positioning until current public documentation validates any product claim.
+- Preserve ambiguity when similarly named or stale files cannot be resolved safely.
+
+### Zendeskdev
+
+- Use only for explicitly internal engineering topics or SOURCE_DIRECTED requests.
+- Search with the product plus the engineering concept, incident symptom, service, or runbook term.
+- Retrieve the relevant article or external indexed content before relying on it.
+- Keep engineering details in CSM notes and minimize sensitive content.
+- Route public API behavior to Z2 or official developer.zendesk.com content instead.
 
 ## Search budget
 
 | Complexity | Typical maximum calls |
 |---|---:|
 | Simple Z2 question | 2–3 |
-| Z2 plus official public sweep | 4–5 |
-| Troubleshooting with internal validation | 6–8 |
+| One source-directed question | 2–4 within the allowed source |
+| Z2 plus official-public expansion | 4–5 |
+| Troubleshooting with one internal layer | 5–7 |
 | Multi-topic question | 8–10 |
 
-Stop expanding once the answer is sufficiently supported. One refined query is preferable to chains of synonyms.
+Stop expanding when the answer is sufficiently supported. Prefer one refined query to chains of synonyms.
 
 ## Failure handling
 
-- Z2 unavailable: stop; no Zendesk product answer from memory.
-- Tavily unavailable: continue with Z2 unless the question specifically depends on an official non-Help-Center source; disclose the public-web gap.
-- Unleash or Slack unavailable: use the remaining internal source and disclose incomplete internal coverage.
-- Both internal sources unavailable when internal validation is material: state that internal validation could not be completed and route appropriately.
-- Empty results: rephrase once, then stop or move to the next applicable layer. Never equate a retrieval miss with product unavailability.
+- `INTERPRET_ONLY`: never repair a gap with a tool call; identify the next useful source.
+- `SOURCE_DIRECTED`: if an allowed source is unavailable, disclose the failure and continue only to the next source already permitted by the user. Do not substitute an unpermitted source; stop when the allowed set is exhausted.
+- `AUTO`, Z2 unavailable: use Tavily restricted to official Zendesk sources only when it can support the claim; disclose the missing Z2 metadata check. Stop when customer-safe status or exact Help Center content is load-bearing.
+- `AUTO`, optional source unavailable: continue only when the remaining evidence is sufficient and disclose the coverage gap.
+- Empty results: rephrase once within the permitted source, then stop or identify the next source. Never equate a retrieval miss with product unavailability.

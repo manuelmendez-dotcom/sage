@@ -15,6 +15,14 @@
     "slack": {
       "type": "http",
       "url": "https://mcp-gateway.zende.sk/mcps/slack"
+    },
+    "google-drive": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/google-drive"
+    },
+    "zendeskdev": {
+      "type": "http",
+      "url": "https://mcp-gateway.zende.sk/mcps/zendeskdev"
     }
   }
 }

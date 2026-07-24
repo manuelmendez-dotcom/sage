@@ -16,11 +16,13 @@ Suggested shape:
 ```markdown
 **Answer:** [What the evidence supports. State an important native limitation up front.]
 
+**What this means for the customer:** [Translate the evidence into the customer's actual situation when useful.]
+
 **On their plan:** [Only when plan changes the answer and is confirmed.]
 
-**Recommendation:** [Concrete path grounded in the customer's stated workflow.]
+**Recommended CSM action:** [A concrete guidance, curation, or validation step within Scaled CSM scope.]
 
-**Support / development / external app:** [Only when a genuine handoff or non-native path exists.]
+**Owner / next step:** [Only when a genuine handoff, non-native path, or further validation is required.]
 
 ### Public sources
 
@@ -29,13 +31,23 @@ Suggested shape:
 ### CSM notes
 
 [Only internal evidence, meaningful assumptions, conflicts, or verification gaps.]
+
+*Research scope: [Mode] · [Sources used or `New searches: none`] · [Constraint when applicable]*
 ```
 
 For a multi-question email, replace generic labels with the customer's actual questions and answer them in the original order.
 
 Keep public sources to the few URLs that materially support the answer. Do not list every search result.
 
-Omit `CSM notes` when no internal evidence, conflict, assumption, or important gap exists. Omit the handoff beat when the issue resolves without one.
+Omit `CSM notes` when no internal evidence, conflict, assumption, or important gap exists. Omit the owner beat when the issue resolves without one. Keep the research-scope line in CSM-facing output even when the notes section is omitted.
+
+Use one of these compact scope patterns:
+
+- `Research scope: Interpret only · New searches: none`
+- `Research scope: Source-directed · Source lock: Slack · Used: Slack`
+- `Research scope: Auto · Used: Z2, Unleash`
+
+When a research-only constraint differs from an evidence-only constraint, make that clear without process narration. For example, `New searches: Slack only · Prior Z2 evidence reused`.
 
 ## Pasted customer content without a draft request
 
@@ -59,10 +71,12 @@ Do not announce that a customer-ready reply will follow unless it is rendered in
 - Lead with the substantive answer, not commentary about the process.
 - Use `we` and `our` when writing as a Zendesk representative.
 - Include a clear next step.
-- Add no fact that was not grounded in the current research turn.
+- Add no fact that is not grounded in suitable supplied, prior-turn, or newly retrieved evidence available in the active conversation.
 - Do not include internal citations, confidence labels, research narration, or employee names.
 
 After the draft, provide public sources and CSM notes outside the copyable reply only when useful.
+
+Place the research-scope line outside the customer-ready copy. Never include internal source names or mode metadata inside the draft.
 
 ## Style
 

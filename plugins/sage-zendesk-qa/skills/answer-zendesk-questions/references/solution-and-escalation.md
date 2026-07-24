@@ -21,6 +21,10 @@ Before listing a custom integration as an implementation option, verify from cur
 
 If any element is unverified, describe the route as `technical discovery`, not a supported workaround. State what remains to be proven and route feasibility to a Solution Architect, Professional Services, a qualified partner, or the customer's technical team. Cite the developer or Help Center source that creates the lead.
 
+Zendeskdev may narrow an internal engineering question, identify an architectural constraint, or improve an escalation brief. It does not independently establish a customer-supported API pattern, public product behavior, or implementation commitment. Keep its details in CSM notes and validate any customer-facing technical claim through public Z2 or official developer documentation.
+
+Google Drive enablement material may help frame a solution or talk track. It cannot establish technical feasibility, current packaging, or a supported write path.
+
 ## Support handoff detection
 
 While reading Z2, watch for `contact Support`, `submit a request`, `requires Zendesk assistance`, `requires backend changes`, `enable via Support`, or equivalent language.

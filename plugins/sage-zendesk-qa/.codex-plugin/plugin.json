@@ -1,7 +1,7 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.1.1+codex.20260722221728",
-  "description": "Evidence-grounded Zendesk Q&A for Scaled Customer Success.",
+  "version": "0.2.0+codex.20260724214756",
+  "description": "Source-aware Zendesk Q&A and evidence interpretation for Scaled Customer Success.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -13,18 +13,18 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "SAGE Zendesk Q&A",
-    "shortDescription": "Grounded Zendesk answers for customer success",
-    "longDescription": "Internal pilot for researching Zendesk product, configuration, plan, workflow, and troubleshooting questions through Z2, official Zendesk web sources, Unleash, and Slack.",
+    "displayName": "SAGE CSM Q&A",
+    "shortDescription": "Source-aware Zendesk briefings for CSMs",
+    "longDescription": "Research Zendesk questions automatically or through user-selected Z2, Tavily, Unleash, Slack, Google Drive, and Zendeskdev sources, then interpret the evidence for Scaled Customer Success.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [
       "Read"
     ],
     "defaultPrompt": [
-      "Check whether this Zendesk feature is available on the customer's plan.",
-      "Investigate this Zendesk issue using public and internal evidence.",
-      "Analyze this customer email and brief me before drafting a reply."
+      "Interpret the evidence above for a Scaled CSM without new research.",
+      "Research this Zendesk question using only the sources I name.",
+      "Auto-route this Zendesk question and brief me with grounded evidence."
     ]
   },
   "mcpServers": "./.mcp.json"

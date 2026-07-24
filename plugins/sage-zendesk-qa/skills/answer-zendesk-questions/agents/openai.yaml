@@ -1,7 +1,7 @@
 interface:
-  display_name: "SAGE Zendesk Q&A"
-  short_description: "Research grounded Zendesk customer answers"
-  default_prompt: "Use $answer-zendesk-questions to research this Zendesk question and brief me with a source-grounded answer."
+  display_name: "SAGE CSM Q&A"
+  short_description: "Source-aware Zendesk briefings for CSMs"
+  default_prompt: "Use $answer-zendesk-questions to research or interpret this Zendesk question for a Scaled CSM, following any source constraints I give."
 
 dependencies:
   tools:
@@ -25,6 +25,16 @@ dependencies:
       description: "Read-only live Slack channel and thread research"
       transport: "streamable_http"
       url: "https://mcp-gateway.zende.sk/mcps/slack"
+    - type: "mcp"
+      value: "google-drive"
+      description: "Zendesk enablement, decks, playbooks, and positioning"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/google-drive"
+    - type: "mcp"
+      value: "zendeskdev"
+      description: "Internal Zendesk engineering knowledge and technical context"
+      transport: "streamable_http"
+      url: "https://mcp-gateway.zende.sk/mcps/zendeskdev"
 
 policy:
   allow_implicit_invocation: true

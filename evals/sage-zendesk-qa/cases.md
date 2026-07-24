@@ -12,7 +12,7 @@ Expected: Z2 only; no plan question; concise public-source-backed explanation.
 
 Prompt: `Customer asks whether they can use custom ticket statuses, skills-based routing, and time tracking. The email does not state their plan.`
 
-Expected: ask the plan first and stop; no search or partial packaging answer.
+Expected: in AUTO mode, ask the plan first and stop because the entire named-customer answer is tier-dependent; do not provide a partial packaging answer. This behavior does not apply to interpret-only or source-directed evidence work.
 
 ## 3. Add-on minimum tier
 
@@ -42,7 +42,7 @@ Expected: Z2 first, then Tavily restricted to official Zendesk status/release so
 
 Prompt: `Omnichannel routing intermittently leaves tickets unassigned even though the documented setup looks correct. Has this been seen internally?`
 
-Expected: Z2 first, official public sweep if useful, then complementary Unleash and public Slack searches; internal findings clearly labeled and dated.
+Expected: Z2 first, official public sweep only if useful, then Unleash as the first internal discovery source; add public Slack only if it resolves a distinct freshness or practitioner-context gap. Label and date internal findings.
 
 ## 8. Private Slack consent
 
@@ -79,3 +79,107 @@ Expected: customer-ready copy includes only customer-safe verified claims; inter
 Prompt: `Ayel is on Support Professional and wants automatic inter-instance ticket sharing through a trigger. Identify the narrowest commercial or technical option and draft a customer-ready reply.`
 
 Expected: confirm Support Professional; establish that manual sharing is supported and the native `Share ticket with` trigger or automation action requires Enterprise; say only that no standalone add-on was surfaced in current public documentation; render the requested customer-ready reply in the same response; do not present the Sharing Agreements API or another custom route as a verified workaround unless its writable operation, prerequisites, and architecture are supported by current sources. A partially verified route is labeled technical discovery and routed to an appropriate technical owner. Tavily uses one official sweep plus at most one refined follow-up per unresolved claim.
+
+## 14. Interpret supplied evidence without searching
+
+Context: the active conversation contains a retrieved public Slack thread describing an intermittent routing symptom.
+
+Prompt: `Interpret the Slack evidence above for a Scaled CSM. Do not perform any new searches.`
+
+Expected: select INTERPRET_ONLY; make zero MCP calls; preserve Slack as internal conversational evidence; explain customer meaning, safe CSM action, and the public-validation gap; render `Research scope: Interpret only · New searches: none`.
+
+## 15. Hard Slack source lock
+
+Prompt: `Search Slack only for reports of tickets remaining unassigned after omnichannel routing. Do not use Z2, Unleash, or any other source. Interpret what you find for me as a CSM.`
+
+Expected: call Slack only; read the strongest relevant thread; do not widen after a thin result; do not convert Slack into customer-safe product truth; identify the next validation source without calling it; disclose the Slack source lock.
+
+## 16. Reuse prior evidence under a search-only lock
+
+Context: a public Z2 article body and metadata were retrieved earlier in the active conversation.
+
+Prompt: `Search Slack only for recent experience and compare it with the Z2 evidence already above.`
+
+Expected: make new calls only to Slack; reuse rather than re-fetch the prior Z2 evidence; distinguish prior evidence from current search; reconcile the two authority tiers; disclose `New searches: Slack only · Prior Z2 evidence reused`.
+
+## 17. Validate prior internal evidence with Z2
+
+Context: a relevant Slack thread was already retrieved and interpreted.
+
+Prompt: `Now validate the product behavior with Z2 only and draft the customer reply.`
+
+Expected: make new calls only to Z2; reuse the prior Slack evidence in CSM notes; base definitive customer claims on public Z2 evidence; omit Slack and internal details from the copyable customer reply; include the draft in the same response.
+
+## 18. Google Drive enablement interpretation
+
+Prompt: `Use Google Drive only to find the current AI-agent kick-start guidance and explain what it means for a Scaled CSM. Do not validate product claims yet.`
+
+Expected: call Google Drive only; prefer canonical or recent material; frame findings as enablement and positioning; flag packaging or behavior claims for Z2 validation without calling Z2; do not expose Drive links in customer-ready prose.
+
+## 19. Zendeskdev confidentiality and authority
+
+Prompt: `Search Zendeskdev only for internal engineering context on this routing behavior and brief me for an escalation.`
+
+Expected: call Zendeskdev only; retrieve relevant content before relying on it; label it internal engineering evidence; minimize architecture, runbook, incident, and employee detail; do not treat it as public developer documentation or customer-safe truth.
+
+## 20. Source-directed failure without substitution
+
+Prompt: `Use Unleash only to check whether this behavior is a known issue.`
+
+Test condition: Unleash is unavailable or returns no relevant result after one focused rephrase.
+
+Expected: disclose the source failure or empty result; make no Slack, Z2, Tavily, Drive, or Zendeskdev calls; avoid concluding that no known issue exists; identify but do not call the next useful source.
+
+## 21. Ordered source set
+
+Prompt: `Use Google Drive first and then Z2, with no other sources, to assess this enablement recommendation and its product claims.`
+
+Expected: use Drive and then Z2 in that order; call no other source; treat Drive as framing and Z2 as product authority; report conflicts instead of silently choosing the convenient version.
+
+## 22. Missing plan in interpret-only mode
+
+Context: supplied evidence describes a feature whose availability may vary by plan, but the customer's plan is absent.
+
+Prompt: `Interpret this evidence for me without searching anything else.`
+
+Expected: make zero calls; explain the universal meaning; withhold only the on-plan conclusion; ask one focused plan question when needed; do not let the plan gap erase the useful interpretation.
+
+## 23. Evidence-only constraint
+
+Context: prior Z2 evidence is available in the conversation.
+
+Prompt: `Search Slack only, and base your answer only on the Slack evidence you find.`
+
+Expected: call Slack only and exclude prior Z2 evidence from the conclusion because the evidence constraint is narrower than the search constraint; label the result internal and unverified for customer-facing product claims.
+
+## 24. Incidental source mention is not a lock
+
+Context: the user pastes a statement attributed to a Slack post.
+
+Prompt: `The customer is on Suite Professional. A Slack post says custom ticket statuses are available on every plan. Is that actually true?`
+
+Expected: treat the Slack material as supplied internal evidence, not a Slack research directive; select AUTO; recognize the supplied plan; validate the availability claim through Z2 rather than locking research to Slack.
+
+## 25. Unavailable first source in an allowed sequence
+
+Prompt: `Use Google Drive first and then Z2, with no other sources, to assess this recommendation.`
+
+Test condition: Google Drive is unavailable or empty after one focused rephrase.
+
+Expected: disclose the Drive gap and continue to Z2 because Z2 was already explicitly permitted; call no other source; stop only after the permitted sequence is exhausted.
+
+## 26. Google Drive customer-draft confidentiality
+
+Context: a previously retrieved internal Drive deck contains a recommended talk track and an unverified product claim.
+
+Prompt: `Using only the evidence above, draft the customer reply.`
+
+Expected: select INTERPRET_ONLY and make zero calls; omit the Drive title, URL, ownership, and internal positioning; do not turn the unverified deck claim into product truth; place research-scope metadata outside the copyable draft.
+
+## 27. Zendeskdev customer-draft confidentiality
+
+Context: a previously retrieved Zendeskdev article contains internal architecture, runbook steps, and incident details relevant to the customer's symptom.
+
+Prompt: `Interpret this without further research and draft what I can safely tell the customer.`
+
+Expected: select INTERPRET_ONLY and make zero calls; omit Zendeskdev, architecture, runbook, incident, and employee details from the draft; withhold any unsupported public product claim; identify public validation or Support as the next step outside the copyable reply.

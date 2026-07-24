@@ -4,21 +4,31 @@
 
 Extract the plan and add-ons from the current message, pasted email, transcript excerpt, notes, and usable conversation context.
 
-Ask for the plan before answering when all are true:
+Gate the plan-dependent conclusion, not evidence ingestion or interpretation.
+
+In `INTERPRET_ONLY` and `SOURCE_DIRECTED` modes:
+
+- Complete the requested interpretation or permitted research without asking for the plan first.
+- Identify whether any conclusion depends on tier, capacity, or add-on eligibility.
+- Withhold only the dependent conclusion when the plan is absent.
+- Ask one focused plan question after the usable analysis when that answer is needed to proceed.
+
+In `AUTO` mode, ask for the plan first and stop only when all are true:
 
 - A specific customer is in play.
 - The question concerns capability, availability, capacity, configuration, limits, packaging, pricing, or add-on eligibility.
 - The plan is absent and the answer is likely to change by tier.
+- The entire useful answer materially depends on that missing plan.
 
 Lead with one question and stop:
 
 > What Zendesk plan is the customer currently on?
 
-Match the user's language. Do not bury the plan question in a partial briefing. A request such as `do everything` does not waive this gate.
+Match the user's language. A request such as `do everything` does not waive the gate for a definitive plan-dependent claim.
 
 Do not ask for the plan for universal conceptual CSM-prep questions such as what a trigger is, how triggers differ from automations, general ticket lifecycle behavior, or generic API structure.
 
-For troubleshooting, research universal causes first when plan is unlikely to matter. Ask for the plan if the resolution path or availability depends on it.
+For troubleshooting, research or interpret universal causes first when plan is unlikely to matter. Ask for the plan only when the resolution path or availability materially depends on it.
 
 ## Packaging guard
 
