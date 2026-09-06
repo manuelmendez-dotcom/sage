@@ -1,6 +1,6 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.2.0+codex.20260724214756",
+  "version": "0.2.0+codex.20260906084211",
   "description": "Source-aware Zendesk Q&A and evidence interpretation for Scaled Customer Success.",
   "author": {
     "name": "Manuel M\u00e9ndez"
