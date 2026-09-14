@@ -39,6 +39,8 @@ For a multi-question email, replace generic labels with the customer's actual qu
 
 Keep public sources to the few URLs that materially support the answer. Do not list every search result.
 
+When Community is used, label its original discussion/reply links as Community evidence and include relevant dates. Keep documented behavior distinct from community-reported experience or workarounds. Mention native Community AI search only if it was actually used; its overview is not a substitute for original references. Avoid a full extra section when one attribution sentence is sufficient.
+
 Omit `CSM notes` when no internal evidence, conflict, assumption, or important gap exists. Omit the owner beat when the issue resolves without one. Keep the research-scope line in CSM-facing output even when the notes section is omitted.
 
 Use one of these compact scope patterns:
@@ -46,6 +48,10 @@ Use one of these compact scope patterns:
 - `Research scope: Interpret only · New searches: none`
 - `Research scope: Source-directed · Source lock: Slack · Used: Slack`
 - `Research scope: Auto · Used: Z2, Unleash`
+- `Research scope: Source-directed · Community only · Used: Tavily`
+- `Research scope: Source-directed · Used: Community, Z2 · Community findings checked against official documentation`
+
+Source-menu and preference-only turns use the short interaction in [source-selection.md](source-selection.md), not the full CSM briefing. Do not add research-scope metadata to a menu when no research occurred.
 
 When a research-only constraint differs from an evidence-only constraint, make that clear without process narration. For example, `New searches: Slack only · Prior Z2 evidence reused`.
 

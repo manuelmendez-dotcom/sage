@@ -8,12 +8,15 @@ Evidence authority does not change when the user changes search order. Classify 
 |---|---|---|
 | Documented product truth | Public Z2 Help Center content | Customer-safe behavior, setup, requirements, limits, and availability |
 | Official public corroboration | Zendesk product, pricing, developer, status, and corporate pages retrieved through Tavily | Public facts outside normal Help Center coverage |
+| Community evidence | Original Zendesk Community discussions and replies with visible dates and author roles | Comparable cases, experience, and possible workarounds; validate current product claims against permitted official documentation |
 | Internal operational evidence | Unleash, Jira, direct Slack | Known issues, operational experience, recent changes, decisions, and documentation gaps |
 | Internal engineering evidence | Zendeskdev and engineering material surfaced through internal sources | Architecture, runbooks, incidents, implementation constraints, and technical discovery |
 | Internal enablement evidence | Google Drive decks, playbooks, examples, and positioning | CSM framing, talk tracks, examples, and recommendation context |
 | Unverified | Unclear provenance, incomplete retrieval, unsupported inference, stale or conflicting evidence | Do not present as settled fact |
 
 Marketplace and community content require separate labels. A Zendesk-hosted Marketplace listing can describe a third-party product without establishing native Zendesk behavior. A community post is a lead, not official documentation.
+
+Community AI overviews are discovery aids, not independent sources. Retrieve the underlying discussions before relying on them. Accepted-answer status, likes, and employee badges do not by themselves establish current product behavior. Preserve later corrections and distinguish suggestions from reported results. Public Community content is customer-accessible evidence, but restricted authenticated content must not be presented as public. See [community-research.md](community-research.md).
 
 ## Supplied and prior-turn evidence
 

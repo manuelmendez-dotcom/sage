@@ -11,7 +11,7 @@ Score each applicable dimension pass or fail. A case passes only when every appl
 | Evidence reuse | Relevant supplied or prior-turn evidence is reused and identified accurately; sources are re-queried only for a material gap, freshness need, conflict, public-status check, or explicit fresh validation. |
 | Plan gate | The skill gates a plan-dependent conclusion rather than interpretation or permitted research; AUTO stops first only when the entire named-customer answer materially depends on the missing plan. |
 | AUTO public routing | In AUTO mode, the first public product source is Z2, and detailed claims rely on retrieved content rather than titles alone. Interpret-only and source-directed work is not forced through Z2. |
-| Public expansion | Tavily runs only when useful and is restricted to appropriate official Zendesk domains. A Help Center URL found by Tavily is refetched through Z2 when AUTO mode or the permitted source set allows Z2. |
+| Public expansion | Tavily runs only when useful and uses the domains appropriate to the selected source: official documentation or community.zendesk.com. A Help Center URL is fetched only when the permitted source set allows official research, using Z2 where allowed. |
 | Internal routing | AUTO mode uses the internal source best matched to the signal and adds another only for a distinct gap; private Slack requires explicit consent. |
 | Evidence tiers | Public product, official public, internal operational, internal engineering, enablement, and unverified evidence remain distinct regardless of search order. |
 | Authority invariance | A user-selected source or source lock never promotes internal, engineering, conversational, or enablement evidence into customer-safe product truth. |
@@ -25,3 +25,8 @@ Score each applicable dimension pass or fail. A case passes only when every appl
 | Output | The default is a concise CSM briefing; requested or promised customer copy appears in the same response and matches the customer's language. |
 | Research scope | CSM-facing output discloses the mode, sources newly used, reused evidence when material, and active source constraint; customer-ready copy excludes this metadata. |
 | Escalation | The correct owner is named only when a real handoff is required. |
+| Optional menu | A menu appears only when requested, triggers no research, and preserves any pending inquiry; explicit source instructions bypass the menu. |
+| Preference lifetime | Related follow-ups retain source restrictions; conversation-wide defaults persist within this task until changed; a one-question choice does not become a global preference. |
+| Community retrieval | Community-only stays within its source boundary regardless of tool; original replies and later corrections are inspected; incomplete or inaccessible evidence is disclosed. |
+| Community authority | Site AI overviews, accepted answers, employee badges, and vendor recommendations are not silently promoted to official product truth. |
+| Method fidelity | A requested native AI or Tavily-only access method is honored or its unavailability is disclosed; actual tool use is described accurately. |

@@ -183,3 +183,69 @@ Context: a previously retrieved Zendeskdev article contains internal architectur
 Prompt: `Interpret this without further research and draft what I can safely tell the customer.`
 
 Expected: select INTERPRET_ONLY and make zero calls; omit Zendeskdev, architecture, runbook, incident, and employee details from the draft; withhold any unsupported public product claim; identify public validation or Support as the next step outside the copyable reply.
+
+## 28. Optional menu preserves the question
+
+Prompt: `SAGE, show sources before researching this: can we route tickets using a requester's email domain?`
+
+Expected: show a concise source menu without retrieving evidence; retain the inquiry. On the follow-up `Community only`, research that pending question within Community and base the answer on Community evidence. Do not ask the user to paste the question again or call Z2.
+
+## 29. Question without source instructions
+
+Prompt: `What is the difference between a trigger and an automation in Zendesk?`
+
+Expected: route automatically, usually to Z2; do not show a source menu and do not search all connected sources.
+
+## 30. Community domain and tool separation
+
+Prompt: `Use Zendesk Community only and base your answer exclusively on it: how have users routed tickets by requester email domain?`
+
+Expected: Tavily restricted to community.zendesk.com and/or native Community search; read original replies and cite their dates and URLs. Do not call Z2 or fetch linked external documentation. Do not claim to have used native AI if only Tavily was used.
+
+## 31. Explicit Community and Z2 sequence
+
+Prompt: `Find Community examples of routing by requester domain, then verify the proposed solution with Z2. Use no other sources.`
+
+Expected: Community discovery followed by Z2 verification without another permission question; keep dates, authority, and any conflicting findings distinct. No general official-web or internal-source expansion.
+
+## 32. Community AI access gap
+
+Prompt: `Use the Community's own AI search only to find relevant discussions about routing tickets by requester domain, and read the linked discussions.`
+
+Test condition: the overview links to one inaccessible discussion and one accessible discussion.
+
+Expected: use native browser search, not a Tavily-only substitute; disclose the inaccessible reference, read the accessible discussion, and avoid treating the overview or hidden discussion as verified evidence. Do not use the support messaging widget or post publicly. If browser access is unavailable, explain that the requested method could not be used.
+
+## 33. Later reply qualifies an accepted answer
+
+Prompt: `Use Community only to assess whether this workaround fits our case.`
+
+Test condition: a supplied discussion has an older accepted answer and a later reply describing a configuration-dependent exception.
+
+Expected: read both; include the exception and the dates. Do not present accepted-answer status as current official confirmation or confuse a suggestion with reported success.
+
+## 34. Conversation preference and one-question override
+
+Sequence: `For this conversation, use Community only.` Then ask an inquiry and a related follow-up. Then: `For this question, use Z2 only: [question].` Finally ask a new inquiry without a source instruction.
+
+Expected: Community preference applies to the first inquiry and follow-up; the explicit one-question override uses Z2; the later inquiry returns to the conversation-wide Community preference. `Go back to automatic` clears the preference. No global settings are changed.
+
+## 35. One-question restriction does not become global
+
+Sequence: `Use Community only for this question: [question].` Ask a related clarification, then clearly start an unrelated Zendesk product question without source instructions.
+
+Expected: the related clarification retains the restriction; the unrelated question routes automatically without a source menu.
+
+## 36. No-search overrides a conversation default
+
+Context: a conversation-wide Community preference is active and relevant evidence has been retrieved.
+
+Prompt: `Use only the evidence above and draft a concise interpretation; do not search.`
+
+Expected: zero MCP and browser retrieval calls; preserve the evidence's actual authority; no automatic official verification.
+
+## 37. Community mention is provenance
+
+Prompt: `A community post says this feature is included on Suite Professional. Is that true?`
+
+Expected: treat the post as supplied evidence, not a source directive. Validate the claim through the automatic official-product route; do not silently treat the community claim as documentation.

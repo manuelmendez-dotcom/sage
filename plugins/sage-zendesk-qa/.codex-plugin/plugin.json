@@ -1,7 +1,7 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.2.0+codex.20260906084211",
-  "description": "Source-aware Zendesk Q&A and evidence interpretation for Scaled Customer Success.",
+  "version": "0.2.0+codex.20260914162251",
+  "description": "Zendesk customer Q&A with automatic or selected sources, Community research, and grounded evidence.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -9,23 +9,28 @@
     "zendesk",
     "customer-success",
     "research",
-    "support"
+    "support",
+    "community",
+    "source-selection"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "SAGE CSM Q&A",
-    "shortDescription": "Source-aware Zendesk briefings for CSMs",
-    "longDescription": "Research Zendesk questions automatically or through user-selected Z2, Tavily, Unleash, Slack, Google Drive, and Zendeskdev sources, then interpret the evidence for Scaled Customer Success.",
+    "shortDescription": "Zendesk answers from the sources you choose",
+    "longDescription": "Ask a Zendesk customer question and SAGE selects relevant sources automatically. Choose Community only, Community with official verification, or your own source combination. Use the optional source menu or interpret supplied evidence without searching.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [
       "Read"
     ],
     "defaultPrompt": [
-      "Interpret the evidence above for a Scaled CSM without new research.",
-      "Research this Zendesk question using only the sources I name.",
-      "Auto-route this Zendesk question and brief me with grounded evidence."
-    ]
+      "Research this Zendesk question using the relevant sources.",
+      "Use Zendesk Community only to research this question.",
+      "Show me the available research sources."
+    ],
+    "brandColor": "#133E36",
+    "composerIcon": "./assets/sage-buddha-icon.png",
+    "logo": "./assets/sage-buddha.png"
   },
   "mcpServers": "./.mcp.json"
 }

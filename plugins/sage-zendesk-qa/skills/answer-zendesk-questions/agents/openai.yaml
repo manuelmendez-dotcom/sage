@@ -1,6 +1,9 @@
 interface:
   display_name: "SAGE CSM Q&A"
-  short_description: "Source-aware Zendesk briefings for CSMs"
+  icon_small: "./assets/sage-buddha-icon.png"
+  icon_large: "./assets/sage-buddha.png"
+  brand_color: "#133E36"
+  short_description: "Zendesk answers from the sources you choose"
   default_prompt: "Use $answer-zendesk-questions to research or interpret this Zendesk question for a Scaled CSM, following any source constraints I give."
 
 dependencies:
@@ -12,7 +15,7 @@ dependencies:
       url: "https://mcp-gateway.zende.sk/mcps/z2-help-center"
     - type: "mcp"
       value: "tavily"
-      description: "Official Zendesk public web discovery and retrieval"
+      description: "Public web and Zendesk Community discovery and retrieval"
       transport: "streamable_http"
       url: "https://mcp-gateway.zende.sk/mcps/tavily"
     - type: "mcp"

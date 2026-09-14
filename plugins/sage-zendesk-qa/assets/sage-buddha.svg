@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">SAGE seated Buddha</title>
+  <desc id="desc">A calm golden Buddha seated on a lotus, framed by a halo on deep green.</desc>
+  <rect width="512" height="512" rx="112" fill="#133E36"/>
+  <circle cx="256" cy="193" r="125" fill="#214E43"/>
+  <circle cx="256" cy="193" r="123" fill="none" stroke="#DBBC76" stroke-width="5"/>
+  <path d="M234 116c-3-16 7-29 22-37 15 8 25 21 22 37" fill="#E6C889"/>
+  <path d="M214 153c0-27 17-47 42-47s42 20 42 47v25c0 33-17 60-42 60s-42-27-42-60z" fill="#F3DCA7"/>
+  <path d="M214 158c-13-8-17 4-11 23 2 7 6 12 12 13m83-36c13-8 17 4 11 23-2 7-6 12-12 13" fill="#E6C889"/>
+  <path d="M231 171q9 6 17 0m16 0q9 6 17 0m-35 35q10 5 20 0" fill="none" stroke="#496149" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="256" cy="153" r="4" fill="#A98749"/>
+  <path d="M226 235c-32 10-48 35-64 69l-28 37c-8 13 0 27 15 25l56-14 16-35h70l16 35 56 14c15 2 23-12 15-25l-28-37c-16-34-32-59-64-69-8 13-18 20-30 20s-22-7-30-20z" fill="#E6C889"/>
+  <path d="M278 248c-3 37-19 67-57 99" fill="none" stroke="#A88345" stroke-width="8" stroke-linecap="round"/>
+  <path d="M205 298l13 25 38 13 38-13 13-25" fill="none" stroke="#133E36" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M198 340c-27-4-58 8-79 28-14 14-6 34 17 34h240c23 0 31-20 17-34-21-20-52-32-79-28l-58 20z" fill="#F3DCA7"/>
+  <path d="M172 374q54-10 84-14 30 4 84 14" fill="none" stroke="#A88345" stroke-width="7" stroke-linecap="round"/>
+  <path d="M157 416c29 0 48 7 62 20-1-15 15-31 37-39 22 8 38 24 37 39 14-13 33-20 62-20-16 25-48 37-99 37s-83-12-99-37z" fill="#DBBC76"/>
+</svg>

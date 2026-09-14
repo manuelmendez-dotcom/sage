@@ -1,6 +1,6 @@
 ---
 name: answer-zendesk-questions
-description: Research and interpret Zendesk product, configuration, workflow, plan, limitation, integration, and troubleshooting questions for Customer Success. Use for raw questions, discrete questions from customer content, supplied evidence, or source-directed requests naming Z2, Tavily, Unleash, Slack, Google Drive, or Zendeskdev. Honor interpret-only and source constraints; otherwise auto-route from the smallest sufficient evidence set. Do not use for account-data analysis, goal extraction, success plans, presentation creation, or other non-Q&A deliverables.
+description: Research and interpret Zendesk customer questions using relevant sources automatically or a user-selected source set, including Zendesk Community, Z2, official web documentation, Slack, Unleash, Google Drive, and Zendeskdev. Use for product and workflow Q&A, supplied evidence, community experience, or requests to show SAGE's source menu. Honor source and no-search constraints. Do not use for account-data analysis, success plans, or presentation creation.
 ---
 
 # Answer Zendesk Questions
@@ -10,6 +10,7 @@ Turn Zendesk questions or retrieved evidence into concise, evidence-grounded bri
 ## Core contract
 
 - Resolve the research mode before asking plan questions or calling tools.
+- A question without source instructions uses relevant sources automatically, not every source. Show the optional source menu only when requested; follow explicit source instructions immediately.
 - Reuse relevant evidence already present in the conversation. Do not repeat a search merely to satisfy a current-turn ritual.
 - Never complete a Zendesk product claim from memory. Supplied or retrieved evidence must support it, or label it `couldn't verify`.
 - Treat public product truth, internal operational evidence, internal engineering evidence, and enablement material as different tiers regardless of search order.
@@ -37,9 +38,11 @@ Keep a checklist for multi-question inputs. Answer or explicitly block every nam
 
 Read [references/source-routing.md](references/source-routing.md) before calling any source. Apply this precedence:
 
-1. **INTERPRET_ONLY**: Use when the user asks to interpret, synthesize, or reuse supplied or previously retrieved evidence without new research, or says `no search`, `no tools`, `use only what is above`, or equivalent. Make zero MCP calls.
+1. **INTERPRET_ONLY**: Use when the user asks to interpret, synthesize, or reuse supplied or previously retrieved evidence without new research, or says `no search`, `no tools`, `use only what is above`, or equivalent. Make zero source-retrieval calls, including MCP and browser retrieval.
 2. **SOURCE_DIRECTED**: Use when the user explicitly directs research to one or more sources, specifies a source order or constraint, or asks to validate with a particular source. Call only the permitted sources and honor the requested order. Do not silently substitute or widen.
-3. **AUTO**: Use when the user requests neither interpret-only handling nor a source constraint. Reuse suitable evidence first, then choose the smallest additional evidence set that can answer safely.
+3. **AUTO**: Use when the user requests neither interpret-only handling nor an applicable source constraint from this inquiry or an explicit conversation-wide preference. Reuse suitable evidence first, then choose the smallest additional evidence set that can answer safely.
+
+For `show sources`, `choose sources`, or an explicit conversation-wide source preference, read [references/source-selection.md](references/source-selection.md). A menu is an optional way to set the same source rules, not a separate research mode. Community is an information source; Tavily and native browser search are access tools. Read [references/community-research.md](references/community-research.md) when Community is selected or a concrete practitioner-evidence gap warrants it in AUTO mode.
 
 Treat `only`, `do not use`, and equivalent language as hard constraints. Treat `start with X` as permission to use X first, report whether it is sufficient, and identify the next useful source without calling that source unless the user permits expansion.
 
@@ -79,7 +82,8 @@ Follow the selected mode and the source roles in [references/source-routing.md](
 ### AUTO
 
 - Start with Z2 for public product behavior, configuration, requirements, limits, plan availability, or customer-shareable guidance.
-- Expand to Tavily only for a useful official-public gap or fast-changing public claim.
+- Use Tavily for a useful official-public gap or fast-changing public claim, or for the Community route below with its own domain restriction.
+- Add Community when comparable cases, practitioner experience, or possible workarounds would resolve a specific remaining gap. Read the Community playbook; keep those findings separate from official product truth.
 - Use one internal discovery source first when bugs, incidents, regressions, undocumented behavior, or recent changes require internal context. Add another internal source only for a distinct unresolved gap.
 - Use Google Drive only for enablement, positioning, decks, playbooks, or examples; do not auto-route ordinary product Q&A there.
 - Use Zendeskdev only for explicit internal-engineering, architecture, incident, runbook, or deep technical-feasibility questions. Do not treat it as public developer documentation.
