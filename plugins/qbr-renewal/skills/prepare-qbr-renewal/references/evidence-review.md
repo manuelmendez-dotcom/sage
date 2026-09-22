@@ -1,14 +1,15 @@
 # Review account evidence
 
-Use this run's delivered PPTX directly for the brief or account exploration.
-Record its actual path, source hash, report date and slide numbers. Reuse an
-existing extraction only when its hash matches this file. Do not upload or
-convert it to enable analysis, or search Drive for a substitute. Retain any
-generation warnings in the brief and separate CSM source notes.
+Use the user's supplied PPTX or PDF directly for the brief or account exploration.
+Record its actual path, source hash, customer, report date and slide/page numbers.
+Reuse an extraction only when its hash matches the supplied file. Do not upload
+or convert the report to enable analysis, search Drive for a substitute or obtain
+a fresh website export. Keep report warnings from the file or supplied context
+in the brief and separate CSM source notes.
 
-For an explicit request to revisit an earlier report, use that exact source
-instead of a previous summary or stale extraction. A new QBR or renewal-
-preparation request uses a fresh website download under the generation workflow.
+When the user provides a different version, verify its identity, hash and period
+before replacing prior evidence. Use exact sources rather than a past summary.
+Do not assume the latest attachment contains the latest reporting period.
 
 For PPTX use this skill's standard-library helper (resolve paths for this install):
 

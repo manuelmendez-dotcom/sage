@@ -1,4 +1,4 @@
-"""Install the browser workflow and migrate legacy QBR components through Codex."""
+"""Install the analysis workflow and migrate legacy QBR components through Codex."""
 import hashlib
 import json
 import os
@@ -14,7 +14,7 @@ import unittest
 class InstalledPackageTests(unittest.TestCase):
     def test_install_and_upgrade_retire_only_legacy_qbr_components(self):
         repo = Path(__file__).resolve().parents[3]
-        with tempfile.TemporaryDirectory(prefix="qbr-browser-package-") as temporary:
+        with tempfile.TemporaryDirectory(prefix="qbr-analysis-package-") as temporary:
             folder = Path(temporary)
             profile = folder / "profile"
             profile.mkdir()

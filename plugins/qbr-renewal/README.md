@@ -1,46 +1,27 @@
 # QBR Conversations
 
-One plugin generates a customer QBR through the QBR Express website, delivers the
-PowerPoint file, and offers a concise CSM conversation brief for renewal or discovery.
-
-Every new QBR or renewal-preparation request generates and downloads a fresh deck
-from the website, even if you ran it for the same customer minutes ago. It does
-not first search Drive for an older customer deck. Each run retains its actual
-download without overwriting earlier files. Ask explicitly to use an existing
-report when that is what you want. Follow-up questions and recovery of an
-unfinished run continue with that run's report.
+Bring your own QBR PowerPoint or PDF. The plugin analyzes it and directly prepares
+a concise CSM conversation brief for a renewal or discovery meeting.
 
 ## What you get
 
-- **QBR deck:** the site's generated PPTX, limited to owned product sections by
-  default, with a clickable file link after a basic readability and identity check.
-- **CSM brief:** value already realised, comparable YoY/industry context, focus
-  areas, up to three product-linked next value moves, measures, discovery
-  questions and one proposed next step. Detailed CSM source notes stay separate.
-- **Follow-ups:** the same response that delivers the PPTX offers **Prepare the
-  one-page conversation brief** (recommended) and **Explore the account results**.
-  The CSM chooses. A renewal-preparation or deck-and-brief request continues
-  directly to the brief without waiting for a menu choice.
+- **Value already realised:** supported wins, comparable YoY trends and industry
+  peer context, with clear limits where evidence is missing.
+- **Focus areas and next value moves:** up to three priorities tied to account
+  evidence, relevant Zendesk capabilities, measures and prerequisites.
+- **Meeting preparation:** a short talk track, discovery questions and one proposed
+  next step. Detailed CSM source notes stay separate.
 
-The default brief appears in the conversation. Ask for a file if needed. Analysis
-uses the delivered PPTX directly. Default delivery has no Drive upload, Slides
-conversion, timestamped rename, speaker-note editing or file deletion. A request
-for a different format or destination can be handled explicitly. The handoff
-does not stop for housekeeping approval; supplied originals and older reports
-are preserved.
+The default is a 450–650 word brief in the conversation. No menu or additional
+confirmation comes before analysis. Ask for a document if needed, or request a
+narrower analysis of a particular metric or priority. The supplied file remains
+unchanged. Follow-up questions reuse its reviewed evidence.
 
-The website settings are checked immediately before each generation:
-
-| Setting | Default |
-| --- | --- |
-| Include customer stories | Unchecked |
-| Only include product sections customers have | Checked |
-| Usage | Unchecked |
-| Appendix | Unchecked |
-| What's new | Unchecked |
-
-You can explicitly override these settings for a particular deck. The What's new
-deck section is excluded; selective release research still informs the brief.
+If no file is provided, the plugin asks for it. It does not generate QBRs, search
+Drive for customer reports, operate the QBR website, or upload/convert/deliver a
+new deck. You can also explicitly provide an existing native Google Slides link
+as the source. Multiple ambiguous reports or an unreadable source may require
+one clarification.
 
 ## Install in one go
 
@@ -50,35 +31,30 @@ On a Mac with Codex, paste this command into Terminal:
 curl -fsSL https://raw.githubusercontent.com/manuelmendez-dotcom/sage/main/install-qbr.sh | bash
 ```
 
-Restart Codex and open a new task with browser/computer-use access. Complete your
-own QBR website/Okta sign-in. Google Drive and Z2 support research for a requested
-brief or explicitly selected sources; they are not required for PPTX delivery.
-The installer does not grant company service or document permissions.
+Restart Codex and open a new task. Attach your QBR PowerPoint or PDF and select
+QBR Conversations. Google Drive and Z2 support recommendation research; sign in
+when needed. Browser access and QBR website sign-in are not required. The installer
+does not grant company service or document permissions.
 
-**No QBR MCP, Pomerium bridge or QBR Local Delivery plugin is required.** The
-website workflow is bundled here; colleagues do not need personal copies of any
-of the four contributing skills. The plugin page shows **one skill and two
-research connections: Google Drive and Z2 Help Center**. Neither generates QBRs.
+The plugin contains **one coordinating skill and two research connections:
+Google Drive and Z2 Help Center**. Colleagues do not need separate personal skills,
+a QBR MCP, Pomerium bridge or Local Delivery plugin.
 
 The installer automatically obtains an official Codex CLI when needed and a
-managed Python for setup. Its portable evidence extractor uses only Python's
-standard library. It installs no QBR server, Python package environment or
-Pomerium component. Setup files stay under `~/.local/share/qbr-renewal`; no sudo
-or shell-profile changes are required. Fresh setup needs no preinstalled
-Homebrew, Python, Git or Terminal CLI.
+managed Python for setup. The bundled PPTX extractor uses Python's standard
+library. Setup files stay under `~/.local/share/qbr-renewal`; no sudo or shell-
+profile changes are required. Fresh setup needs no preinstalled Homebrew,
+Python, Git or Terminal CLI.
 
-The same command updates the plugin. When migrating from the previous release,
-it removes the recognised standalone QBR MCP connection, the separate
-`qbr-local-delivery@qbr-express-local-delivery` plugin and its unused marketplace,
-and this installer's old delivery runtime and private bridge components.
-SAGE, unrelated connections, shared system tools, credentials and customer
-reports are preserved. The original local delivery source folder may remain on
-disk, but it is no longer installed or registered as a plugin.
+The same command updates the plugin and retires recognised obsolete QBR MCP,
+Local Delivery and private bridge components from earlier versions. SAGE,
+unrelated connections, shared tools, credentials and customer reports are
+preserved. Legacy source folders may remain on disk but are not installed.
 
 Existing clean local SAGE checkouts update by fast-forward on `main`; modified
 checkouts, other branches and other origins are preserved with an explanatory
 error. New installs use a managed repository snapshot. Apple Silicon is tested;
-Intel download checksums are provided but not tested on an Intel Mac. This
+Intel download checksums are provided but not tested on an Intel Mac. The
 installer does not support Windows/Linux.
 
 Advanced options: `QBR_RENEWAL_SOURCE_DIR` selects a local snapshot;
@@ -88,19 +64,20 @@ if desired.
 
 ## Start a task
 
-> Create a QBR for [customer], using only the products they own.
+Attach the report and use one of these prompts:
 
-> Prepare a QBR and one-page brief for [customer]'s renewal meeting.
+> Analyze this QBR and prepare a one-page renewal conversation brief.
 
-> Use this existing QBR to explain value already realised and next value moves.
-> Include YoY and industry peers where supported. No new slides.
+> Use this file to explain value already realised, focus areas and product-linked
+> next value moves. Include YoY and industry peers where supported.
 
-## The combined workflow
+> Help me prepare for discovery using this QBR. What should I explore with the customer?
+
+## Sources and evidence
 
 | Module | Role and sources |
 | --- | --- |
-| qbr-express adaptation | Website account selection, fresh generation and download; basic PPTX checks and file delivery, followed by the brief/results choice. |
-| value-conversation evidence method | Reviews the QBR, including charts, notes, definitions and recent trends. Replaces the original five-slide default with the requested brief. |
+| value-conversation evidence method | Reviews the supplied QBR, including charts, notes, definitions and recent trends. Replaces the original five-slide default with the conversation brief. |
 | cxrecommendations approach | Refreshes the live Scaled CS master and relevant supporting decks; uses official Zendesk documentation to validate product/plan claims. |
 | whatsnew approach | Selectively checks What's New and Announcements through Z2 for newer capabilities, rollout and EAP/GA questions. |
 
@@ -109,38 +86,35 @@ expected operational benefit, measure and prerequisite. Owned products are not
 assumed to be activated. Product names are research leads, not a fixed catalogue.
 There are no invented benchmarks, ROI promises or unverified entitlements.
 
-The QBR website controls available settings. Generation warnings appear beside
-the file link and carry into the brief and CSM source notes when relevant. The
-original PPTX remains unchanged. Basic file checks do not establish that all
-business data is complete. A requested brief reviews substantive content,
-including charts, notes and definitions; image-only values need visual review.
+Account results come from the supplied report and dated user context. Product
+research does not replace missing account data. Report warnings and material
+coverage gaps stay visible in the analysis and separate CSM source notes without
+editing the original. Image-only values require visual review. An explicit
+report-only request limits analysis to that report and leaves current product
+availability unverified.
 
-The package contains instructions, research connections and a local extractor;
-it contains no customer reports, internal deck copies or credentials. Normal
-requests deliver a local PowerPoint. Cloud uploads, external sharing, permission
-changes, customer messages and instance configuration are outside that default.
+Customer files, internal deck copies and credentials stay outside the plugin
+repository. Analysis does not include cloud uploads, deletion, sharing,
+permission changes, customer messages or instance configuration.
 
 ## Troubleshooting and validation
 
 | Situation | Next step |
 | --- | --- |
-| Browser access is unavailable | Enable Codex browser/computer-use access or supply an existing report for the brief. Do not reinstall a QBR MCP or bridge. |
-| The QBR website requires sign-in | Complete your own sign-in in the preserved browser tab, then continue the same run. |
-| Generation/download is uncertain | Inspect the existing request and exact new download before retrying. Do not start a duplicate job. |
-| Download is missing, corrupt or for the wrong account | Explain the file problem and preserve the active run for recovery; do not substitute an older deck. |
-| Drive is unavailable | Deliver the PPTX and next-step options normally. Disclose affected research gaps only if a brief is requested. |
-| A readable deck has a source-data warning | Deliver the file with a short warning and the brief/results options; do not edit the deck to record the warning. |
-| Z2/product sources are unavailable | Preserve the measured account story and label affected product recommendations conditional. |
-| Old QBR tools remain in an open task | Restart Codex and open a new task after updating. |
+| No report is supplied | Attach or identify the QBR PowerPoint/PDF to analyze. A customer name alone does not provide performance data. |
+| Source is unreadable or account identity is unclear | Clarify the source; accessible portions can be reviewed with stated gaps. No substitute report is generated or searched for. |
+| Drive or Z2 research is unavailable | Continue with accessible account evidence and label affected product recommendations conditional. |
+| User supplies a Google Slides link without access | Restore access to that specific source or provide a local PowerPoint/PDF. |
+| Old generation behavior remains in an open task | Restart Codex and open a new task after updating. |
 | Local SAGE changes prevent update | Save the changes and update the checkout, then rerun. The installer does not reset or stash work. |
 
-Automated checks cover safe marketplace updates, removal of recognised legacy
+Automated checks cover safe marketplace updates, retirement of recognised legacy
 QBR components, preservation of unrelated configuration, actual Codex installation
-and evidence extraction. Behavioral acceptance cases cover website generation,
-PPTX delivery, the follow-up choice and the brief in [the evaluation guide](../../evals/qbr-renewal/cases.md).
-These package checks do not establish a fresh end-to-end customer generation or
-every colleague's browser/Google permissions.
+and PPTX evidence extraction. Behavioral acceptance scenarios cover supplied-file
+analysis, missing sources and the brief in [the evaluation guide](../../evals/qbr-renewal/cases.md).
+These checks do not prove every customer report is fully readable or every
+colleague has access to the research sources.
 
 Uninstall through Codex plugin settings, or run
 `codex plugin remove qbr-renewal@zendesk-scaled-cs` when the CLI is on PATH.
-SAGE and generated reports remain in place.
+SAGE and supplied customer files remain in place.

@@ -1,7 +1,7 @@
 # Product-linked next value moves
 
-Adapted from cxrecommendations for a short CSM brief; do not add its full slide
-selection or success-plan package unless requested.
+Adapted from cxrecommendations for a short CSM brief. Keep recommendations
+focused on the meeting conversation; this module does not create presentations.
 
 ## Live source library
 

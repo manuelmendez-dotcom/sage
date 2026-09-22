@@ -6,16 +6,16 @@ Two independently installable Codex plugins share this repository and the
 | Plugin | Use it for |
 | --- | --- |
 | [SAGE CSM Q&A](plugins/sage-zendesk-qa) | Zendesk product and workflow questions, with automatic or selected research sources. |
-| [QBR Conversations](plugins/qbr-renewal) | Customer QBR decks and concise renewal/discovery preparation. |
+| [QBR Conversations](plugins/qbr-renewal) | Analyze your QBR file and prepare a renewal/discovery conversation brief. |
 
 Installing QBR Conversations does not replace or uninstall SAGE.
 
 ## Install QBR Conversations on a Mac
 
-Use a Mac with Codex browser access and your own Zendesk sign-in. One plugin
-generates through the QBR Express website, delivers the PowerPoint file, and
-offers a one-page conversation brief. Google Drive and Z2 support research for
-the brief. No QBR MCP, bridge or Local Delivery plugin is needed.
+Bring your own QBR PowerPoint or PDF. The plugin analyzes it and directly prepares
+a one-page conversation brief. Google Drive and Z2 support recommendation research.
+No QBR website access, browser workflow, QBR MCP, bridge or Local Delivery plugin
+is needed.
 
 Paste this in Terminal:
 
@@ -23,9 +23,9 @@ Paste this in Terminal:
 curl -fsSL https://raw.githubusercontent.com/manuelmendez-dotcom/sage/main/install-qbr.sh | bash
 ```
 
-Then restart Codex, start a new task, and complete your own service sign-ins.
-Try: **“Prepare a QBR and a one-page renewal brief for [customer], using owned
-products only.”**
+Then restart Codex, start a new task, and attach your QBR file.
+Try: **“Analyze this QBR and prepare a one-page renewal conversation brief.”**
+Complete your own research-service sign-ins when needed.
 
 The same command updates this plugin and retires the old QBR Local Delivery
 plugin, its marketplace, and the recognised standalone QBR MCP connection. SAGE

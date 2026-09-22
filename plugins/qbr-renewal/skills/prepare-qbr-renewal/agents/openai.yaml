@@ -1,4 +1,4 @@
 interface:
   display_name: "QBR Conversations"
-  short_description: "QBR PowerPoint and a one-page conversation brief"
-  default_prompt: "Use $prepare-qbr-renewal to prepare a QBR and renewal brief for this customer."
+  short_description: "Analyze your QBR file and prepare a conversation brief"
+  default_prompt: "Use $prepare-qbr-renewal to analyze the QBR file I provide and prepare a one-page renewal or discovery conversation brief."

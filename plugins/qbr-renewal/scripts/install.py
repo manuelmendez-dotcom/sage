@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install one browser-based QBR plugin and retire its obsolete QBR connections."""
+"""Install the QBR analysis plugin and retire its obsolete QBR connections."""
 from __future__ import annotations
 
 import argparse
@@ -153,10 +153,10 @@ def main() -> int:
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
         print(f"Installed QBR Conversations {result['version']}.")
         retire_legacy_qbr(args.codex, data_root)
-        print("One QBR plugin: fresh website generation, PowerPoint delivery, and a conversation brief when requested.")
+        print("One QBR plugin: bring your own PowerPoint or PDF and receive the conversation brief directly.")
         print("SAGE and unrelated connections are preserved. No QBR MCP, bridge or delivery runtime is required.")
-        print("Restart Codex and open a new task with browser access. Sign in to the QBR website; Google Drive and Z2 are used only when needed for research or explicitly requested sources.")
-        print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
+        print("Restart Codex and open a new task. Attach your QBR file; Google Drive and Z2 support recommendation research.")
+        print('Try: Analyze this QBR and prepare a one-page renewal conversation brief.')
         return 0
     except (OSError, RuntimeError, ValueError) as error:
         print(f"Installation could not finish: {error}", file=sys.stderr)
