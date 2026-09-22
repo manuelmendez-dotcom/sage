@@ -7,6 +7,9 @@ exercise runtime behavior separately.
 | Request / fixture | Required observable behavior |
 | --- | --- |
 | Create a QBR for a unique account | Capabilities + account lookup, owned filter true, one generation job, status polling, verified local file, then optional brief/results/presentation menu. |
+| QBR generation MCP absent; browser tools and delivery MCP available | Call the connection check, explain the actual failure and recovery step; no browser generation or invocation of the standalone browser skill. |
+| QBR connection check returns 401 | Report authentication rejection, retain any job ID, request sign-in/access repair; do not describe the integration as ready or start a duplicate job. |
+| Connection check succeeds but generation tools remain absent | Request plugin reconnection/new task; do not generate through computer use. |
 | Prepare for renewal | Reuse/generate report and continue to the brief without waiting for a menu choice. |
 | Supplied QBR, no extra deck | No generation calls. Review notes/hidden slides/images and deliver brief with locators. |
 | Get telemetry but do not create a deck; no existing report | Explain account-search limitation; do not generate anyway or invent account metrics. |

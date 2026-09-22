@@ -1,12 +1,22 @@
 ---
 name: prepare-qbr-renewal
-description: Generate Zendesk QBR Express decks and prepare concise CSM renewal or discovery briefs from QBR evidence, current Scaled CS recommendations, and selective release checks. Use for customer QBRs, value already realised, next value moves, and renewal preparation; not standalone product Q&A or instance configuration.
+description: Generate Zendesk QBR Express decks through MCP and prepare concise CSM renewal or discovery briefs from QBR evidence, current Scaled CS recommendations, and selective release checks. Use for customer QBRs, value already realised, next value moves, and renewal preparation; not standalone product Q&A or instance configuration.
 ---
 
 # QBR & Renewal Brief
 
 Help the CSM explain current value, understand what needs attention, and agree one
 useful next step. Follow the user's requested output and language.
+
+## QBR connection
+
+Account lookup and report generation use QBR Express MCP. If its tools are missing
+or fail, call the bundled `check_qbr_connection` tool when available and explain
+the result. Do not substitute the QBR Express website, computer use, or a separate
+browser skill to generate the report. Browser sign-in is fine; browser generation
+requires an explicit user request. An unavailable connection still permits analysis
+of a supplied report. Preserve any existing generation job and never restart it
+through another route.
 
 ## Route by intent
 

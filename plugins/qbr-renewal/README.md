@@ -38,6 +38,10 @@ Codex CLI if a compatible command is unavailable. Components stay under
 The private Python environment is `runtime-v1`. A fresh install uses a managed
 local marketplace snapshot, avoiding a Git/Xcode prerequisite.
 
+The installer also performs a read-only QBR MCP connection check. It distinguishes
+an installed plugin from a working generation connection and reports authentication
+failures explicitly. This check does not generate a deck.
+
 Restart Codex and open a new task. Complete your own QBR browser sign-in and any
 Google Drive/Z2 connection prompts. Company access remains required; the installer
 does not grant service permissions or share credentials.
@@ -46,6 +50,12 @@ The plugin page shows **four MCP servers and one skill**. The coordinating skill
 contains all three adapted methods. Its generation and delivery connections have
 unique IDs, `qbr-renewal-express` and `qbr-renewal-delivery`, so older QBR connections
 cannot take precedence over them.
+
+Account lookup and report generation use MCP. The plugin does not switch to
+computer use or website generation when MCP is unavailable. Ask **"Check the QBR
+MCP connection"** for the actual connection status; this diagnostic remains
+available through the local delivery connection even if generation cannot start.
+Browser sign-in is separate from browser report generation.
 
 Rerun the same command to update. It refreshes its managed snapshot or an existing
 Git marketplace. If SAGE already uses a local checkout of this repository, it
@@ -103,6 +113,7 @@ range downloads and atomic non-overwriting publication.
 | Installation interrupted or component missing | Rerun the same command; missing components are installed automatically. |
 | Dependency download blocked | Check company network access to GitHub and the Python package registry, then rerun. |
 | QBR says Unauthenticated / 401 / 403 | Complete company sign-in and verify QBR access. Retry the existing job/download. If it persists, contact the QBR service owner. |
+| Generation tools missing, only delivery visible | Ask "Check the QBR MCP connection". If it succeeds, reconnect the plugin/open a new task. If it fails, resolve the reported connection issue; do not generate through the website as an automatic fallback. |
 | Deck download fails | Retry delivery using the same job ID; do not regenerate. |
 | Runtime missing after installing from the plugin UI | Run the single Terminal command to provision the runtime. |
 | Drive or Z2 unavailable | Complete their sign-ins. Deck generation is independent; a supplied-QBR brief can proceed with product-validation gaps labelled. |

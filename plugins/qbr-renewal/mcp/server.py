@@ -6,16 +6,25 @@ import os
 from pathlib import Path
 import re
 import tempfile
+from typing import Any
 
 import requests
 from mcp.server.fastmcp import FastMCP
+from mcp.types import ToolAnnotations
 from qbr_auth import QBR_URL, pomerium_token
+from qbr_proxy import check_connection
 
 JOB_ID = re.compile(r"^[a-f0-9]{32}$")
 CONTENT_RANGE = re.compile(r"^bytes (\d+)-(\d+)/(\d+)$")
 RANGE_SIZE = 4 * 1024 * 1024
 MAX_SIZE = 2 * 1024 ** 3
-mcp = FastMCP("QBR Renewal Local Delivery", instructions="Save a completed QBR job locally; retry delivery with the same job ID, never regenerate it.")
+mcp = FastMCP("QBR Renewal Local Delivery", instructions="Save a completed QBR job locally; retry delivery with the same job ID, never regenerate it. If QBR generation tools are missing, use check_qbr_connection and report the result. Do not switch to browser generation without an explicit user request.")
+
+
+@mcp.tool(annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=True))
+async def check_qbr_connection() -> dict[str, Any]:
+    """Check QBR Express MCP sign-in and generation-tool discovery without creating a report. Use when the QBR account/generation tools are missing or fail; return the actual connection status and next step."""
+    return await check_connection()
 
 
 def safe_filename(filename: str | None) -> str:

@@ -6,10 +6,18 @@ import subprocess
 QBR_URL = "https://qbr-express.internal.zenai-apps.com"
 
 
+class QbrSignInError(RuntimeError):
+    """Sign-in did not return a usable credential; no credential data attached."""
+
+
+class QbrRuntimeMissingError(RuntimeError):
+    """The automatically installed sign-in component is unavailable."""
+
+
 def pomerium_token() -> str:
     executable = shutil.which("pomerium-cli")
     if not executable:
-        raise RuntimeError("The QBR sign-in component is missing. Rerun the one-command installer.")
+        raise QbrRuntimeMissingError("The QBR sign-in component is missing. Rerun the one-command installer.")
     try:
         result = subprocess.run([executable, "k8s", "exec-credential", QBR_URL],
                                 check=True, capture_output=True, text=True, timeout=90)
@@ -18,4 +26,4 @@ def pomerium_token() -> str:
             raise ValueError("empty credential")
         return token.removeprefix("Pomerium-")
     except (subprocess.SubprocessError, ValueError, KeyError, TypeError):
-        raise RuntimeError("QBR sign-in is needed. Complete company sign-in in your browser and reconnect.") from None
+        raise QbrSignInError("QBR sign-in is needed. Complete company sign-in in your browser and reconnect.") from None

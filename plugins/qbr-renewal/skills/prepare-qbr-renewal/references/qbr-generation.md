@@ -3,6 +3,16 @@
 Discover tools by capability; namespaces may differ. Prefer this plugin's QBR and
 delivery tools if duplicates exist. Never generate through two namespaces.
 
+If account/generation tools are not available, use `check_qbr_connection` from
+the local delivery connection. It performs sign-in, an MCP handshake and tool
+discovery without starting a report. Report its actual status; a successful
+installation or download tool alone does not establish a working generation MCP.
+If the check succeeds but the tools are still absent, ask the CSM to reconnect
+the plugin/open a new task. If it returns 401/403, complete company sign-in and
+verify service access; persistent rejection needs the QBR service owner's help.
+Do not fall back to website generation or the standalone browser workflow unless
+the user explicitly requests that route. Keep any existing job ID.
+
 1. Call `get_qbr_capabilities`. Use supported options and actual current schemas;
    do not invent section names or parameters.
 2. Call `search_qbr_accounts` with the name, subdomain or supplied ID. Identify

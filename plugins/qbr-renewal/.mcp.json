@@ -10,9 +10,10 @@
     },
     "qbr-renewal-delivery": {
       "title": "QBR Local Delivery",
-      "description": "Save completed QBR Express artifacts in Generated QBRs without overwriting reports.",
+      "description": "Check the QBR MCP connection and save completed artifacts without overwriting reports.",
       "command": "./scripts/run-delivery.sh",
       "args": [],
+      "tool_timeout_sec": 120,
       "cwd": "."
     },
     "google-drive": {"type": "http", "url": "https://mcp-gateway.zende.sk/mcps/google-drive"},

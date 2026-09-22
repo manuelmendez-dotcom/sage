@@ -47,7 +47,7 @@ class InstalledPackageTests(unittest.TestCase):
                     async with ClientSession(read, write) as session:
                         await session.initialize()
                         tools = await session.list_tools()
-                        self.assertEqual(["save_qbr_artifact"], [tool.name for tool in tools.tools])
+                        self.assertEqual({"check_qbr_connection", "save_qbr_artifact"}, {tool.name for tool in tools.tools})
                         result = await session.call_tool("save_qbr_artifact", {"job_id": "invalid"})
                         self.assertTrue(result.isError)
 

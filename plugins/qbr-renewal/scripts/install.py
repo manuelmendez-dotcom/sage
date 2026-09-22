@@ -145,12 +145,28 @@ def main() -> int:
         root = prepare_marketplace(args.codex, args.source, args.snapshot, data_root)
         if not (root / "plugins" / PLUGIN / ".codex-plugin/plugin.json").is_file():
             raise RuntimeError("The configured marketplace does not yet contain QBR & Renewal Brief.")
-        install_runtime(data_root, args.uv)
+        python = install_runtime(data_root, args.uv)
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
         print(f"Installed QBR & Renewal Brief {result['version']}.")
         print("SAGE remains independently installed. No existing MCP settings were removed.")
+        print("Checking the QBR MCP connection. Complete company sign-in if a browser window opens…", flush=True)
+        qbr_ready = False
+        try:
+            check = subprocess.run([str(python), str(root / "plugins" / PLUGIN / "mcp/qbr_proxy.py"), "--check"],
+                                   text=True, capture_output=True, timeout=115)
+            # The check emits only sanitised status messages. Never print stderr.
+            if check.stdout.strip():
+                print(check.stdout.strip())
+            qbr_ready = check.returncode == 0
+            if check.returncode:
+                print("Plugin installed; QBR generation is not ready. In Codex, ask: Check the QBR MCP connection. The plugin will not switch to browser generation.")
+        except subprocess.TimeoutExpired:
+            print("Plugin installed; the QBR connection check timed out. In Codex, ask: Check the QBR MCP connection.")
         print("Restart Codex and open a new task. Complete your own QBR, Google Drive and Z2 sign-ins when prompted.")
-        print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
+        if qbr_ready:
+            print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
+        else:
+            print('After sign-in, ask: Check the QBR MCP connection. Resolve that connection before generating a report.')
         return 0
     except (OSError, RuntimeError, ValueError) as error:
         print(f"Installation could not finish: {error}", file=sys.stderr)

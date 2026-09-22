@@ -1,6 +1,6 @@
 {
   "name": "qbr-renewal",
-  "version": "0.1.0+codex.20260922125237",
+  "version": "0.1.0+codex.20260922131344",
   "description": "Generate an owned-products QBR and prepare a source-backed renewal or discovery brief.",
   "author": {
     "name": "Manuel M\u00e9ndez"
