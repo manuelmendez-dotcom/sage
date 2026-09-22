@@ -12,9 +12,10 @@ Installing QBR Conversations does not replace or uninstall SAGE.
 
 ## Install QBR Conversations on a Mac
 
-Use a Mac with Codex browser access and your own Zendesk/Google sign-ins. One plugin
-generates through the QBR Express website, delivers verified Google Slides, and
-prepares the renewal brief. No QBR MCP, bridge or Local Delivery plugin is needed.
+Use a Mac with Codex browser access and your own Zendesk sign-in. One plugin
+generates through the QBR Express website, delivers the PowerPoint file, and
+offers a one-page conversation brief. Google Drive and Z2 support research for
+the brief. No QBR MCP, bridge or Local Delivery plugin is needed.
 
 Paste this in Terminal:
 

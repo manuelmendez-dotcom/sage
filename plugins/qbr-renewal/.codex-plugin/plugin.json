@@ -1,7 +1,7 @@
 {
   "name": "qbr-renewal",
-  "version": "0.1.0+codex.20260922143044",
-  "description": "Generate an owned-products QBR through the website, deliver Google Slides, and prepare a source-backed renewal brief.",
+  "version": "0.1.0+codex.20260922145223",
+  "description": "Generate a fresh owned-products QBR PowerPoint through the website and prepare a source-backed conversation brief when requested.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "QBR Conversations",
     "shortDescription": "Customer QBRs and clear renewal preparation",
-    "longDescription": "One plugin takes you from the QBR Express website to a verified native Google Slides deck and a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Includes the qbr-express browser workflow, value-conversation evidence review, Scaled CS recommendations, and selective release checks. No QBR MCP, bridge or Local Delivery plugin is required. Google Drive and Z2 support retrieval and research.",
+    "longDescription": "One plugin generates a fresh QBR Express PowerPoint, delivers the file, and offers a one-page CSM conversation brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Renewal-preparation requests include the brief automatically. No default Drive upload, Slides conversion, QBR MCP, bridge or Local Delivery plugin is required. Google Drive and Z2 support recommendation research.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [
@@ -17,8 +17,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Create a QBR for this customer using owned products only.",
-      "Prepare a QBR and one-page brief for this customer's renewal.",
+      "Create a fresh QBR PowerPoint for this customer using owned products only.",
+      "Prepare a QBR PowerPoint and one-page conversation brief for this customer's renewal.",
       "Prepare a renewal brief from this QBR without another deck."
     ],
     "brandColor": "#174C47"

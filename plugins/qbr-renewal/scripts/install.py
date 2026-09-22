@@ -153,9 +153,9 @@ def main() -> int:
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
         print(f"Installed QBR Conversations {result['version']}.")
         retire_legacy_qbr(args.codex, data_root)
-        print("One QBR plugin: website generation, verified Google Slides, and the renewal brief.")
+        print("One QBR plugin: fresh website generation, PowerPoint delivery, and a conversation brief when requested.")
         print("SAGE and unrelated connections are preserved. No QBR MCP, bridge or delivery runtime is required.")
-        print("Restart Codex and open a new task with browser access. Complete your own QBR website, Google Drive and Z2 sign-ins when prompted.")
+        print("Restart Codex and open a new task with browser access. Sign in to the QBR website; Google Drive and Z2 are used only when needed for research or explicitly requested sources.")
         print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
         return 0
     except (OSError, RuntimeError, ValueError) as error:
