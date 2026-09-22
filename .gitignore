@@ -34,6 +34,17 @@
 !evals/sage-zendesk-qa/
 !evals/sage-zendesk-qa/**
 
+# Independently installable QBR and renewal preparation plugin.
+!README.md
+!install-qbr.sh
+!plugins/qbr-renewal/
+!plugins/qbr-renewal/**
+!evals/qbr-renewal/
+!evals/qbr-renewal/**
+**/__pycache__/
+**/.venv/
+**/*.pyc
+
 # Tooling exclusions (redundant with * but kept explicit)
 .DS_Store
 .claude/

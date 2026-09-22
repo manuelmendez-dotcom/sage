@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "qbr-express": {"command": "./scripts/run-qbr.sh", "args": []},
+    "qbr-local-delivery": {"command": "./scripts/run-delivery.sh", "args": []},
+    "google-drive": {"type": "http", "url": "https://mcp-gateway.zende.sk/mcps/google-drive"},
+    "z2-help-center": {"type": "http", "url": "https://mcp-gateway.zende.sk/mcps/z2-help-center"}
+  }
+}

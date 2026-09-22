@@ -1,0 +1,4 @@
+interface:
+  display_name: "QBR & Renewal Brief"
+  short_description: "QBR decks and a clear renewal conversation brief"
+  default_prompt: "Use $prepare-qbr-renewal to prepare a QBR and renewal brief for this customer."

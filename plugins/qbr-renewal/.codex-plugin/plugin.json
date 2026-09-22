@@ -1,0 +1,27 @@
+{
+  "name": "qbr-renewal",
+  "version": "0.1.0",
+  "description": "Generate an owned-products QBR and prepare a source-backed renewal or discovery brief.",
+  "author": {
+    "name": "Manuel Méndez"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "QBR & Renewal Brief",
+    "shortDescription": "Customer QBRs and clear renewal preparation",
+    "longDescription": "Create a QBR for the customer's owned products, save the verified deck locally, and prepare a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Combines QBR evidence review, current Scaled CS recommendations, and selective release validation. Requires Zendesk access and the QBR bridge; run the installer first.",
+    "developerName": "Zendesk Scaled Customer Success",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Create a QBR for this customer using owned products only.",
+      "Prepare a QBR and one-page brief for this customer's renewal.",
+      "Prepare a renewal brief from this QBR without another deck."
+    ],
+    "brandColor": "#174C47"
+  },
+  "homepage": "https://github.com/manuelmendez-dotcom/sage/tree/main/plugins/qbr-renewal",
+  "repository": "https://github.com/manuelmendez-dotcom/sage",
+  "keywords": ["zendesk", "qbr", "renewal", "discovery", "customer-success"],
+  "mcpServers": "./.mcp.json"
+}
