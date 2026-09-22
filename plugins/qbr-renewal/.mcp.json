@@ -1,7 +1,19 @@
 {
   "mcpServers": {
-    "qbr-express": {"command": "./scripts/run-qbr.sh", "args": []},
-    "qbr-local-delivery": {"command": "./scripts/run-delivery.sh", "args": []},
+    "qbr-renewal-express": {
+      "title": "QBR Express",
+      "description": "Find accounts and generate QBR Express reports for renewal preparation.",
+      "command": "./scripts/run-qbr.sh",
+      "args": [],
+      "cwd": "."
+    },
+    "qbr-renewal-delivery": {
+      "title": "QBR Local Delivery",
+      "description": "Save completed QBR Express artifacts in Generated QBRs without overwriting reports.",
+      "command": "./scripts/run-delivery.sh",
+      "args": [],
+      "cwd": "."
+    },
     "google-drive": {"type": "http", "url": "https://mcp-gateway.zende.sk/mcps/google-drive"},
     "z2-help-center": {"type": "http", "url": "https://mcp-gateway.zende.sk/mcps/z2-help-center"}
   }

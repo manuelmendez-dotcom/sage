@@ -50,6 +50,11 @@ Restart Codex and open a new task. Complete the QBR browser sign-in and any Goog
 Drive/Z2 connection prompts. Check the MCP connection status if tools are absent.
 Installation does not grant service permissions or share someone else's credentials.
 
+The plugin page shows **four MCP servers and one skill**. The one coordinating
+skill contains all three adapted methods. Its own generation and delivery
+connections use the unique IDs `qbr-renewal-express` and `qbr-renewal-delivery`,
+so previously installed QBR connections cannot take precedence over them.
+
 The command updates an existing Git marketplace. If SAGE already uses a local
 checkout of this repository, it preserves that registration and updates the clean
 `main` checkout with a fast-forward only. It stops for local changes, another
@@ -111,7 +116,7 @@ range downloads and atomic non-overwriting publication.
 
 ## Validation and release limits
 
-Automated checks cover credential-output suppression, download integrity,
+Automated checks cover Codex-resolved launcher paths, credential-output suppression, download integrity,
 redirect rejection, filename safety, concurrent/no-overwrite delivery, evidence
 extraction, and safe marketplace update decisions. The maintainer also checks the
 real Codex marketplace install and local MCP handshake in an isolated profile.
