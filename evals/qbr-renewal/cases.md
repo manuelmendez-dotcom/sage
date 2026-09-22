@@ -7,6 +7,10 @@ exercise runtime behavior separately.
 | Request / fixture | Required observable behavior |
 | --- | --- |
 | Create a QBR for a unique account | Website account matching; immediately before generation verify Include customer stories, Usage, Appendix and What's new are unchecked and Only include product sections customers have is checked; one generation request, exact new download, one verified native Slides file in My Drive, then optional brief/results/presentation menu. |
+| A customer deck already exists in Drive from yesterday or minutes ago; user requests a new QBR | Go directly to the website and generate/download again without a prior customer-deck search or reuse question. Deliver a new timestamped native Slides file and preserve older decks. |
+| User repeats the same QBR request in the same task after successful delivery | Start a new website generation, even if the previous output has identical reporting dates or metrics. |
+| Repeated download receives a browser filename suffix | Track the actual new path and current download time; do not select the older file with the original filename. |
+| A same-name older presentation appears during output verification | Verify the captured new file ID and timestamped name; do not read or deliver the older result as this run's output. |
 | Account selection resets the checkboxes | Inspect and restore all five requested states after selecting the account and before generation; do not rely on earlier state. |
 | User explicitly asks to include Usage for this deck | Check Usage for this run while preserving the other four plugin defaults. |
 | A required checkbox is missing or unreadable | Explain the specific blocker before generation; do not claim the defaults were applied. |
@@ -14,11 +18,12 @@ exercise runtime behavior separately.
 | QBR MCP is absent or broken; browser is available | Use the bundled website workflow without attempting QBR MCP authentication or installing a bridge/Local Delivery. |
 | No browser access | Explain the missing capability and offer supplied-report analysis; do not claim generation succeeded. |
 | Uploaded PPTX opens at a Slides URL | Verify MIME type and convert to native Slides; the URL alone does not prove conversion. |
-| Conversion result is uncertain | Inspect existing matching files before retrying; avoid duplicate native presentations. |
+| Conversion result is uncertain | Inspect outputs from this run and reuse only its verified conversion; avoid duplicate presentations within the run without substituting an earlier run's deck. |
 | Native Slides verification succeeds | Confirm actual connector content, slide counts and representative visuals before trashing only this run's temporary Drive PPTX by captured ID. |
 | Generation reports a partial-data warning | Preserve it in the handoff and editable native metadata/notes; do not claim conversion repaired it or regenerate automatically. |
 | Explicit PPTX/local-only request | Deliver that format without default Drive upload or conversion. |
-| Prepare for renewal | Reuse/generate report and continue to the brief without waiting for a menu choice. |
+| Prepare for renewal | Generate/download a fresh report through the website and continue to the brief without waiting for a menu choice or searching for an older account deck. |
+| Prepare for renewal using an explicitly supplied QBR | Use the selected report without generation; continue to the brief. |
 | Supplied QBR, no extra deck | No generation calls. Review notes/hidden slides/images and deliver brief with locators. |
 | Get telemetry but do not create a deck; no existing report | Explain account-search limitation; do not generate anyway or invent account metrics. |
 | Two same-name accounts | Resolve instance/subdomain before generation. |

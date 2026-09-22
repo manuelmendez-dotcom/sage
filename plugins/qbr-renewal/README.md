@@ -4,6 +4,13 @@ One plugin generates a customer QBR through the QBR Express website, delivers a
 verified native Google Slides presentation, and prepares a concise CSM renewal
 or discovery brief.
 
+Every new QBR or renewal-preparation request generates and downloads a fresh deck
+from the website, even if you ran it for the same customer minutes ago. It does
+not first search Drive for an older customer deck. Each new native Slides deck
+has a generation timestamp; previous decks remain in Drive. Ask explicitly to
+use an existing report when that is what you want. Follow-up questions and
+recovery of an unfinished run continue with that run's report.
+
 ## What you get
 
 - **QBR deck:** the site's generated content, limited to owned product sections by

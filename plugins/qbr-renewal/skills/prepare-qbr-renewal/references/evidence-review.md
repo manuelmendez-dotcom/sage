@@ -8,12 +8,15 @@ in images or omitted from connector text. Include notes and hidden slides where
 accessible and record any coverage gaps. Do not claim they were reviewed if the
 connector does not expose them.
 
-When generation and the brief occur in one task, reuse the source PPTX working
-file to review notes, hidden slides and chart details, and check the corresponding
-native slides. Cite the verified Slides URL and matching slide numbers. Retain
-generation warnings and do not let conversion erase them. On a later task,
-retrieve the native presentation again instead of relying on a previous summary
-or a stale local extraction. Honour a supplied local-only source.
+When generation and the brief occur in one task, review this run's freshly
+downloaded PPTX for notes, hidden slides and chart details, and check its
+corresponding native slides. Cite that run's verified Slides URL and matching
+slide numbers. Retain generation warnings and do not let conversion erase them.
+For an explicit request to revisit an earlier report, retrieve that exact native
+presentation again instead of relying on a previous summary or stale extraction.
+A new QBR or renewal-preparation request uses a new website extraction under the
+generation workflow; this review step never searches for an older substitute.
+Honour an explicitly selected local-only source.
 
 For PPTX use this skill's standard-library helper (resolve paths for this install):
 

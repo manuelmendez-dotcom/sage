@@ -16,6 +16,14 @@ This bundles the qbr-express workflow; no separate personal skill, QBR MCP,
 bridge or Local Delivery plugin is required. Do not call old QBR MCP tools or
 repair their authentication as part of this workflow.
 
+For every new QBR or renewal/discovery-preparation request, go directly to the
+website and generate/download a fresh deck, even if the same account's deck was
+created days or minutes ago. Do not search Drive for an existing customer deck
+before generation or use one to skip the website. Reuse a report only when the
+user explicitly requests that report, a follow-up on the current results, or
+account analysis without generation.
+Completing or recovering the same run is not a new generation request.
+
 Default to owned product sections only, with customer stories, Usage, Appendix
 and What's new unchecked. Verify these website settings immediately before
 generation as detailed in the generation reference. Deliver one verified native
@@ -28,11 +36,11 @@ Google Drive and Z2 connections support retrieval and recommendation research.
 
 | Request | Deliver |
 | --- | --- |
-| Create a QBR | Generate through the website, verify native Google Slides delivery, then offer the brief as the primary follow-up. |
-| Prepare for renewal/discovery | Reuse a suitable supplied QBR; otherwise generate one. Deliver the deck, if generated, and the brief without an extra menu or permission gate. |
+| Create a QBR, including a repeat request | Generate/download a fresh deck through the website, verify the new native Google Slides delivery, then offer the brief as the primary follow-up. |
+| Prepare for renewal/discovery | Generate/download a fresh deck through the website, then deliver the deck and brief without an extra menu or permission gate. Use an existing report only when explicitly requested. |
 | Brief from this QBR | Review that report and deliver the brief. Do not generate a replacement QBR or extra slides. |
 | Account information without a deck | Retrieve an existing report if accessible. Website account search identifies the customer; it does not provide a complete account performance report. If no report exists and generation is excluded, explain the limitation and ask for an existing report. |
-| Explore, translate or refine | Reuse reviewed evidence and change only what is needed. |
+| Explore, translate or refine the current results | Reuse that run's reviewed evidence and change only what is needed. An explicit new extraction starts a fresh website run. |
 | Focused customer presentation | Draft the requested story from reviewed evidence, then use available presentation tools for the requested format. The QBR website/conversion workflow does not author a custom presentation. |
 
 Resolve ambiguous accounts before generation; a clear unique match needs no

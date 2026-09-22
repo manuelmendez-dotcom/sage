@@ -6,6 +6,23 @@ handles the renewal brief and product recommendations.
 
 Generate customer QBRs through https://qbr-express.internal.zenai-apps.com/ (Customer Success Content Hub). Use the live website as the authority for available options. The default deliverable is one converted, native Google Slides presentation per requested account in the root of My Drive, readable through the Drive connector for later queries and reuse. The generated PPTX is a temporary conversion input, not a second deliverable. Preserve the generated content; do not redesign or rewrite the deck.
 
+## Fresh extraction for every new request
+
+Start every new QBR or renewal/discovery-preparation request at the website and
+generate/download a fresh deck. This includes repeat requests for the same account,
+even minutes after a completed run. Do not search Drive for an existing customer
+deck as a prerequisite, ask whether to reuse a recent deck, or let any previous
+deck substitute for this extraction. Existing reports and unchanged source metrics
+do not cancel a new request. A new extraction does not prove the underlying data
+has refreshed; preserve the report's actual reporting periods.
+
+Reuse a report only for an explicit request to use it, an explicit no-generation
+request, or a follow-up analysis/refinement of the current results. Within one
+active run, continue the same job through download, conversion and recovery;
+status checks and retries do not create extra generation jobs. Drive searches
+after generation may locate and verify this run's output, and product research
+may retrieve source decks. Neither replaces the new customer extraction.
+
 ## Customer and settings
 
 - Use the customer name or instance domain from the request. Search Accounts and match the legal account name, instance domain, instance account ID, and CSM where available. Select only the intended account. Ask for clarification when several plausible matches remain.
@@ -48,7 +65,7 @@ Ground controls in fresh accessibility or DOM observations. Do not reuse element
 2. Click Download selected deck (the label may differ for multiple accounts). A single account produces an editable `.pptx`; multiple accounts may produce a `.zip`.
 3. Monitor generation until the site reports completion or a concrete failure. Progress can take several minutes. Use bounded waits and meaningful updates. Do not click Generate again while an existing request is running.
 4. Inspect the final status for data warnings as well as completion. A downloaded deck can still contain incomplete data. Report the affected area and useful error detail without claiming the content has been validated.
-5. Locate the newly downloaded file using the exact filename reported by the site and verify it exists. Do not substitute an older similarly named QBR. Continue to Google Slides conversion by default. Keep the local PPTX available until conversion and verification finish; retaining or linking it is not part of default completion. If conversion is blocked, retain the working file for recovery and report the blocker without presenting the PPTX as completed Slides delivery. Honor an explicit local-only request.
+5. Locate this run's new download and verify it exists. Track the current request, download time and actual local path, including any filename suffix added by the browser for repeated downloads. Do not substitute an older similarly named QBR or infer a fresh download from filename alone. Continue to Google Slides conversion by default. Keep the local PPTX available until conversion and verification finish; retaining or linking it is not part of default completion. If conversion is blocked, retain the working file for recovery and report the blocker without presenting the PPTX as completed Slides delivery. Honor an explicit local-only request.
 
 An observed example was a successful download accompanied by a Snowflake error in “New Data” for invalid identifier `AI.IS_AI_AGENT_REMOVED`. Treat this only as an example of a partial-data warning, not an expected error or a reason to regenerate automatically. Backend SQL failures need attention from the site owner; this skill does not repair them.
 
@@ -59,7 +76,7 @@ This plugin’s default is Google Slides only: one converted presentation in My 
 1. Open Google Drive and verify the signed-in account is the intended destination account.
 2. Navigate to the requested folder. For My Drive, use its root, even if a seemingly relevant folder such as Automated QBRs is visible.
 3. Prefer a supported upload/import action that directly creates native Google Slides without retaining a separate Drive PPTX. Otherwise, use New > File upload with the exact downloaded file as a temporary conversion input. For browser automation, read the current file-upload documentation and use its supported file chooser API with the absolute local path. Avoid native clipboard shortcuts when the browser disables them.
-4. Wait for “upload complete.” A 100% transfer indicator accompanied by “Finishing upload” is not yet completion. On an uncertain result, inspect Drive before retrying to avoid duplicates.
+4. Wait for “upload complete.” A 100% transfer indicator accompanied by “Finishing upload” is not yet completion. On an uncertain result, inspect only this run's upload before retrying to avoid duplicates within the run. A previous run's deck is not a substitute.
 5. Locate the uploaded file and capture its exact file ID or URL, filename, and location so any temporary PPTX can be identified for cleanup. Continue to conversion and verification. For a multi-account ZIP, inspect members, reject unsafe paths, and extract only the intended decks locally without executing contents; upload and convert each requested account’s PPTX; deliver one native presentation per account.
 
 ## Native Google Slides conversion and verification
@@ -67,8 +84,8 @@ This plugin’s default is Google Slides only: one converted presentation in My 
 Verify the native presentation before removing the temporary Drive PPTX. Opening a PowerPoint in the Slides editor is not conversion, and upload alone does not complete this workflow.
 
 1. If the upload did not already create a native presentation, open the temporary PPTX in Google Slides and use the live UI’s conversion action, typically File > Save as Google Slides. Do not change Drive’s global upload-conversion setting.
-2. Keep the customer or instance name and report date in the native copy’s name so future searches distinguish reporting versions. Preserve the source name without the `.pptx` suffix, or append “Google Slides” if necessary for clarity. Capture the new file’s URL. Inspect existing matching files before retrying a conversion whose outcome is uncertain; reuse a verified matching copy rather than creating duplicates.
-3. Verify the new file is native Google Slides. With the Drive connector, search by the report name and confirm MIME type `application/vnd.google-apps.presentation`. A `docs.google.com/presentation/...` URL alone is insufficient: Drive also uses these URLs for Office files. The source PPTX has MIME type `application/vnd.openxmlformats-officedocument.presentationml.presentation`.
+2. Keep the customer or instance name and report date in the native copy's name and append this run's generation timestamp (date, time including seconds, and timezone) to distinguish repeated extractions. Do not change the report's internal dates. Capture the new file's ID and URL. If a conversion outcome is uncertain, inspect files created by this run and reuse only a verified conversion of this run's new PPTX. Never reuse an older run's presentation because its customer, filename or report date matches. Preserve previous runs' native decks.
+3. Verify this run's new file is native Google Slides. With the Drive connector, locate the captured file ID (search by its timestamped name if needed), confirm the returned ID matches and MIME type is `application/vnd.google-apps.presentation`. A `docs.google.com/presentation/...` URL alone is insufficient: Drive also uses these URLs for Office files. The source PPTX has MIME type `application/vnd.openxmlformats-officedocument.presentationml.presentation`.
 4. Read the native copy through the available presentation-reading connector (currently `gdrive_get_presentation`). For large decks, an outline response is only an index: follow its slide selector to read actual slide content. Verify representative substantive slides, including a metrics/table slide and a narrative/product slide when present. Confirm the returned text corresponds to the customer and report. A successful search alone does not establish readability.
 5. Compare source and converted slide counts, and inspect representative converted charts, tables, and dense slides for obvious conversion loss. Reuse source slide extraction or rendering tools where available. This is a conversion check, not a new editorial or business-data review. If the connector omits chart values or information embedded in images, state that limitation; visually inspect or render the native Slides presentation when a later question depends on those details. Image-only chart values are a text-extraction limitation, not a reason to retain a duplicate Drive PPTX when the visuals are preserved. Do not claim every metric or presenter note is retrievable from a text export.
 6. Preserve any material generation warnings in the native file as described below, then complete the temporary-file cleanup. If conversion, substantive connector reading, or visual verification is blocked or shows material content loss, keep the temporary PPTX for recovery and report what remains incomplete. Do not regenerate or create duplicate conversions automatically.

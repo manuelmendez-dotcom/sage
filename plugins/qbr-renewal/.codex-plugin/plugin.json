@@ -1,6 +1,6 @@
 {
   "name": "qbr-renewal",
-  "version": "0.1.0+codex.20260922142132",
+  "version": "0.1.0+codex.20260922143044",
   "description": "Generate an owned-products QBR through the website, deliver Google Slides, and prepare a source-backed renewal brief.",
   "author": {
     "name": "Manuel M\u00e9ndez"
