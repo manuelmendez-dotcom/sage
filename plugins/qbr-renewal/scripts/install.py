@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install the runtime and plugin through Codex's supported marketplace commands."""
+"""Install one browser-based QBR plugin and retire its obsolete QBR connections."""
 from __future__ import annotations
 
 import argparse
@@ -10,12 +10,13 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
-import venv
 
 REPOSITORY = "https://github.com/manuelmendez-dotcom/sage.git"
 MARKETPLACE = "zendesk-scaled-cs"
 PLUGIN = "qbr-renewal"
-PLUGIN_ROOT = Path(__file__).resolve().parents[1]
+LEGACY_PLUGIN = "qbr-local-delivery@qbr-express-local-delivery"
+LEGACY_MARKETPLACE = "qbr-express-local-delivery"
+QBR_URL = "https://qbr-express.internal.zenai-apps.com"
 
 
 def run(*args: str) -> str:
@@ -102,30 +103,37 @@ def prepare_marketplace(codex: str, source: str = REPOSITORY, snapshot: Path | N
     return root
 
 
-def install_runtime(data_root: Path, uv: str | None = None) -> Path:
-    data_root.mkdir(parents=True, exist_ok=True)
-    with (data_root / "install.lock").open("a") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
-        runtime = data_root / "runtime-v1"
-        python = runtime / "bin" / "python"
-        if not python.exists():
-            if uv:
-                run(uv, "venv", "--no-project", "--python", sys.executable, str(runtime))
-            else:
-                venv.EnvBuilder(with_pip=True).create(runtime)
-        requirements = PLUGIN_ROOT / "requirements.txt"
-        marker = runtime / "qbr-requirements.txt"
-        if not marker.exists() or marker.read_bytes() != requirements.read_bytes():
-            print("Installing local delivery dependencies…", flush=True)
-            if uv:
-                run(uv, "pip", "install", "--python", str(python), "--quiet", "-r", str(requirements))
-            else:
-                run(str(python), "-m", "pip", "install", "--disable-pip-version-check", "--quiet", "-r", str(requirements))
-            run(str(python), "-c", "import mcp, requests")
-            marker.write_bytes(requirements.read_bytes())
-        else:
-            run(str(python), "-c", "import mcp, requests")
-    return python
+def retire_legacy_qbr(codex: str, data_root: Path) -> None:
+    """Remove only the known QBR components replaced by this plugin."""
+    installed = json.loads(run(codex, "plugin", "list", "--json"))["installed"]
+    if any(item["pluginId"] == LEGACY_PLUGIN for item in installed):
+        run(codex, "plugin", "remove", LEGACY_PLUGIN, "--json")
+        print("Removed the separate QBR Local Delivery plugin.")
+    remaining = [item for item in installed if item["pluginId"] != LEGACY_PLUGIN]
+    markets = json.loads(run(codex, "plugin", "marketplace", "list", "--json"))["marketplaces"]
+    if (any(item["name"] == LEGACY_MARKETPLACE for item in markets)
+            and not any(item.get("marketplaceName") == LEGACY_MARKETPLACE for item in remaining)):
+        run(codex, "plugin", "marketplace", "remove", LEGACY_MARKETPLACE, "--json")
+
+    for server in json.loads(run(codex, "mcp", "list", "--json")):
+        if server["name"] not in {"qbr-express", "qbr_express"}:
+            continue
+        transport = server["transport"]
+        destinations = [transport.get("url", ""), *transport.get("args", [])]
+        if any(value.rstrip("/") in {QBR_URL, QBR_URL + "/mcp"} for value in destinations):
+            run(codex, "mcp", "remove", server["name"])
+            print("Removed the obsolete standalone QBR MCP connection.")
+
+    # These exact paths belonged to this installer, not shared system tooling.
+    runtime = data_root / "runtime-v1"
+    if runtime.is_symlink():
+        runtime.unlink()
+    elif (runtime / "qbr-requirements.txt").is_file():
+        shutil.rmtree(runtime)
+    private_bin = data_root / "bin"
+    if not private_bin.is_symlink():
+        for name in ("pomerium-cli", "pomerium-v0.33.1.verified", "pom-mcp-bridge"):
+            (private_bin / name).unlink(missing_ok=True)
 
 
 def main() -> int:
@@ -133,40 +141,22 @@ def main() -> int:
     parser.add_argument("--codex", default="codex")
     parser.add_argument("--source", default=REPOSITORY, help="Local marketplace root for development; defaults to the published repository")
     parser.add_argument("--snapshot", type=Path, help="Downloaded repository snapshot for setup without Git")
-    parser.add_argument("--uv", help="Automatically provisioned dependency manager")
     args = parser.parse_args()
     if sys.version_info < (3, 10):
         parser.error("Python 3.10+ is required")
     data_root = Path(os.environ.get("QBR_RENEWAL_DATA_HOME", str(Path.home() / ".local/share/qbr-renewal"))).expanduser().resolve()
-    if not shutil.which("pomerium-cli"):
-        parser.error("The sign-in component is missing. Rerun the one-command installer.")
     try:
         run(args.codex, "plugin", "add", "--help")
         root = prepare_marketplace(args.codex, args.source, args.snapshot, data_root)
         if not (root / "plugins" / PLUGIN / ".codex-plugin/plugin.json").is_file():
             raise RuntimeError("The configured marketplace does not yet contain QBR & Renewal Brief.")
-        python = install_runtime(data_root, args.uv)
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
         print(f"Installed QBR & Renewal Brief {result['version']}.")
-        print("SAGE remains independently installed. No existing MCP settings were removed.")
-        print("Checking the QBR MCP connection. Complete company sign-in if a browser window opens…", flush=True)
-        qbr_ready = False
-        try:
-            check = subprocess.run([str(python), str(root / "plugins" / PLUGIN / "mcp/qbr_proxy.py"), "--check"],
-                                   text=True, capture_output=True, timeout=115)
-            # The check emits only sanitised status messages. Never print stderr.
-            if check.stdout.strip():
-                print(check.stdout.strip())
-            qbr_ready = check.returncode == 0
-            if check.returncode:
-                print("Plugin installed; QBR generation is not ready. In Codex, ask: Check the QBR MCP connection. The plugin will not switch to browser generation.")
-        except subprocess.TimeoutExpired:
-            print("Plugin installed; the QBR connection check timed out. In Codex, ask: Check the QBR MCP connection.")
-        print("Restart Codex and open a new task. Complete your own QBR, Google Drive and Z2 sign-ins when prompted.")
-        if qbr_ready:
-            print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
-        else:
-            print('After sign-in, ask: Check the QBR MCP connection. Resolve that connection before generating a report.')
+        retire_legacy_qbr(args.codex, data_root)
+        print("One QBR plugin: website generation, verified Google Slides, and the renewal brief.")
+        print("SAGE and unrelated connections are preserved. No QBR MCP, bridge or delivery runtime is required.")
+        print("Restart Codex and open a new task with browser access. Complete your own QBR website, Google Drive and Z2 sign-ins when prompted.")
+        print('Try: Prepare a QBR and one-page renewal brief for [customer], using owned products only.')
         return 0
     except (OSError, RuntimeError, ValueError) as error:
         print(f"Installation could not finish: {error}", file=sys.stderr)

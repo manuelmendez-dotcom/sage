@@ -9,16 +9,12 @@ fi
 case "$(uname -m)" in
   arm64)
     qbr_uv_arch=aarch64
-    qbr_pom_arch=arm64
     qbr_uv_sha=85f00cbdc6dd3e97eba4c31b4d014375a9fdfe8f570023b84e5102fc3456896b
-    qbr_pom_sha=ffd3ba0b9719779878f110bba4733968164cf189a141988744e7d6c2e8364625
     qbr_codex_sha=5e5a51470dce2423f9d96bd191d0bbc4cc0e2848a6833df5178eaf47a07a3768
     ;;
   x86_64)
     qbr_uv_arch=x86_64
-    qbr_pom_arch=amd64
     qbr_uv_sha=8dcf05a8c809bb3c471d2b614788ba27a6e41298fc8c31ac84b5f4339fd468e5
-    qbr_pom_sha=645ae0ce8f82e95fa17abb2c034a4a1a47d1fe309f08596b25f644ab42f5b1a2
     qbr_codex_sha=ff22ad0bf28b8568dbfb28ef0ea64451fe5170fa0f9118bf764ca6cb24c27791
     ;;
   *) echo 'Unsupported Mac processor.' >&2; exit 1 ;;
@@ -43,14 +39,6 @@ if [[ ! -x "$qbr_data_root/bin/uv" ]] || [[ "$("$qbr_data_root/bin/uv" --version
   tar -xzf "$qbr_temp/uv.tar.gz" -C "$qbr_temp" "uv-$qbr_uv_arch-apple-darwin/uv"
   mv "$qbr_temp/uv-$qbr_uv_arch-apple-darwin/uv" "$qbr_data_root/bin/uv"
 fi
-if [[ ! -x "$qbr_data_root/bin/pomerium-cli" ]] || [[ ! -f "$qbr_data_root/bin/pomerium-v0.33.1.verified" ]]; then
-  qbr_fetch_verified "https://github.com/pomerium/cli/releases/download/v0.33.1/pomerium-cli-darwin-$qbr_pom_arch.zip" "$qbr_temp/pomerium.zip" "$qbr_pom_sha"
-  unzip -p "$qbr_temp/pomerium.zip" pomerium-cli > "$qbr_temp/pomerium-cli"
-  chmod 755 "$qbr_temp/pomerium-cli"
-  mv "$qbr_temp/pomerium-cli" "$qbr_data_root/bin/pomerium-cli"
-  touch "$qbr_data_root/bin/pomerium-v0.33.1.verified"
-fi
-
 qbr_codex="${QBR_CODEX_BIN:-$(command -v codex || true)}"
 if [[ -z "$qbr_codex" ]] || ! "$qbr_codex" plugin add --help >/dev/null 2>&1; then
   qbr_fetch_verified "https://github.com/openai/codex/releases/download/rust-v0.155.1/codex-$qbr_uv_arch-apple-darwin.tar.gz" "$qbr_temp/codex.tar.gz" "$qbr_codex_sha"
@@ -73,4 +61,4 @@ if [[ -z "$qbr_source" ]]; then
   tar -xzf "$qbr_temp/repo.tar.gz" --strip-components=1 -C "$qbr_temp/repo"
   qbr_source="$qbr_temp/repo"
 fi
-"$qbr_python" "$qbr_source/plugins/qbr-renewal/scripts/install.py" --codex "$qbr_codex" --uv "$qbr_data_root/bin/uv" --snapshot "$qbr_source"
+"$qbr_python" "$qbr_source/plugins/qbr-renewal/scripts/install.py" --codex "$qbr_codex" --snapshot "$qbr_source"

@@ -1,18 +1,13 @@
 from __future__ import annotations
 
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
-import subprocess
-import sys
 import tempfile
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "mcp"))
-import qbr_auth
 
 
 def load(name, path):
@@ -22,110 +17,8 @@ def load(name, path):
     return module
 
 
-server = load("qbr_delivery_test", ROOT / "mcp/server.py")
 installer = load("qbr_installer_test", ROOT / "scripts/install.py")
 extractor = load("qbr_extractor_test", ROOT / "skills/prepare-qbr-renewal/scripts/extract_qbr.py")
-
-
-def response(body, start=0, total=None, status=206, headers=None):
-    result = MagicMock(status_code=status)
-    result.__enter__.return_value = result
-    result.headers = {"Content-Type": "application/zip", "Content-Range": f"bytes {start}-{start+len(body)-1}/{total or len(body)}"}
-    if headers:
-        result.headers.update(headers)
-    result.iter_content.return_value = [body]
-    return result
-
-
-class DeliveryTests(unittest.TestCase):
-    def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.addCleanup(self.temp.cleanup)
-        self.directory = Path(self.temp.name)
-        self.home = patch.object(server.Path, "home", return_value=self.directory)
-        self.home.start()
-        self.addCleanup(self.home.stop)
-        self.auth = patch.object(server, "pomerium_token", return_value="test-token")
-        self.auth.start()
-        self.addCleanup(self.auth.stop)
-
-    def test_multirange_hash_and_nonoverwriting_delivery(self):
-        body = b"PK\x03\x04abcdefgh"
-        chunks = [response(body[i:i+4], i, len(body)) for i in range(0, len(body), 4)]
-        directory = self.directory / "Generated QBRs"
-        directory.mkdir()
-        (directory / "deck.pptx").write_bytes(b"existing")
-        with patch.object(server, "RANGE_SIZE", 4), patch.object(server.requests, "get", side_effect=chunks) as get:
-            result = server.save_qbr_artifact("a" * 32, "../../deck.pptx", len(body))
-        self.assertEqual(body, Path(result["path"]).read_bytes())
-        self.assertEqual(b"existing", (directory / "deck.pptx").read_bytes())
-        self.assertEqual("deck (1).pptx", result["filename"])
-        self.assertEqual(hashlib.sha256(body).hexdigest(), result["sha256"])
-        self.assertEqual(["bytes=0-3", "bytes=4-7", "bytes=8-11"], [c.kwargs["headers"]["Range"] for c in get.call_args_list])
-        for call in get.call_args_list:
-            self.assertFalse(call.kwargs["allow_redirects"])
-            self.assertEqual({"_pomerium": "test-token"}, call.kwargs["cookies"])
-        self.assertFalse(list(directory.glob("*.partial")))
-
-    def test_size_can_be_discovered_from_server(self):
-        body = b"%PDF-1.7 test"
-        with patch.object(server.requests, "get", return_value=response(body)):
-            result = server.save_qbr_artifact("b" * 32, "report.pdf")
-        self.assertEqual(len(body), result["size"])
-
-    def test_rejects_bad_transfers_and_removes_partial_files(self):
-        cases = [
-            response(b"PK\x03\x04data", status=302),
-            response(b"<html>bad", headers={"Content-Type": "text/html"}),
-            response(b"PK\x03\x04data", headers={"Content-Range": "bytes 2-9/10"}),
-            response(b"PK\x03\x04data", headers={"Content-Range": "bytes 0-9/10"}),
-            response(b"PK\x03\x04data", headers={"Content-Range": "bytes 0-3/4"}),
-            response(b"not-an-artifact"),
-            response(b"PK\x03\x04data", headers={"Content-Range": f"bytes 0-7/{server.MAX_SIZE+1}"}),
-        ]
-        for item in cases:
-            with self.subTest(headers=item.headers, status=item.status_code):
-                with patch.object(server.requests, "get", return_value=item), self.assertRaises(RuntimeError):
-                    server.save_qbr_artifact("c" * 32, "report.pptx")
-                self.assertEqual([], list((self.directory / "Generated QBRs").iterdir()))
-
-    def test_explicit_size_mismatch_fails(self):
-        with patch.object(server.requests, "get", return_value=response(b"PK\x03\x04data")), self.assertRaises(RuntimeError):
-            server.save_qbr_artifact("d" * 32, "report.pptx", 10)
-
-    def test_rejects_invalid_job_without_network(self):
-        with patch.object(server.requests, "get") as get:
-            for value in ("../../escape", "https://example.com", "x" * 32):
-                with self.assertRaises(ValueError):
-                    server.save_qbr_artifact(value)
-            get.assert_not_called()
-
-    def test_atomic_publish_handles_collision_during_creation(self):
-        partial = self.directory / "temporary"
-        partial.write_bytes(b"report")
-        actual_link = server.os.link
-
-        def racing_link(source, destination):
-            if destination.name == "deck.pptx":
-                destination.write_bytes(b"other download")
-            return actual_link(source, destination)
-
-        with patch.object(server.os, "link", side_effect=racing_link):
-            result = server.publish_unique(partial, self.directory, "deck.pptx")
-        self.assertEqual("deck (1).pptx", result.name)
-        self.assertEqual(b"other download", (self.directory / "deck.pptx").read_bytes())
-
-
-class AuthenticationTests(unittest.TestCase):
-    def test_scoped_credential_and_no_output_leak(self):
-        with patch.object(qbr_auth.shutil, "which", return_value="/bin/pomerium-cli"), patch.object(qbr_auth.subprocess, "run") as run:
-            run.return_value.stdout = json.dumps({"status": {"token": "Pomerium-example"}})
-            self.assertEqual("example", qbr_auth.pomerium_token())
-            self.assertEqual(server.QBR_URL, run.call_args.args[0][-1])
-            run.side_effect = subprocess.CalledProcessError(1, ["cli"], stderr="private auth data")
-            with self.assertRaises(RuntimeError) as error:
-                qbr_auth.pomerium_token()
-            self.assertNotIn("private auth data", str(error.exception))
 
 
 class MarketplaceTests(unittest.TestCase):
@@ -181,6 +74,33 @@ class MarketplaceTests(unittest.TestCase):
             with patch.object(installer, "run", side_effect=[self.listing(temp), installer.REPOSITORY, "", "main", "", ""]) as run:
                 installer.prepare_marketplace("codex")
             self.assertEqual(("git", "-C", temp, "merge", "--ff-only", "origin/main"), run.call_args.args)
+
+
+class MigrationTests(unittest.TestCase):
+    def test_different_endpoint_and_shared_marketplace_are_preserved(self):
+        installed = {"installed": [{"pluginId": "another@qbr-express-local-delivery", "marketplaceName": "qbr-express-local-delivery"}]}
+        markets = {"marketplaces": [{"name": "qbr-express-local-delivery"}]}
+        servers = [{"name": "qbr-express", "transport": {"url": "https://other.example/mcp"}}]
+        with tempfile.TemporaryDirectory() as temp, patch.object(installer, "run", side_effect=[json.dumps(installed), json.dumps(markets), json.dumps(servers)]) as run:
+            installer.retire_legacy_qbr("codex", Path(temp))
+        self.assertFalse(any("remove" in call.args for call in run.call_args_list))
+
+    def test_cleanup_does_not_follow_symlinks_into_shared_tools(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            data = root / "data"
+            shared = root / "shared"
+            data.mkdir()
+            shared.mkdir()
+            (shared / "pomerium-cli").write_text("shared tool")
+            (shared / "qbr-requirements.txt").write_text("shared runtime")
+            (data / "bin").symlink_to(shared, target_is_directory=True)
+            (data / "runtime-v1").symlink_to(shared, target_is_directory=True)
+            with patch.object(installer, "run", side_effect=['{"installed":[]}', '{"marketplaces":[]}', '[]']):
+                installer.retire_legacy_qbr("codex", data)
+            self.assertEqual("shared tool", (shared / "pomerium-cli").read_text())
+            self.assertEqual("shared runtime", (shared / "qbr-requirements.txt").read_text())
+            self.assertFalse((data / "runtime-v1").is_symlink())
 
 
 class ExtractionTests(unittest.TestCase):

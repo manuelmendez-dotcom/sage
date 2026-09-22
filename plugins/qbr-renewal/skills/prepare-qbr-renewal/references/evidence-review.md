@@ -1,5 +1,20 @@
 # Review account evidence
 
+For native Google Slides, retrieve the exact presentation through the Drive
+connector. An outline is an index: follow its slide selector to read actual
+content in bounded batches. Record the Slides URL/file ID, report date, retrieval
+time and slide numbers. Inspect charts/tables visually when values are embedded
+in images or omitted from connector text. Include notes and hidden slides where
+accessible and record any coverage gaps. Do not claim they were reviewed if the
+connector does not expose them.
+
+When generation and the brief occur in one task, reuse the source PPTX working
+file to review notes, hidden slides and chart details, and check the corresponding
+native slides. Cite the verified Slides URL and matching slide numbers. Retain
+generation warnings and do not let conversion erase them. On a later task,
+retrieve the native presentation again instead of relying on a previous summary
+or a stale local extraction. Honour a supplied local-only source.
+
 For PPTX use this skill's standard-library helper (resolve paths for this install):
 
 ```bash
@@ -18,7 +33,7 @@ product adoption; adoption suggestions; capacity/storage/limits/integrations.
 Include hidden slides and notes internally. Mark slides reviewed, contextual,
 unreadable or unavailable. Do not claim full review while material gaps remain.
 
-Keep a private record of filename/hash, slide/page number/title, period, exact
+Keep a private record of file ID/URL or filename/hash, slide/page number/title, period, exact
 metric/value/unit/population/denominator/aggregation/clock, source location, type,
 usability, contradictions, counterevidence, and formulas/cited inputs for changes.
 Types distinguish observations, calculations, dated customer/CSM statements,

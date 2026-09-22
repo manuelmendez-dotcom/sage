@@ -1,7 +1,7 @@
 {
   "name": "qbr-renewal",
-  "version": "0.1.0+codex.20260922131344",
-  "description": "Generate an owned-products QBR and prepare a source-backed renewal or discovery brief.",
+  "version": "0.1.0+codex.20260922140046",
+  "description": "Generate an owned-products QBR through the website, deliver Google Slides, and prepare a source-backed renewal brief.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "QBR & Renewal Brief",
     "shortDescription": "Customer QBRs and clear renewal preparation",
-    "longDescription": "Create a QBR for the customer's owned products, save the verified deck locally, and prepare a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Combines QBR evidence review, current Scaled CS recommendations, and selective release validation. One Terminal command installs all runtime and connection components; each colleague uses their own company sign-in.",
+    "longDescription": "One plugin takes you from the QBR Express website to a verified native Google Slides deck and a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Includes the qbr-express browser workflow, value-conversation evidence review, Scaled CS recommendations, and selective release checks. No QBR MCP, bridge or Local Delivery plugin is required. Google Drive and Z2 support retrieval and research.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [
