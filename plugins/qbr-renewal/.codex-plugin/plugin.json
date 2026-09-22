@@ -1,6 +1,6 @@
 {
   "name": "qbr-renewal",
-  "version": "0.1.0+codex.20260922123641",
+  "version": "0.1.0+codex.20260922125237",
   "description": "Generate an owned-products QBR and prepare a source-backed renewal or discovery brief.",
   "author": {
     "name": "Manuel M\u00e9ndez"
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "QBR & Renewal Brief",
     "shortDescription": "Customer QBRs and clear renewal preparation",
-    "longDescription": "Create a QBR for the customer's owned products, save the verified deck locally, and prepare a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Combines QBR evidence review, current Scaled CS recommendations, and selective release validation. Requires Zendesk access and the QBR bridge; run the installer first.",
+    "longDescription": "Create a QBR for the customer's owned products, save the verified deck locally, and prepare a concise CSM brief: value already realised, YoY and peer context, focus areas, product-linked next value moves, and discovery questions. Combines QBR evidence review, current Scaled CS recommendations, and selective release validation. One Terminal command installs all runtime and connection components; each colleague uses their own company sign-in.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [

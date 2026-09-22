@@ -2,38 +2,20 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 from pathlib import Path
 import re
-import shutil
-import subprocess
 import tempfile
 
 import requests
 from mcp.server.fastmcp import FastMCP
+from qbr_auth import QBR_URL, pomerium_token
 
-QBR_URL = "https://qbr-express.internal.zenai-apps.com"
 JOB_ID = re.compile(r"^[a-f0-9]{32}$")
 CONTENT_RANGE = re.compile(r"^bytes (\d+)-(\d+)/(\d+)$")
 RANGE_SIZE = 4 * 1024 * 1024
 MAX_SIZE = 2 * 1024 ** 3
 mcp = FastMCP("QBR Renewal Local Delivery", instructions="Save a completed QBR job locally; retry delivery with the same job ID, never regenerate it.")
-
-
-def pomerium_token() -> str:
-    executable = shutil.which("pomerium-cli")
-    if not executable:
-        raise RuntimeError("Pomerium CLI is missing. Run the QBR plugin installer.")
-    try:
-        result = subprocess.run([executable, "k8s", "exec-credential", QBR_URL],
-                                check=True, capture_output=True, text=True, timeout=60)
-        token = json.loads(result.stdout)["status"]["token"]
-        if not isinstance(token, str) or not token.removeprefix("Pomerium-"):
-            raise ValueError("empty credential")
-        return token.removeprefix("Pomerium-")
-    except (subprocess.SubprocessError, ValueError, KeyError, TypeError):
-        raise RuntimeError("QBR sign-in is needed. Sign in to QBR Express and retry the same download.") from None
 
 
 def safe_filename(filename: str | None) -> str:

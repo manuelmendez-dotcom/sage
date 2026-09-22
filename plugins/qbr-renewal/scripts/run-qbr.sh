@@ -2,8 +2,9 @@
 set -euo pipefail
 qbr_script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$qbr_script_dir/common.sh"
-if ! command -v pom-mcp-bridge >/dev/null 2>&1; then
-  echo 'QBR bridge missing. Run the QBR & Renewal Brief installer; see the plugin README.' >&2
+qbr_python="$qbr_data_root/runtime-v1/bin/python"
+if [[ ! -x "$qbr_python" ]]; then
+  echo 'QBR runtime missing. Rerun the one-command installer.' >&2
   exit 1
 fi
-exec pom-mcp-bridge https://qbr-express.internal.zenai-apps.com
+exec "$qbr_python" "$qbr_script_dir/../mcp/qbr_proxy.py" "$@"

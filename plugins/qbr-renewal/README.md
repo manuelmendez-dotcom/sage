@@ -19,51 +19,47 @@ document/PDF if needed; document creation depends on available document tools.
 QBR Express supplies the original deck format. Native Google Slides upload is
 not part of this plugin.
 
-## Install
+## Install in one go
 
-Supported installer: **macOS**. Apple Silicon is the verified bridge platform.
-Intel Macs need an appropriate company bridge; Intel has not been tested.
-Windows/Linux installation is not provided in this release.
-
-1. Install/update Codex with the `codex plugin` commands available.
-2. Ensure you can access QBR Express, the Scaled CS master in Google Drive, and
-   Zendesk's Z2 service with your own company account.
-3. If needed, obtain the bridge from the
-   [QBR setup guide](https://docs.google.com/document/d/1cdcSGinExD8K5Ydu7RCLnkU28ZQoXVxf_BvEgrlSlmo/edit).
-   An existing `pom-mcp-bridge` on PATH works. On Apple Silicon, the installer
-   can copy the verified version 0.3.0-go download from `~/Downloads/pom-mcp-bridge`
-   into its own user directory, without sudo. A changed/renamed download requires
-   the official installation instructions. The binary is not redistributed here.
-4. Run:
+On a Mac with Codex, paste this single command into Terminal:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/manuelmendez-dotcom/sage/main/install-qbr.sh | bash
 ```
 
-The installer checks Python 3.10+ and Pomerium CLI. When Homebrew is available it
-installs missing Python/Pomerium dependencies; otherwise it gives the exact next
-step. It creates an isolated Python runtime under
-`~/.local/share/qbr-renewal/runtime-v1`, registers the existing team marketplace,
-and installs only `qbr-renewal@zendesk-scaled-cs`.
+That is the complete software installation step. No manual bridge download,
+Homebrew, Python, Git or Codex Terminal CLI installation is required on a new Mac.
+The plugin includes its own QBR connection code.
 
-Restart Codex and open a new task. Complete the QBR browser sign-in and any Google
-Drive/Z2 connection prompts. Check the MCP connection status if tools are absent.
-Installation does not grant service permissions or share someone else's credentials.
+The installer automatically downloads checksum-pinned official uv and Pomerium
+components, provisions Python and package dependencies, and obtains an official
+Codex CLI if a compatible command is unavailable. Components stay under
+`~/.local/share/qbr-renewal`; it does not require sudo or edit shell profiles.
+The private Python environment is `runtime-v1`. A fresh install uses a managed
+local marketplace snapshot, avoiding a Git/Xcode prerequisite.
 
-The plugin page shows **four MCP servers and one skill**. The one coordinating
-skill contains all three adapted methods. Its own generation and delivery
-connections use the unique IDs `qbr-renewal-express` and `qbr-renewal-delivery`,
-so previously installed QBR connections cannot take precedence over them.
+Restart Codex and open a new task. Complete your own QBR browser sign-in and any
+Google Drive/Z2 connection prompts. Company access remains required; the installer
+does not grant service permissions or share credentials.
 
-The command updates an existing Git marketplace. If SAGE already uses a local
-checkout of this repository, it preserves that registration and updates the clean
-`main` checkout with a fast-forward only. It stops for local changes, another
-branch or another origin; it never resets a checkout or removes SAGE/MCP settings.
+The plugin page shows **four MCP servers and one skill**. The coordinating skill
+contains all three adapted methods. Its generation and delivery connections have
+unique IDs, `qbr-renewal-express` and `qbr-renewal-delivery`, so older QBR connections
+cannot take precedence over them.
+
+Rerun the same command to update. It refreshes its managed snapshot or an existing
+Git marketplace. If SAGE already uses a local checkout of this repository, it
+preserves that registration and updates clean `main` with a fast-forward only.
+It stops for unsaved changes, another branch or another origin; it never resets
+checkouts or removes SAGE/MCP settings.
+
+Apple Silicon installation is tested. Intel download paths and checksums are
+provided, but an Intel Mac has not been tested. Windows/Linux setup is not provided.
 
 Review the [installer](../../install-qbr.sh) before running if preferred. Advanced
-local development can run `python3 scripts/install.py --source /path/to/repo`
-from this plugin, with the same prerequisites. `QBR_RENEWAL_DATA_HOME` optionally
-sets a different runtime directory; Codex must inherit it too.
+options: `QBR_RENEWAL_SOURCE_DIR` uses a local repository snapshot instead of main;
+`QBR_RENEWAL_DATA_HOME` changes the data directory (Codex must inherit it too);
+`QBR_CODEX_BIN` selects a CLI. Normal setup needs none of these options.
 
 ## Start a task
 
@@ -104,30 +100,35 @@ range downloads and atomic non-overwriting publication.
 
 | Symptom | Next step |
 | --- | --- |
-| Bridge missing | Follow the company setup guide, then rerun the installer. A company-authenticated download cannot be completed by a public install command. |
-| macOS blocks the bridge | Use the official guide's Privacy & Security instructions for the trusted company download. The installer does not remove quarantine flags. |
-| QBR says Unauthenticated / 401 / 403 | Sign in to QBR Express and verify your access. Retry the existing job/download. If sign-in does not resolve it, contact the QBR service owner. |
-| Deck download fails | Retry local delivery using the same job ID; do not regenerate the deck. |
-| Delivery runtime missing | Rerun the installer. Installing from the plugin UI alone does not install Python dependencies. |
-| Drive or Z2 unavailable | Complete their connection sign-ins. Deck generation still works; a supplied-QBR brief can proceed with product-validation gaps labelled. |
-| Duplicate QBR/Drive/Z2 tools | Existing standalone tools are preserved. Prefer the tools bundled with this plugin and never start the same job twice. Disabling duplicates is optional and manual. |
-| Plugin/tools missing after setup | Restart Codex and start a new task. Verify this plugin is enabled. |
-| Local SAGE changes prevent update | Save your work and update the checkout; rerun. The installer deliberately does not reset or stash changes. |
+| Installation interrupted or component missing | Rerun the same command; missing components are installed automatically. |
+| Dependency download blocked | Check company network access to GitHub and the Python package registry, then rerun. |
+| QBR says Unauthenticated / 401 / 403 | Complete company sign-in and verify QBR access. Retry the existing job/download. If it persists, contact the QBR service owner. |
+| Deck download fails | Retry delivery using the same job ID; do not regenerate. |
+| Runtime missing after installing from the plugin UI | Run the single Terminal command to provision the runtime. |
+| Drive or Z2 unavailable | Complete their sign-ins. Deck generation is independent; a supplied-QBR brief can proceed with product-validation gaps labelled. |
+| Older QBR tools still visible | Older installations remain intact. Prefer this plugin's tools and never start the same job twice. |
+| Plugin/tools missing after setup | Restart Codex, open a new task and check the plugin is enabled. |
+| Local SAGE changes prevent update | Save your work and update the checkout, then rerun. The installer does not reset or stash changes. |
+
+The bundled QBR connection uses the official Python MCP SDK and route-scoped
+Pomerium authentication. It forwards tool schemas, structured results and error
+flags without replaying report generation. The old `pom-mcp-bridge` executable
+is neither required nor redistributed.
 
 ## Validation and release limits
 
-Automated checks cover Codex-resolved launcher paths, credential-output suppression, download integrity,
-redirect rejection, filename safety, concurrent/no-overwrite delivery, evidence
-extraction, and safe marketplace update decisions. The maintainer also checks the
-real Codex marketplace install and local MCP handshake in an isolated profile.
-Behavioral scenarios are in [the evaluation guide](../../evals/qbr-renewal/cases.md).
+Automated checks cover MCP tool/result forwarding, credential handling, managed
+snapshot updates, Codex-resolved launcher paths, download integrity, redirects,
+filename safety, non-overwriting delivery, extraction and safe updates. Installation
+and updates are also checked in an isolated profile with only standard macOS
+commands on PATH. Behavioral scenarios are in [the evaluation guide](../../evals/qbr-renewal/cases.md).
 
-QBR generation depends on the live internal service and per-user authentication.
-An installer success is not a claim that every colleague's account access, SSO,
-or a fresh end-to-end generation has been verified. This release's live remote
-connection check returned `Unauthenticated`; report generation must be verified
-after company sign-in is restored. The package can already analyse supplied QBRs.
+Installation success does not establish company account access or a completed
+live report. The latest live QBR check returned `Unauthenticated`; fresh generation
+must be verified after sign-in/service access is restored. Supplied QBR analysis
+and local package checks are independent of that connection.
 
-Uninstall just this plugin with `codex plugin remove qbr-renewal@zendesk-scaled-cs`.
-This leaves SAGE and generated reports in place. The separate local runtime may be
-kept for reinstalling; it contains no generated customer report.
+Uninstall this plugin through Codex's plugin settings, or with
+`codex plugin remove qbr-renewal@zendesk-scaled-cs` when that command is on PATH.
+SAGE and generated reports remain in place. The separate runtime can be kept for
+reinstallation; it contains no generated customer report.

@@ -1,73 +1,76 @@
 #!/usr/bin/env bash
-# Installs only QBR & Renewal Brief; existing SAGE remains independently installed.
+# One-command macOS setup. All downloaded components stay in the plugin's data directory.
 set -euo pipefail
-export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.npm-global/bin:$HOME/bin:$PATH"
-qbr_setup_guide='https://docs.google.com/document/d/1cdcSGinExD8K5Ydu7RCLnkU28ZQoXVxf_BvEgrlSlmo/edit'
 qbr_data_root="${QBR_RENEWAL_DATA_HOME:-$HOME/.local/share/qbr-renewal}"
-
 if [[ "$(uname -s)" != Darwin ]]; then
-  echo 'This installer supports macOS. See the plugin README for requirements.' >&2
+  echo 'This installer currently supports macOS.' >&2
   exit 1
 fi
-qbr_codex="$(command -v codex || true)"
-if [[ -z "$qbr_codex" && -x /Applications/Codex.app/Contents/Resources/codex ]]; then
-  qbr_codex=/Applications/Codex.app/Contents/Resources/codex
-fi
-if [[ -z "$qbr_codex" ]] || ! "$qbr_codex" plugin add --help >/dev/null 2>&1; then
-  echo 'Install or update Codex with plugin CLI support, then rerun this command.' >&2
-  exit 1
-fi
-
-# The company bridge is distributed through authenticated Drive, not this repo.
-# Accept an existing installation, or copy the verified Apple Silicon download
-# into a user-owned directory without sudo or changes to other MCP connections.
-if ! command -v pom-mcp-bridge >/dev/null 2>&1 && [[ ! -x "$qbr_data_root/bin/pom-mcp-bridge" ]]; then
-  qbr_download="$HOME/Downloads/pom-mcp-bridge"
-  qbr_expected_sha='b212cb0bfc04fd8518b3b25b8ba28f95dedb044a77042e74dcf6aeaa0d2e2cb5'
-  if [[ "$(uname -m)" == arm64 && -f "$qbr_download" ]] &&
-     [[ "$(shasum -a 256 "$qbr_download" | awk '{print $1}')" == "$qbr_expected_sha" ]]; then
-    mkdir -p "$qbr_data_root/bin"
-    cp "$qbr_download" "$qbr_data_root/bin/pom-mcp-bridge"
-    chmod 755 "$qbr_data_root/bin/pom-mcp-bridge"
-  else
-    echo 'One-time prerequisite: download/install the company QBR bridge, then rerun.' >&2
-    echo "Setup guide: $qbr_setup_guide" >&2
-    echo 'Apple Silicon: the original pom-mcp-bridge download may stay in Downloads; this installer can copy it.' >&2
-    echo 'Intel: obtain a compatible bridge from the QBR owner and install it first.' >&2
-    exit 1
-  fi
-fi
-
-qbr_python=''
-for qbr_candidate in python3.13 python3.12 python3.11 python3.10 python3; do
-  if command -v "$qbr_candidate" >/dev/null 2>&1 &&
-     "$qbr_candidate" -c 'import sys; raise SystemExit(sys.version_info < (3, 10))' 2>/dev/null; then
-    qbr_python="$(command -v "$qbr_candidate")"
-    break
-  fi
-done
-if [[ -z "$qbr_python" ]]; then
-  if command -v brew >/dev/null 2>&1; then
-    echo 'Installing Python for local report delivery…'
-    brew install python@3.12
-    qbr_python="$(brew --prefix python@3.12)/bin/python3.12"
-  else
-    echo 'Python 3.10+ is required. Install Python or Homebrew, then rerun.' >&2
-    exit 1
-  fi
-fi
-if ! command -v pomerium-cli >/dev/null 2>&1; then
-  if command -v brew >/dev/null 2>&1; then
-    echo 'Installing Pomerium CLI for your own QBR sign-in…'
-    brew install pomerium/tap/pomerium-cli
-  else
-    echo 'Install Pomerium CLI (brew install pomerium/tap/pomerium-cli), then rerun.' >&2
-    exit 1
-  fi
-fi
+case "$(uname -m)" in
+  arm64)
+    qbr_uv_arch=aarch64
+    qbr_pom_arch=arm64
+    qbr_uv_sha=85f00cbdc6dd3e97eba4c31b4d014375a9fdfe8f570023b84e5102fc3456896b
+    qbr_pom_sha=ffd3ba0b9719779878f110bba4733968164cf189a141988744e7d6c2e8364625
+    qbr_codex_sha=5e5a51470dce2423f9d96bd191d0bbc4cc0e2848a6833df5178eaf47a07a3768
+    ;;
+  x86_64)
+    qbr_uv_arch=x86_64
+    qbr_pom_arch=amd64
+    qbr_uv_sha=8dcf05a8c809bb3c471d2b614788ba27a6e41298fc8c31ac84b5f4339fd468e5
+    qbr_pom_sha=645ae0ce8f82e95fa17abb2c034a4a1a47d1fe309f08596b25f644ab42f5b1a2
+    qbr_codex_sha=ff22ad0bf28b8568dbfb28ef0ea64451fe5170fa0f9118bf764ca6cb24c27791
+    ;;
+  *) echo 'Unsupported Mac processor.' >&2; exit 1 ;;
+esac
 
 qbr_temp="$(mktemp -d "${TMPDIR:-/tmp}/qbr-renewal.XXXXXX")"
 trap 'rm -rf "$qbr_temp"' EXIT
-echo 'Downloading QBR & Renewal Brief…'
-git clone --quiet --depth 1 https://github.com/manuelmendez-dotcom/sage.git "$qbr_temp/sage"
-"$qbr_python" "$qbr_temp/sage/plugins/qbr-renewal/scripts/install.py" --codex "$qbr_codex"
+mkdir -p "$qbr_data_root/bin"
+export PATH="$qbr_data_root/bin:$PATH"
+
+qbr_fetch_verified() {
+  curl --proto '=https' --tlsv1.2 -fsSL --retry 2 "$1" -o "$2"
+  if [[ "$(shasum -a 256 "$2" | awk '{print $1}')" != "$3" ]]; then
+    echo 'A downloaded component failed its checksum check. Installation stopped.' >&2
+    exit 1
+  fi
+}
+
+echo 'Preparing QBR & Renewal Brief…'
+if [[ ! -x "$qbr_data_root/bin/uv" ]] || [[ "$("$qbr_data_root/bin/uv" --version 2>/dev/null)" != "uv 0.12.17"* ]]; then
+  qbr_fetch_verified "https://github.com/astral-sh/uv/releases/download/0.12.17/uv-$qbr_uv_arch-apple-darwin.tar.gz" "$qbr_temp/uv.tar.gz" "$qbr_uv_sha"
+  tar -xzf "$qbr_temp/uv.tar.gz" -C "$qbr_temp" "uv-$qbr_uv_arch-apple-darwin/uv"
+  mv "$qbr_temp/uv-$qbr_uv_arch-apple-darwin/uv" "$qbr_data_root/bin/uv"
+fi
+if [[ ! -x "$qbr_data_root/bin/pomerium-cli" ]] || [[ ! -f "$qbr_data_root/bin/pomerium-v0.33.1.verified" ]]; then
+  qbr_fetch_verified "https://github.com/pomerium/cli/releases/download/v0.33.1/pomerium-cli-darwin-$qbr_pom_arch.zip" "$qbr_temp/pomerium.zip" "$qbr_pom_sha"
+  unzip -p "$qbr_temp/pomerium.zip" pomerium-cli > "$qbr_temp/pomerium-cli"
+  chmod 755 "$qbr_temp/pomerium-cli"
+  mv "$qbr_temp/pomerium-cli" "$qbr_data_root/bin/pomerium-cli"
+  touch "$qbr_data_root/bin/pomerium-v0.33.1.verified"
+fi
+
+qbr_codex="${QBR_CODEX_BIN:-$(command -v codex || true)}"
+if [[ -z "$qbr_codex" ]] || ! "$qbr_codex" plugin add --help >/dev/null 2>&1; then
+  qbr_fetch_verified "https://github.com/openai/codex/releases/download/rust-v0.155.1/codex-$qbr_uv_arch-apple-darwin.tar.gz" "$qbr_temp/codex.tar.gz" "$qbr_codex_sha"
+  tar -xzf "$qbr_temp/codex.tar.gz" -C "$qbr_temp" "codex-$qbr_uv_arch-apple-darwin"
+  mv "$qbr_temp/codex-$qbr_uv_arch-apple-darwin" "$qbr_data_root/bin/codex"
+  qbr_codex="$qbr_data_root/bin/codex"
+fi
+
+export UV_PYTHON_INSTALL_DIR="$qbr_data_root/python"
+export UV_CACHE_DIR="$qbr_data_root/cache"
+"$qbr_data_root/bin/uv" python install 3.12 --no-bin --no-progress
+qbr_python="$("$qbr_data_root/bin/uv" python find --managed-python --no-project 3.12)"
+
+# A local archive-backed marketplace avoids a Git/Xcode prerequisite on new Macs.
+echo 'Downloading the plugin…'
+qbr_source="${QBR_RENEWAL_SOURCE_DIR:-}"
+if [[ -z "$qbr_source" ]]; then
+  curl --proto '=https' --tlsv1.2 -fsSL --retry 2 https://codeload.github.com/manuelmendez-dotcom/sage/tar.gz/refs/heads/main -o "$qbr_temp/repo.tar.gz"
+  mkdir "$qbr_temp/repo"
+  tar -xzf "$qbr_temp/repo.tar.gz" --strip-components=1 -C "$qbr_temp/repo"
+  qbr_source="$qbr_temp/repo"
+fi
+"$qbr_python" "$qbr_source/plugins/qbr-renewal/scripts/install.py" --codex "$qbr_codex" --uv "$qbr_data_root/bin/uv" --snapshot "$qbr_source"

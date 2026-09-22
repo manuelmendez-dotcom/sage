@@ -12,10 +12,9 @@ Installing QBR & Renewal Brief does not replace or uninstall SAGE.
 
 ## Install QBR & Renewal Brief on a Mac
 
-Prerequisites: current Codex with plugin CLI support, Zendesk access, and the
-[company QBR bridge](https://docs.google.com/document/d/1cdcSGinExD8K5Ydu7RCLnkU28ZQoXVxf_BvEgrlSlmo/edit).
-The bridge requires a one-time company-authenticated download. If it is already
-installed, no second bridge installation is needed.
+Use a Mac with Codex and your own Zendesk access. The command below installs the
+plugin and its connection/runtime components automatically. No separate bridge,
+Homebrew, Python, Git or Terminal CLI setup is required for a new installation.
 
 Paste this in Terminal:
 

@@ -5,11 +5,14 @@ import importlib.util
 import json
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "mcp"))
+import qbr_auth
 
 
 def load(name, path):
@@ -115,17 +118,36 @@ class DeliveryTests(unittest.TestCase):
 
 class AuthenticationTests(unittest.TestCase):
     def test_scoped_credential_and_no_output_leak(self):
-        with patch.object(server.shutil, "which", return_value="/bin/pomerium-cli"), patch.object(server.subprocess, "run") as run:
+        with patch.object(qbr_auth.shutil, "which", return_value="/bin/pomerium-cli"), patch.object(qbr_auth.subprocess, "run") as run:
             run.return_value.stdout = json.dumps({"status": {"token": "Pomerium-example"}})
-            self.assertEqual("example", server.pomerium_token())
+            self.assertEqual("example", qbr_auth.pomerium_token())
             self.assertEqual(server.QBR_URL, run.call_args.args[0][-1])
             run.side_effect = subprocess.CalledProcessError(1, ["cli"], stderr="private auth data")
             with self.assertRaises(RuntimeError) as error:
-                server.pomerium_token()
+                qbr_auth.pomerium_token()
             self.assertNotIn("private auth data", str(error.exception))
 
 
 class MarketplaceTests(unittest.TestCase):
+    def test_managed_snapshot_installs_without_git_and_refreshes_removed_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            snapshot = root / "download"
+            (snapshot / ".agents/plugins").mkdir(parents=True)
+            (snapshot / ".agents/plugins/marketplace.json").write_text('{"name":"zendesk-scaled-cs","plugins":[]}')
+            (snapshot / "release.txt").write_text("first")
+            data = root / "data"
+            managed = data / "marketplace"
+            with patch.object(installer, "run", side_effect=[json.dumps({"marketplaces": []}), json.dumps({"installedRoot": str(managed)})]) as run:
+                self.assertEqual(managed, installer.prepare_marketplace("codex", snapshot=snapshot, data_root=data))
+            self.assertFalse(any(call.args[0] == "git" for call in run.call_args_list))
+            (managed / "removed.txt").write_text("old")
+            (snapshot / "release.txt").write_text("second")
+            with patch.object(installer, "run", return_value=self.listing(managed)):
+                installer.prepare_marketplace("codex", snapshot=snapshot, data_root=data)
+            self.assertEqual("second", (managed / "release.txt").read_text())
+            self.assertFalse((managed / "removed.txt").exists())
+
     def listing(self, root, kind="local", source=None):
         return json.dumps({"marketplaces": [{"name": installer.MARKETPLACE, "root": str(root), "marketplaceSource": {"sourceType": kind, "source": source or str(root)}}]})
 

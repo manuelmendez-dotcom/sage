@@ -5,6 +5,7 @@
       "description": "Find accounts and generate QBR Express reports for renewal preparation.",
       "command": "./scripts/run-qbr.sh",
       "args": [],
+      "startup_timeout_sec": 120,
       "cwd": "."
     },
     "qbr-renewal-delivery": {

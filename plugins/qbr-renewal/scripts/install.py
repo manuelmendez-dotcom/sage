@@ -35,14 +35,48 @@ def canonical_repo(value: str) -> str:
     return value
 
 
-def prepare_marketplace(codex: str, source: str = REPOSITORY) -> Path:
+def sync_snapshot(snapshot: Path, destination: Path) -> Path:
+    """Replace only this installer's own marketplace snapshot, with rollback."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with (destination.parent / "marketplace.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        staging = destination.with_name(destination.name + ".incoming")
+        backup = destination.with_name(destination.name + ".previous")
+        if backup.exists() and not destination.exists():
+            backup.rename(destination)
+        if staging.exists():
+            shutil.rmtree(staging)
+        shutil.copytree(snapshot, staging, ignore=shutil.ignore_patterns(".git", "__pycache__", ".venv"))
+        if not (staging / ".agents/plugins/marketplace.json").is_file():
+            raise RuntimeError("The downloaded package has no marketplace catalogue")
+        if backup.exists():
+            shutil.rmtree(backup)
+        if destination.exists():
+            destination.rename(backup)
+        try:
+            staging.rename(destination)
+        except OSError:
+            if backup.exists():
+                backup.rename(destination)
+            raise
+        if backup.exists():
+            shutil.rmtree(backup)
+    return destination
+
+
+def prepare_marketplace(codex: str, source: str = REPOSITORY, snapshot: Path | None = None, data_root: Path | None = None) -> Path:
     listing = json.loads(run(codex, "plugin", "marketplace", "list", "--json"))
     existing = next((item for item in listing["marketplaces"] if item["name"] == MARKETPLACE), None)
+    managed = data_root / "marketplace" if data_root is not None else None
     if existing is None:
+        if snapshot is not None and managed is not None:
+            source = str(sync_snapshot(snapshot, managed))
         result = json.loads(run(codex, "plugin", "marketplace", "add", source, "--json"))
         return Path(result["installedRoot"])
 
     root = Path(existing["root"])
+    if snapshot is not None and managed is not None and root.resolve() == managed.resolve():
+        return sync_snapshot(snapshot, managed)
     configured = existing.get("marketplaceSource", {})
     if configured.get("sourceType") == "git":
         if canonical_repo(configured.get("source", "")) != canonical_repo(REPOSITORY):
@@ -68,19 +102,25 @@ def prepare_marketplace(codex: str, source: str = REPOSITORY) -> Path:
     return root
 
 
-def install_runtime(data_root: Path) -> Path:
+def install_runtime(data_root: Path, uv: str | None = None) -> Path:
     data_root.mkdir(parents=True, exist_ok=True)
     with (data_root / "install.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         runtime = data_root / "runtime-v1"
         python = runtime / "bin" / "python"
         if not python.exists():
-            venv.EnvBuilder(with_pip=True).create(runtime)
+            if uv:
+                run(uv, "venv", "--no-project", "--python", sys.executable, str(runtime))
+            else:
+                venv.EnvBuilder(with_pip=True).create(runtime)
         requirements = PLUGIN_ROOT / "requirements.txt"
         marker = runtime / "qbr-requirements.txt"
         if not marker.exists() or marker.read_bytes() != requirements.read_bytes():
             print("Installing local delivery dependencies…", flush=True)
-            run(str(python), "-m", "pip", "install", "--disable-pip-version-check", "--quiet", "-r", str(requirements))
+            if uv:
+                run(uv, "pip", "install", "--python", str(python), "--quiet", "-r", str(requirements))
+            else:
+                run(str(python), "-m", "pip", "install", "--disable-pip-version-check", "--quiet", "-r", str(requirements))
             run(str(python), "-c", "import mcp, requests")
             marker.write_bytes(requirements.read_bytes())
         else:
@@ -92,20 +132,20 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--codex", default="codex")
     parser.add_argument("--source", default=REPOSITORY, help="Local marketplace root for development; defaults to the published repository")
+    parser.add_argument("--snapshot", type=Path, help="Downloaded repository snapshot for setup without Git")
+    parser.add_argument("--uv", help="Automatically provisioned dependency manager")
     args = parser.parse_args()
     if sys.version_info < (3, 10):
         parser.error("Python 3.10+ is required")
     data_root = Path(os.environ.get("QBR_RENEWAL_DATA_HOME", str(Path.home() / ".local/share/qbr-renewal"))).expanduser().resolve()
     if not shutil.which("pomerium-cli"):
-        parser.error("Install Pomerium CLI first: brew install pomerium/tap/pomerium-cli")
-    if not shutil.which("pom-mcp-bridge") and not os.access(data_root / "bin/pom-mcp-bridge", os.X_OK):
-        parser.error("Install the company QBR bridge first; see the plugin README")
+        parser.error("The sign-in component is missing. Rerun the one-command installer.")
     try:
         run(args.codex, "plugin", "add", "--help")
-        root = prepare_marketplace(args.codex, args.source)
+        root = prepare_marketplace(args.codex, args.source, args.snapshot, data_root)
         if not (root / "plugins" / PLUGIN / ".codex-plugin/plugin.json").is_file():
             raise RuntimeError("The configured marketplace does not yet contain QBR & Renewal Brief.")
-        install_runtime(data_root)
+        install_runtime(data_root, args.uv)
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
         print(f"Installed QBR & Renewal Brief {result['version']}.")
         print("SAGE remains independently installed. No existing MCP settings were removed.")
