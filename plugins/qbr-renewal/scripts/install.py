@@ -149,9 +149,9 @@ def main() -> int:
         run(args.codex, "plugin", "add", "--help")
         root = prepare_marketplace(args.codex, args.source, args.snapshot, data_root)
         if not (root / "plugins" / PLUGIN / ".codex-plugin/plugin.json").is_file():
-            raise RuntimeError("The configured marketplace does not yet contain QBR & Renewal Brief.")
+            raise RuntimeError("The configured marketplace does not yet contain QBR Conversations.")
         result = json.loads(run(args.codex, "plugin", "add", f"{PLUGIN}@{MARKETPLACE}", "--json"))
-        print(f"Installed QBR & Renewal Brief {result['version']}.")
+        print(f"Installed QBR Conversations {result['version']}.")
         retire_legacy_qbr(args.codex, data_root)
         print("One QBR plugin: website generation, verified Google Slides, and the renewal brief.")
         print("SAGE and unrelated connections are preserved. No QBR MCP, bridge or delivery runtime is required.")

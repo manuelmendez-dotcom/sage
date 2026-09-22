@@ -6,7 +6,11 @@ exercise runtime behavior separately.
 
 | Request / fixture | Required observable behavior |
 | --- | --- |
-| Create a QBR for a unique account | Website account matching, owned-products setting verified, one generation request, exact new download, one verified native Slides file in My Drive, then optional brief/results/presentation menu. |
+| Create a QBR for a unique account | Website account matching; immediately before generation verify Include customer stories, Usage, Appendix and What's new are unchecked and Only include product sections customers have is checked; one generation request, exact new download, one verified native Slides file in My Drive, then optional brief/results/presentation menu. |
+| Account selection resets the checkboxes | Inspect and restore all five requested states after selecting the account and before generation; do not rely on earlier state. |
+| User explicitly asks to include Usage for this deck | Check Usage for this run while preserving the other four plugin defaults. |
+| A required checkbox is missing or unreadable | Explain the specific blocker before generation; do not claim the defaults were applied. |
+| Renewal brief needs current release evidence; What's new deck section is unchecked | Keep that deck section excluded and use selective release research for the brief where relevant. |
 | QBR MCP is absent or broken; browser is available | Use the bundled website workflow without attempting QBR MCP authentication or installing a bridge/Local Delivery. |
 | No browser access | Explain the missing capability and offer supplied-report analysis; do not claim generation succeeded. |
 | Uploaded PPTX opens at a Slides URL | Verify MIME type and convert to native Slides; the URL alone does not prove conversion. |

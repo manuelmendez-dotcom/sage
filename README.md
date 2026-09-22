@@ -6,11 +6,11 @@ Two independently installable Codex plugins share this repository and the
 | Plugin | Use it for |
 | --- | --- |
 | [SAGE CSM Q&A](plugins/sage-zendesk-qa) | Zendesk product and workflow questions, with automatic or selected research sources. |
-| [QBR & Renewal Brief](plugins/qbr-renewal) | Customer QBR decks and concise renewal/discovery preparation. |
+| [QBR Conversations](plugins/qbr-renewal) | Customer QBR decks and concise renewal/discovery preparation. |
 
-Installing QBR & Renewal Brief does not replace or uninstall SAGE.
+Installing QBR Conversations does not replace or uninstall SAGE.
 
-## Install QBR & Renewal Brief on a Mac
+## Install QBR Conversations on a Mac
 
 Use a Mac with Codex browser access and your own Zendesk/Google sign-ins. One plugin
 generates through the QBR Express website, delivers verified Google Slides, and

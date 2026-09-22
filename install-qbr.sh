@@ -33,7 +33,7 @@ qbr_fetch_verified() {
   fi
 }
 
-echo 'Preparing QBR & Renewal Brief…'
+echo 'Preparing QBR Conversations…'
 if [[ ! -x "$qbr_data_root/bin/uv" ]] || [[ "$("$qbr_data_root/bin/uv" --version 2>/dev/null)" != "uv 0.12.17"* ]]; then
   qbr_fetch_verified "https://github.com/astral-sh/uv/releases/download/0.12.17/uv-$qbr_uv_arch-apple-darwin.tar.gz" "$qbr_temp/uv.tar.gz" "$qbr_uv_sha"
   tar -xzf "$qbr_temp/uv.tar.gz" -C "$qbr_temp" "uv-$qbr_uv_arch-apple-darwin/uv"

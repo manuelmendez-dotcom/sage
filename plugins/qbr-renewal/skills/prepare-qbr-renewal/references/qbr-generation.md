@@ -10,10 +10,29 @@ Generate customer QBRs through https://qbr-express.internal.zenai-apps.com/ (Cus
 
 - Use the customer name or instance domain from the request. Search Accounts and match the legal account name, instance domain, instance account ID, and CSM where available. Select only the intended account. Ask for clarification when several plausible matches remain.
 - If the site reports no owned accounts, its unrestricted search can still locate the customer. Do not interpret an empty owned-account list as absence of an account.
-- Keep QBR deck selected. Preserve user-requested settings; otherwise use current site defaults and briefly state this assumption. For this plugin, enable the site’s owned-products-only option unless the user explicitly requests another product scope. Confirm its live UI state before generation; do not infer ownership from product names. Preserve other site defaults and do not infer special periods, brands or customer context.
+- Keep QBR deck selected and apply the checkbox defaults below. Explicit settings requested by the user for this run take precedence. Preserve other site defaults; do not infer special periods, brands or customer context, or infer product ownership from product names.
 - Fill Prepared by from established user context or the site. A displayed account CSM alone does not prove the presenter's identity. Do not invent a title. Leave optional fields empty when unknown.
 - Supporting files and customer context are optional. Include them only when supplied or requested for this run.
 - Optional brand trends may require CX Reports and Dashboards permissions. Standard generation can proceed without brand trends. Do not request new permissions as part of an ordinary QBR run. If brand trends were requested, explain the access blocker.
+
+### Default checkboxes
+
+| Website control | Required state |
+| --- | --- |
+| Include customer stories | Unchecked |
+| Only include product sections customers have | Checked |
+| Usage | Unchecked |
+| Appendix | Unchecked |
+| What's new | Unchecked |
+
+Observe each control's actual checked state and set it explicitly; do not blindly
+toggle controls or assume the site remembers a previous run. After selecting or
+changing accounts, recheck all five states immediately before generation because
+the page may reset them. If a control is missing or its state cannot be verified,
+report the specific blocker before generating; do not silently use site defaults.
+
+Excluding the What's new deck section does not disable selective release research
+for the renewal brief. The recommendation and release-check modules still apply.
 
 ## Browser operation
 
@@ -25,7 +44,7 @@ Ground controls in fresh accessibility or DOM observations. Do not reuse element
 
 ## Generate and download
 
-1. Confirm the intended account is selected and the settings match the request.
+1. Confirm the intended account is selected and verify all five checkbox states above, applying any explicit user overrides for this run.
 2. Click Download selected deck (the label may differ for multiple accounts). A single account produces an editable `.pptx`; multiple accounts may produce a `.zip`.
 3. Monitor generation until the site reports completion or a concrete failure. Progress can take several minutes. Use bounded waits and meaningful updates. Do not click Generate again while an existing request is running.
 4. Inspect the final status for data warnings as well as completion. A downloaded deck can still contain incomplete data. Report the affected area and useful error detail without claiming the content has been validated.

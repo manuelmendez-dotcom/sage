@@ -3,7 +3,7 @@ name: prepare-qbr-renewal
 description: Generate customer QBRs through the QBR Express website, deliver verified Google Slides, and prepare concise CSM renewal or discovery briefs using QBR evidence, current Scaled CS recommendations and selective release checks. Use for customer QBRs, value already realised, next value moves and renewal preparation; not standalone product Q&A or instance configuration.
 ---
 
-# QBR & Renewal Brief
+# QBR Conversations
 
 Help the CSM explain current value, understand what needs attention, and agree one
 useful next step. Follow the user's requested output and language.
@@ -16,10 +16,12 @@ This bundles the qbr-express workflow; no separate personal skill, QBR MCP,
 bridge or Local Delivery plugin is required. Do not call old QBR MCP tools or
 repair their authentication as part of this workflow.
 
-Default to owned product sections only, then one verified native Google Slides
-presentation per account in the root of My Drive. Honour explicit format/folder
-alternatives. Keep generated content unchanged. The original PPTX is a working
-input for conversion and evidence review, not an additional default deliverable.
+Default to owned product sections only, with customer stories, Usage, Appendix
+and What's new unchecked. Verify these website settings immediately before
+generation as detailed in the generation reference. Deliver one verified native
+Google Slides presentation per account in the root of My Drive. Honour explicit
+format/folder alternatives. Keep generated content unchanged. The original PPTX
+is a working input for conversion and evidence review, not an additional default deliverable.
 Google Drive and Z2 connections support retrieval and recommendation research.
 
 ## Route by intent

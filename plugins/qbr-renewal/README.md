@@ -1,4 +1,4 @@
-# QBR & Renewal Brief
+# QBR Conversations
 
 One plugin generates a customer QBR through the QBR Express website, delivers a
 verified native Google Slides presentation, and prepares a concise CSM renewal
@@ -21,6 +21,19 @@ working PPTX supports conversion and evidence review; it is not a second default
 deliverable. Temporary Drive PPTX files created by the run are moved to Trash only
 after native format, substantive content, slide counts and visuals are verified.
 Supplied originals and older reports are preserved.
+
+The website settings are checked immediately before each generation:
+
+| Setting | Default |
+| --- | --- |
+| Include customer stories | Unchecked |
+| Only include product sections customers have | Checked |
+| Usage | Unchecked |
+| Appendix | Unchecked |
+| What's new | Unchecked |
+
+You can explicitly override these settings for a particular deck. The What's new
+deck section is excluded; selective release research still informs the brief.
 
 ## Install in one go
 
