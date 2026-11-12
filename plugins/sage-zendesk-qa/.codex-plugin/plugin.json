@@ -1,7 +1,7 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.3.0",
-  "description": "Grounded Zendesk product Q&A, capability and release research, Community workarounds, and ticket investigation with focused source routing.",
+  "version": "0.3.1",
+  "description": "Clear Zendesk guidance for CSMs: product answers, capability and release research, Community workarounds, and ticket investigation with verified sources.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Ask Sage",
-    "shortDescription": "Zendesk product, release, and troubleshooting answers",
-    "longDescription": "Research Zendesk product questions, capability recommendations, launches and EAPs with focused official-source checks. Use Community, support cases, or Slack for specific evidence gaps, choose a source set, or interpret supplied evidence without searching. Google Drive and Zendeskdev are outside this Q&A research profile.",
+    "shortDescription": "Clear Zendesk answers for CSMs and customers",
+    "longDescription": "Get practical Zendesk guidance in clear language, with relevant options, confirmed limits, and the next step for the customer. Research product questions, capability recommendations, launches, EAPs and support cases using focused sources. Technical detail is available when requested or needed for a decision.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [

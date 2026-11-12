@@ -3,7 +3,7 @@ interface:
   icon_small: "./assets/sage-buddha-icon.png"
   icon_large: "./assets/sage-buddha.png"
   brand_color: "#133E36"
-  short_description: "Zendesk product, release, and troubleshooting answers"
+  short_description: "Clear Zendesk answers for CSMs and customers"
   default_prompt: "Use $answer-zendesk-questions to research or interpret this Zendesk question for a Scaled CSM, following any source constraints I give."
 
 dependencies:

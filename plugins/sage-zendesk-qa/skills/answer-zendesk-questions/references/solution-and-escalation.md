@@ -19,9 +19,17 @@ Before listing a custom integration as an implementation option, verify from cur
 - Required plan, authentication, permissions, limits, and product prerequisites.
 - The proposed event and update architecture does not depend on a documented unsupported pattern, including a trigger-to-webhook update of the same ticket.
 
-If any element is unverified, describe the route as `technical discovery`, not a supported workaround. State what remains to be proven and route feasibility to a Solution Architect, Professional Services, a qualified partner, or the customer's technical team. Cite the developer or Help Center source that creates the lead.
+If any element is unverified, describe the route in plain language as an option that needs technical validation. State the specific missing check and route feasibility to a Solution Architect, Professional Services, a qualified partner, or the customer's technical team. Cite the developer or Help Center source that creates the lead. Do not expand a speculative implementation design merely to make the answer feel complete.
 
 Use current public Z2 or developer.zendesk.com documentation for customer-facing API claims. Internal case, Slack or explicitly supplied Jira evidence can narrow the diagnostic question or improve the handoff brief; it does not establish a supported implementation commitment.
+
+## When validation needs another owner
+
+Flag a validation boundary near the beginning when it changes the recommendation. This includes a case whose cause depends on unavailable account configuration, request/event records or reproduction; unresolved conflicting behavior that affects the proposed action; a documented Support-only operation; or an implementation whose feasibility has not been established.
+
+Explain what is confirmed, the exact question that remains, who can validate it and the smallest useful evidence to provide. Keep the default handoff brief; include a detailed technical checklist only when requested or necessary to act safely. Continue answering the supported parts of the customer's question.
+
+Use Support as the usual entry for case-specific product diagnosis and established escalation to Engineering. Do not imply that the CSM will debug backend systems, contact engineers directly or guarantee a fix. Use Product for a material product-scope or roadmap question, without presenting internal validation as a public commitment. A normal documented how-to or a missing detail the customer can supply does not require escalation.
 
 ## Support handoff detection
 
@@ -29,7 +37,9 @@ While reading Z2, watch for `contact Support`, `submit a request`, `requires Zen
 
 When that action is genuinely required for the customer's path, state:
 
-> This needs Support to action: [verified reason]. I can draft the request if useful.
+> Support needs to verify [specific question] before we can recommend [dependent action].
+
+For a documented Support-only change, say that Support needs to perform the change and give the verified reason. Match the user's language. If the user requests a handoff draft, provide it in the same response.
 
 Do not trigger a handoff from an incidental or optional Support mention.
 
@@ -37,15 +47,15 @@ Do not trigger a handoff from an incidental or optional Support mention.
 
 | Scenario | Route |
 |---|---|
-| Verified known issue or active incident | Support or Engineering; name the known issue internally and offer the documented workaround |
+| Verified known issue or active incident | Support through the established Engineering escalation path when needed; offer the documented workaround |
 | Security or compliance interpretation | Security team |
 | Data loss or production-impacting issue | Immediate Support escalation |
 | Contract, price, renewal, or account-specific packaging | Account team |
-| Feature does not exist | Product feedback; do not promise roadmap delivery |
+| Documented missing capability or unsupported use case | Explain the confirmed limit and supported alternatives; route Product feedback when useful without promising delivery |
 | Unreleased or roadmap information | Product team; no customer commitment without an approved public source |
 | Complex multi-system implementation | Professional Services or Solution Architect |
 | API feasibility confirmed but implementation unproven | Solution Architect, Professional Services, partner, or customer's technical team |
-| Conflicting or insufficient evidence | Appropriate subject-matter owner or Support |
+| A material claim remains unresolved and blocks a recommendation | Name the missing check; use Support for case diagnosis or the relevant subject-matter owner for that claim |
 
 Keep escalation to one clear recommendation in the CSM briefing. Do not manufacture an escalation section when the issue resolves CSM-side.
 

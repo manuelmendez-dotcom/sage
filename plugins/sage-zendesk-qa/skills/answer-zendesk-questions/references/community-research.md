@@ -38,7 +38,7 @@ For migrated Help Center links with a Community hostname, do not silently rewrit
 
 ## Output
 
-Use the shared concise CSM briefing. Include the answer, the relevant community experience and dates, verified documentation when permitted, and remaining gaps. Cite the original discussions or replies rather than the AI search page. Keep community evidence distinct from official sources. Include the tools used only when material, for example: `Research scope: Source-directed · Community only · Used: Tavily and native Community AI search`.
+Use the shared concise CSM briefing. Include the answer, the relevant community experience and dates, verified documentation when permitted, and remaining gaps. Cite the original discussions or replies rather than the AI search page. Keep community evidence distinct from official sources. Describe the source scope in plain language, for example: `Sources: Zendesk Community only; not checked against official documentation.` Mention native Community AI search only if it was actually used and its role or limitations matter to the answer.
 
 Do not add an Official verification section to a Community-only brief just to say it was not performed. Put the verification gap next to the affected claim. Apply the existing confidentiality rules to customer-ready drafts and authenticated restricted content.
 

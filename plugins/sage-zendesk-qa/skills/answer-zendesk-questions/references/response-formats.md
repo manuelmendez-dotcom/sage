@@ -1,102 +1,71 @@
-# Response formats
+# Clear CSM guidance and response formats
 
-## Language
+## Language and audience
 
-- CSM-facing briefing: match the language of the user's question. If no language signal exists, use English.
-- Customer-ready draft: always match the customer's language from the pasted message or thread.
-- Honor an explicit language request and keep headers and body consistent.
-- Do not mix languages within one output.
+- Match the user's language for CSM guidance and the customer's language for a requested customer reply. Honor an explicit language request. Preserve natural regional vocabulary and forms of address.
+- Write in clear, everyday language by default, including for technically experienced readers. The CSM needs to understand the customer's goal, explain the options and guide the next decision.
+- Research with the precision the question requires. Present only the technical detail needed to answer the request or make the decision.
 
-## Default CSM briefing
+## Default answer
 
-Lead with the conclusion. Use bold labels followed by one or two short paragraphs. Include only the beats that apply.
+Lead with the useful answer. When a customer's message needs interpretation, briefly explain what they appear to be trying to achieve. Mark an uncertain interpretation as such; do not invent a goal or force every answer to start with “What the customer means is…”. A simple factual question can receive a direct short answer.
 
-Suggested shape:
+For a recommendation, connect the customer's need to the best supported option. Explain why it fits, a meaningful alternative if one exists, the conditions or limitations that change the choice, and the next practical step. Do not manufacture three options or list every technical possibility. Place a limitation next to the recommendation it qualifies.
 
-```markdown
-**Answer:** [What the evidence supports. State an important native limitation up front.]
+When the recommendation depends on checking the customer's actual configuration or an unresolved technical assumption, state that boundary early, before extending the explanation. Name what needs validation and the appropriate owner, then give the useful guidance that is already supported. Follow [solution-and-escalation.md](solution-and-escalation.md). Uncertainty about one point does not block the entire answer.
 
-**What this means for the customer:** [Translate the evidence into the customer's actual situation when useful.]
+Use connected paragraphs. Add a short list for actionable steps or genuine alternatives, and a table only when it makes a comparison easier. Labels such as “Options”, “Limit” or “Next step” are optional; do not render a fixed sequence of headings for every question. For multi-question inputs, address every question in the original order.
 
-**On their plan:** [Only when plan changes the answer and is confirmed.]
+## Technical depth
 
-**Recommended CSM action:** [A concrete guidance, curation, or validation step within Scaled CSM scope.]
+- Default to customer impact, relevant choices, limitations and the next step. Avoid unexplained acronyms, API parameters, status-code tables, architecture and implementation detail unless they are requested or needed for the decision.
+- Preserve exact limits, dates, permissions, eligibility conditions and error identifiers when they materially affect the answer. Explain an essential technical term at first use. Plain language must not turn a conditional capability into an unconditional promise.
+- A how-to request still deserves the supported steps the customer or their admin needs, written plainly. A technical follow-up can include the requested mechanics, code, API operations or diagnostic detail, grounded in sources.
+- The reader's technical job title alone is not a request for a technical deep dive. Expand when the question calls for it.
+- If validation is required, identify the specific check instead of filling the answer with speculative causes, invented architecture or a long debugging checklist. Provide a technical handoff or deeper detail when requested.
 
-**Owner / next step:** [Only when a genuine handoff, non-native path, or further validation is required.]
+## Say what the evidence establishes
 
-### Public sources
+Express certainty naturally, in the response's language:
 
-- [Article or official page](url)
+| Evidence | Appropriate wording |
+|---|---|
+| Capability confirmed within a documented scope | “The documentation confirms that…” / “La documentación confirma que…” |
+| Explicit documented limitation | “This feature does not support…” / “Esta función no permite…” followed by the relevant scope |
+| Plausible route with a missing prerequisite or feasibility check | “This is an option to assess; first we need to confirm…” / “Es una vía a explorar; primero hay que confirmar…” |
+| No adequate evidence for a claim | “I couldn't confirm…” / “No pude confirmarlo…” and the precise unresolved point |
 
-### CSM notes
+These are examples, not mandatory labels or repeated sentence starters. State a supported yes or no directly. Keep unverified feasibility separate from a confirmed limitation: not finding documentation does not prove impossibility. Documentation of a general capability does not by itself validate its setup in this customer's account.
 
-[Only internal evidence, meaningful assumptions, conflicts, or verification gaps.]
+## Sources and internal notes
 
-*Research scope: [Mode] · [Sources used or `New searches: none`] · [Constraint when applicable]*
-```
+Cite the few public originals that support the recommendation. Explain Community experience as community-reported, including relevant dates and later corrections. Use original discussions and replies rather than a Community AI summary as evidence.
 
-For a multi-question email, replace generic labels with the customer's actual questions and answer them in the original order.
+Put internal evidence, conflicts and meaningful gaps in separate CSM notes only when needed. Keep internal case links there; a PUBLIC ticket comment is still internal case evidence. A long technical annex is not required merely because internal evidence was used.
 
-Keep public sources to the few URLs that materially support the answer. Do not list every search result.
+Add a compact sources/scope line outside customer-ready copy, in ordinary language. For example: “Sources: Zendesk documentation and release announcements”, “Sources: Community only”, or “Based only on the supplied material; no new searches”. If prior evidence was reused under a search-only constraint, say so when it affects interpretation. Use research-mode codes, connector names or tool details only when the user asks about the research process. Preserve source restrictions without exposing internal machinery in the answer.
 
-When Community is used, label its original discussion/reply links as Community evidence and include relevant dates. Keep documented behavior distinct from community-reported experience or workarounds. Mention native Community AI search only if it was actually used; its overview is not a substitute for original references. Avoid a full extra section when one attribution sentence is sufficient.
+Source-menu and preference-only turns follow [source-selection.md](source-selection.md); they need no research-scope line when no research occurred.
 
-Omit `CSM notes` when no internal evidence, conflict, assumption, or important gap exists. Omit the owner beat when the issue resolves without one. Keep the research-scope line in CSM-facing output even when the notes section is omitted.
+## Release and ticket questions
 
-Use one of these compact scope patterns:
+For several releases or capabilities, compare what changed, relevant announcement/rollout dates, status, customer implications and public sources. Keep article edit dates separate from launch dates. State a meaningful historical-coverage limit without narrating every query. One feature usually needs a paragraph.
 
-- `Research scope: Interpret only · New searches: none`
-- `Research scope: Source-directed · Source lock: Slack · Used: Slack`
-- `Research scope: Auto · Used: Z2, Ticket Context`
-- `Research scope: Source-directed · Community only · Used: Tavily`
-- `Research scope: Source-directed · Used: Community, Z2 · Community findings checked against official documentation`
+For a ticket, explain the customer's issue and what the case actually establishes in plain language. Distinguish documented behavior from the unresolved cause in this account. State the practical next step and any material age, match or incomplete-thread limitation. If Support needs to inspect the case, say what they must verify before recommending a dependent action.
 
-Source-menu and preference-only turns use the short interaction in [source-selection.md](source-selection.md), not the full CSM briefing. Do not add research-scope metadata to a menu when no research occurred.
+## Pasted customer content and requested drafts
 
-When a research-only constraint differs from an evidence-only constraint, make that clear without process narration. For example, `New searches: Slack only · Prior Z2 evidence reused`.
+When a customer message is pasted without a draft request, give the CSM the interpretation, supported guidance and useful next step. Ask only targeted follow-up questions whose answers change the advice. Offer a draft only when useful, not as a repeated closing ritual.
 
-## Release and case answers
+When a customer reply is requested, provide a clearly isolated, copyable reply in the same response:
 
-For several launches or capabilities, use a compact table with feature, announcement date, rollout/status, customer implication, and original public source. Keep article edit dates separate from launch dates. State bounded historical coverage when material; do not imply an exhaustive inventory from a limited search. For one feature, a paragraph is usually enough.
+- Answer the customer's questions in their order, using their terminology where accurate.
+- Use `we` and `our` when writing as a Zendesk representative; do not promise implementation by the CSM or contact with another team that has not occurred.
+- Preserve relevant conditions and uncertainty in plain language. Use only public-supported guidance or the customer's own verified case facts.
+- Include a useful next step. Keep internal citations, employee identities, other customers, research narration and mode metadata outside the reply.
 
-For ticket investigations, separate case observations, documented behavior, the recommended next diagnostic step, and a meaningful match/freshness/partial-thread gap. Internal case links belong only in CSM notes. A PUBLIC ticket comment is not a public citation.
+## Final language check
 
-The research scope can distinguish `Z2 product docs + Updates` or `Ticket Context + Z2`. When the instruction was priority-only, say `Priority: Community`, not `Community only`.
+Use the practical editing principles of clear human writing within this skill; no separate editing skill or agent is required. Remove filler, inflated claims, stock introductions, dramatic contrasts and repetitive recaps. Prefer direct verbs, concrete explanations and natural sentences. Avoid synonym cycling, decorative bolding and a forced identical rhythm across paragraphs.
 
-## Pasted customer content without a draft request
-
-Produce:
-
-1. A one- or two-sentence issue summary for the CSM.
-2. The diagnostic briefing.
-3. Up to three customer follow-up questions only when a gap in the customer's message genuinely changes the answer.
-4. An offer to draft the reply.
-
-Ground each follow-up question in something the customer actually raised. Do not turn it into generic discovery.
-
-## Explicit customer-draft request
-
-Produce a clearly isolated `Customer-ready reply` section that can be copied without internal material.
-
-Do not announce that a customer-ready reply will follow unless it is rendered in the same response. Never replace a requested draft with an offer to draft it later.
-
-- Mirror the customer's structure and terminology where accurate.
-- Answer each question in the same order.
-- Lead with the substantive answer, not commentary about the process.
-- Use `we` and `our` when writing as a Zendesk representative.
-- Include a clear next step.
-- Add no fact that is not grounded in suitable supplied, prior-turn, or newly retrieved evidence available in the active conversation.
-- Do not include internal citations, confidence labels, research narration, or employee names.
-
-After the draft, provide public sources and CSM notes outside the copyable reply only when useful.
-
-Place the research-scope line outside the customer-ready copy. Never include internal source names or mode metadata inside the draft.
-
-## Style
-
-- Direct, warm, professional, and concise.
-- Write for a Scaled CSM who guides and curates rather than performs implementation.
-- Frame setup as the path the customer or their admin follows. Never promise that the CSM will configure it.
-- Use tables only when comparing several options on the same axes.
-- Avoid marketing language and conversational scaffolding such as `let me explain`, `the good news is`, or `your concern is valid`.
-- No coverage percentages or documentation-coverage bands.
+Preserve the user's intended meaning, useful detail, language and uncertainty. Do not replace a precise fact with vague reassurance or invent a claim to make an explanation smoother. Before responding, check that a CSM can explain the recommended option, its limitation and the next step, and that all qualifiers supported by the evidence survived the simplification. Return the answer itself, without an editorial “What changed” report.
