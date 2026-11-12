@@ -47,13 +47,21 @@ Use one of these compact scope patterns:
 
 - `Research scope: Interpret only · New searches: none`
 - `Research scope: Source-directed · Source lock: Slack · Used: Slack`
-- `Research scope: Auto · Used: Z2, Unleash`
+- `Research scope: Auto · Used: Z2, Ticket Context`
 - `Research scope: Source-directed · Community only · Used: Tavily`
 - `Research scope: Source-directed · Used: Community, Z2 · Community findings checked against official documentation`
 
 Source-menu and preference-only turns use the short interaction in [source-selection.md](source-selection.md), not the full CSM briefing. Do not add research-scope metadata to a menu when no research occurred.
 
 When a research-only constraint differs from an evidence-only constraint, make that clear without process narration. For example, `New searches: Slack only · Prior Z2 evidence reused`.
+
+## Release and case answers
+
+For several launches or capabilities, use a compact table with feature, announcement date, rollout/status, customer implication, and original public source. Keep article edit dates separate from launch dates. State bounded historical coverage when material; do not imply an exhaustive inventory from a limited search. For one feature, a paragraph is usually enough.
+
+For ticket investigations, separate case observations, documented behavior, the recommended next diagnostic step, and a meaningful match/freshness/partial-thread gap. Internal case links belong only in CSM notes. A PUBLIC ticket comment is not a public citation.
+
+The research scope can distinguish `Z2 product docs + Updates` or `Ticket Context + Z2`. When the instruction was priority-only, say `Priority: Community`, not `Community only`.
 
 ## Pasted customer content without a draft request
 

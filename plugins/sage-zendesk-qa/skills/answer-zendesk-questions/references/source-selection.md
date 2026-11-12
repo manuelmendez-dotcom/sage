@@ -11,8 +11,10 @@ Show a short conversational menu when asked, using the user's language. No sourc
 | Automatic | Select the smallest relevant source set for the question; do not search everything. |
 | Community only | Research and base the answer on Zendesk Community evidence only. |
 | Community + official verification | Start with Community, then verify material product claims through Z2 and, where useful, official Zendesk web documentation. |
-| Choose sources | Select any combination of Z2 Help Center, Zendesk Community, Official web documentation, Slack, Unleash, Google Drive, or Zendeskdev. |
+| Choose sources | Select any combination of Z2 Help Center, Zendesk Community, Official web documentation, Z2 Ticket Context, or Slack. |
 | Supplied content only | Interpret the evidence already provided without new searches or browser retrieval. |
+
+Unleash, Google Drive and Zendeskdev are outside this profile; do not offer them as research choices. Updates is covered through Z2; Ticket Context provides internal case evidence.
 
 If the user asks to see all individual sources, expand the Choose sources row. Describe Tavily and browser access as tools, not additional evidence sources. Official web documentation means the appropriate official Zendesk domains and a relevant vendor's official documentation when the question requires it.
 
@@ -34,5 +36,5 @@ An explicit source instruction with a question bypasses the menu. `Use Community
 - `Use Community only and base your answer exclusively on its discussions: [question]` → Community research and Community evidence only.
 - `Find community examples, then verify the proposed solution with Z2` → Community followed by Z2.
 - `A community post says this works. Is it true?` → Supplied community evidence, not a source lock; validate through the normal router.
-- `Start with Community` → Search Community; do not call another source without permission.
+- `Start with Community` → Search Community first; expand for a relevant gap within the otherwise permitted sources, without asking again.
 - `Show sources before researching this: [question]` → Menu first; preserve the pending inquiry.

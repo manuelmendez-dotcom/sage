@@ -1,7 +1,7 @@
 {
   "name": "sage-zendesk-qa",
-  "version": "0.2.0+codex.20260914162251",
-  "description": "Zendesk customer Q&A with automatic or selected sources, Community research, and grounded evidence.",
+  "version": "0.3.0",
+  "description": "Grounded Zendesk product Q&A, capability and release research, Community workarounds, and ticket investigation with focused source routing.",
   "author": {
     "name": "Manuel M\u00e9ndez"
   },
@@ -11,13 +11,15 @@
     "research",
     "support",
     "community",
-    "source-selection"
+    "source-selection",
+    "releases",
+    "troubleshooting"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "SAGE CSM Q&A",
-    "shortDescription": "Zendesk answers from the sources you choose",
-    "longDescription": "Ask a Zendesk customer question and SAGE selects relevant sources automatically. Choose Community only, Community with official verification, or your own source combination. Use the optional source menu or interpret supplied evidence without searching.",
+    "displayName": "Ask Sage",
+    "shortDescription": "Zendesk product, release, and troubleshooting answers",
+    "longDescription": "Research Zendesk product questions, capability recommendations, launches and EAPs with focused official-source checks. Use Community, support cases, or Slack for specific evidence gaps, choose a source set, or interpret supplied evidence without searching. Google Drive and Zendeskdev are outside this Q&A research profile.",
     "developerName": "Zendesk Scaled Customer Success",
     "category": "Productivity",
     "capabilities": [
@@ -25,8 +27,9 @@
     ],
     "defaultPrompt": [
       "Research this Zendesk question using the relevant sources.",
-      "Use Zendesk Community only to research this question.",
-      "Show me the available research sources."
+      "Which Zendesk capability fits this objective, considering recent releases?",
+      "Investigate this Z2 ticket and suggest a verified next step.",
+      "Use Zendesk Community only to research this question."
     ],
     "brandColor": "#133E36",
     "composerIcon": "./assets/sage-buddha-icon.png",

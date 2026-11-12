@@ -1,9 +1,9 @@
 interface:
-  display_name: "SAGE CSM Q&A"
+  display_name: "Ask Sage"
   icon_small: "./assets/sage-buddha-icon.png"
   icon_large: "./assets/sage-buddha.png"
   brand_color: "#133E36"
-  short_description: "Zendesk answers from the sources you choose"
+  short_description: "Zendesk product, release, and troubleshooting answers"
   default_prompt: "Use $answer-zendesk-questions to research or interpret this Zendesk question for a Scaled CSM, following any source constraints I give."
 
 dependencies:
@@ -19,25 +19,15 @@ dependencies:
       transport: "streamable_http"
       url: "https://mcp-gateway.zende.sk/mcps/tavily"
     - type: "mcp"
-      value: "unleash"
-      description: "Indexed Zendesk internal knowledge, Slack, and Jira"
-      transport: "streamable_http"
-      url: "https://mcp-gateway.zende.sk/mcps/unleash"
-    - type: "mcp"
       value: "slack"
       description: "Read-only live Slack channel and thread research"
       transport: "streamable_http"
       url: "https://mcp-gateway.zende.sk/mcps/slack"
     - type: "mcp"
-      value: "google-drive"
-      description: "Zendesk enablement, decks, playbooks, and positioning"
+      value: "z2-ticket-context"
+      description: "Read-only Z2 cases, Problem Tickets, and diagnostic history"
       transport: "streamable_http"
-      url: "https://mcp-gateway.zende.sk/mcps/google-drive"
-    - type: "mcp"
-      value: "zendeskdev"
-      description: "Internal Zendesk engineering knowledge and technical context"
-      transport: "streamable_http"
-      url: "https://mcp-gateway.zende.sk/mcps/zendeskdev"
+      url: "https://mcp-gateway.zende.sk/mcps/z2-ticket-context"
 
 policy:
   allow_implicit_invocation: true

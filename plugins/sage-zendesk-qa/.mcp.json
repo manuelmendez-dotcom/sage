@@ -8,17 +8,13 @@
       "type": "http",
       "url": "https://mcp-gateway.zende.sk/mcps/tavily"
     },
-    "unleash": {
-      "type": "http",
-      "url": "https://mcp-gateway.zende.sk/mcps/unleash"
-    },
     "slack": {
       "type": "http",
       "url": "https://mcp-gateway.zende.sk/mcps/slack"
     },
-    "google-drive": {
+    "z2-ticket-context": {
       "type": "http",
-      "url": "https://mcp-gateway.zende.sk/mcps/google-drive"
+      "url": "https://mcp-gateway.zende.sk/mcps/z2-ticket-context"
     }
   }
 }

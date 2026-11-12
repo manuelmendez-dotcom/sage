@@ -5,10 +5,10 @@ Two independently installable Codex plugins share this repository and the
 
 | Plugin | Use it for |
 | --- | --- |
-| [SAGE CSM Q&A](plugins/sage-zendesk-qa) | Zendesk product and workflow questions, with automatic or selected research sources. |
+| [Ask Sage](plugins/sage-zendesk-qa) | Zendesk product questions, release research, Community workarounds, and ticket investigation. |
 | [QBR Conversations](plugins/qbr-renewal) | Analyze your QBR file and prepare a renewal/discovery conversation brief. |
 
-Installing QBR Conversations does not replace or uninstall SAGE.
+Installing QBR Conversations does not replace or uninstall Ask Sage.
 
 ## Install QBR Conversations on a Mac
 
@@ -28,7 +28,7 @@ Try: **“Analyze this QBR and prepare a one-page renewal conversation brief.”
 Complete your own research-service sign-ins when needed.
 
 The same command updates this plugin and retires the old QBR Local Delivery
-plugin, its marketplace, and the recognised standalone QBR MCP connection. SAGE
+plugin, its marketplace, and the recognised standalone QBR MCP connection. Ask Sage
 and unrelated connections remain in place. Read the
 [setup, source policy and troubleshooting guide](plugins/qbr-renewal/README.md)
 for details. Source code is downloadable here; access to Zendesk services and

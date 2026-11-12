@@ -28,6 +28,8 @@ Match the user's language. A request such as `do everything` does not waive the 
 
 Do not ask for the plan for universal conceptual CSM-prep questions such as what a trigger is, how triggers differ from automations, general ticket lifecycle behavior, or generic API structure.
 
+For capability recommendations, research useful candidates and their documented eligibility conditions even if the plan is unknown; withhold only customer-specific availability. A historical release date or general EAP status does not require a customer plan.
+
 For troubleshooting, research or interpret universal causes first when plan is unlikely to matter. Ask for the plan only when the resolution path or availability materially depends on it.
 
 ## Packaging guard
@@ -37,29 +39,22 @@ Do not say `included`, `available on your plan`, `no plan change required`, or a
 1. The customer's plan and relevant add-ons are confirmed.
 2. Availability is verified in current Z2 content or a current official Zendesk product/pricing page.
 
-If the evidence supports likely availability but not a definitive claim, say:
-
-> Based on the available documentation, this should be available on the current plan, but confirm it in the instance before promising it.
-
-Do not use the hedge as a replacement for a required plan question.
+When eligibility is incomplete, state what the documentation establishes and the exact missing condition. Do not hedge an unsupported entitlement into “should be available” or replace a necessary plan question with “check the instance.”
 
 ## Add-ons
 
-An add-on is not plan-agnostic. Before recommending Copilot, Workforce Management, Quality Assurance, Advanced Data Privacy and Protection, or another add-on:
+An add-on is not plan-agnostic. Before confirming customer-specific eligibility for Copilot, Workforce Management, Quality Assurance, Advanced Data Privacy and Protection, or another add-on:
 
 - Verify the add-on's minimum eligible plan.
 - Compare it with the customer's confirmed plan.
 - Distinguish `available to purchase on the current plan` from `requires a plan upgrade first, then the add-on`.
 - Route contract-specific price and commercial terms to the account team.
 
-## Approved AI-agent packaging truth
+## Packaging changes and historical terminology
 
-Last reviewed: 2026-07-22.
+Do not maintain a frozen packaging truth in this skill. Revalidate current public sources when packaging is material; use the releases reference for announcements and subsequent changes.
 
-Zendesk's April–May 2026 rollout replaced the prior Essential/Advanced capability split with a single AI-agent offering for Zendesk customers. The commercial conversation is Automated Resolution volume rather than a separate Advanced capability tier.
+This announcement is a research lead, not a current entitlement rule:
+https://support.zendesk.com/hc/en-us/articles/10487730059034-Announcing-expanded-access-to-AI-agent-capabilities-for-all-Zendesk-customers
 
-Official reference: https://support.zendesk.com/hc/en-us/articles/10487730059034-Announcing-expanded-access-to-AI-agent-capabilities-for-all-Zendesk-customers
-
-Older articles may still describe capabilities as `Advanced only`. Use those older articles for behavior or configuration only, not current packaging. If a newer official public source dated after this review explicitly changes the policy, use the newer evidence and flag the change to the CSM.
-
-Do not recommend purchasing `AI Advanced` as a separate capability upgrade without newer official evidence that supersedes the rollout.
+Check its actual content, rollout scope and subsequent official documentation before applying it. Older articles can remain useful for behavior while using obsolete plan/tier names. Do not infer a purchase requirement, retirement of a tier or billing model from a remembered rollout or an old label. Distinguish the capability, eligibility and commercial terms; route account-specific contractual questions to the account team.

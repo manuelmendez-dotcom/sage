@@ -4,7 +4,7 @@
 
 When the customer's need has several possible implementation paths, consider them in this order:
 
-1. Native Zendesk capability verified in Z2.
+1. Native Zendesk capability verified in current documentation, including a targeted Updates check for relevant recent capabilities.
 2. Official Zendesk integration or Marketplace option, clearly labeled.
 3. App Builder when the need is an agent-side sidebar experience, in-ticket context, external-system lookup, or a focused one-click action.
 4. Custom integration or development.
@@ -21,9 +21,7 @@ Before listing a custom integration as an implementation option, verify from cur
 
 If any element is unverified, describe the route as `technical discovery`, not a supported workaround. State what remains to be proven and route feasibility to a Solution Architect, Professional Services, a qualified partner, or the customer's technical team. Cite the developer or Help Center source that creates the lead.
 
-Zendeskdev may narrow an internal engineering question, identify an architectural constraint, or improve an escalation brief. It does not independently establish a customer-supported API pattern, public product behavior, or implementation commitment. Keep its details in CSM notes and validate any customer-facing technical claim through public Z2 or official developer documentation.
-
-Google Drive enablement material may help frame a solution or talk track. It cannot establish technical feasibility, current packaging, or a supported write path.
+Use current public Z2 or developer.zendesk.com documentation for customer-facing API claims. Internal case, Slack or explicitly supplied Jira evidence can narrow the diagnostic question or improve the handoff brief; it does not establish a supported implementation commitment.
 
 ## Support handoff detection
 
@@ -39,7 +37,7 @@ Do not trigger a handoff from an incidental or optional Support mention.
 
 | Scenario | Route |
 |---|---|
-| Confirmed Jira bug or active incident | Support or Engineering; name the known issue internally and offer the documented workaround |
+| Verified known issue or active incident | Support or Engineering; name the known issue internally and offer the documented workaround |
 | Security or compliance interpretation | Security team |
 | Data loss or production-impacting issue | Immediate Support escalation |
 | Contract, price, renewal, or account-specific packaging | Account team |
